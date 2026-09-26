@@ -1,0 +1,1039 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Seamless Separator</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,800&family=Figtree:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+<style>
+:root{
+  --ground:#e9ebe8; --panel:#f7f8f6; --line:#d3d7d2; --line-2:#c0c6bf;
+  --ink:#141715; --ink-2:#4a524c; --ink-3:#7a837c;
+  --accent:#2f6b4f; --accent-ink:#ffffff; --accent-soft:#dbe9e1;
+  --mat:#2c4a3c; --mat-grid:rgba(255,255,255,.07); --mat-grid-2:rgba(255,255,255,.14);
+  --warn:#a0521b; --ok:#2f6b4f;
+  --display:"Bricolage Grotesque",ui-sans-serif,system-ui,sans-serif;
+  --body:"Figtree",ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif;
+  --mono:"JetBrains Mono",ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+  color-scheme:light;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --ground:#101311; --panel:#171b19; --line:#29302b; --line-2:#394139;
+    --ink:#e5e9e5; --ink-2:#aab3ac; --ink-3:#7b857d;
+    --accent:#6fc49a; --accent-ink:#0d1a13; --accent-soft:#1f3329;
+    --mat:#16241d; --mat-grid:rgba(255,255,255,.05); --mat-grid-2:rgba(255,255,255,.1);
+    --warn:#e3a06b; --ok:#6fc49a;
+    color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --ground:#101311; --panel:#171b19; --line:#29302b; --line-2:#394139;
+  --ink:#e5e9e5; --ink-2:#aab3ac; --ink-3:#7b857d;
+  --accent:#6fc49a; --accent-ink:#0d1a13; --accent-soft:#1f3329;
+  --mat:#16241d; --mat-grid:rgba(255,255,255,.05); --mat-grid-2:rgba(255,255,255,.1);
+  --warn:#e3a06b; --ok:#6fc49a;
+  color-scheme:dark;
+}
+*{box-sizing:border-box}
+html,body{height:100%}
+body{margin:0;background:var(--ground);color:var(--ink);font:14px/1.45 var(--body)}
+.app{display:grid;grid-template-columns:340px 1fr;height:100%;min-height:0}
+.panel{background:var(--panel);border-right:1px solid var(--line);overflow-y:auto;padding:18px 18px 28px;display:flex;flex-direction:column;gap:18px}
+.brand{display:flex;flex-direction:column;gap:2px}
+.brand h1{font:800 26px/1.05 var(--display);letter-spacing:-.02em;margin:0;text-wrap:balance}
+.brand p{margin:0;color:var(--ink-2);font-size:13px}
+section.group{display:flex;flex-direction:column;gap:10px;padding-top:14px;border-top:1px solid var(--line)}
+.group h2{margin:0;font:600 11px/1 var(--mono);letter-spacing:.12em;text-transform:uppercase;color:var(--ink-3)}
+.row{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.drop{border:1.5px dashed var(--line-2);border-radius:10px;padding:14px;display:flex;flex-direction:column;gap:6px;align-items:flex-start;cursor:pointer;background:transparent;color:var(--ink);text-align:left;font:inherit;width:100%}
+.drop:hover,.drop:focus-visible{border-color:var(--accent);outline:none}
+.drop strong{font-weight:600}
+.drop span{color:var(--ink-3);font-size:12.5px}
+.queue{display:flex;gap:6px;flex-wrap:wrap}
+.queue button{width:46px;height:46px;border-radius:6px;border:2px solid transparent;padding:0;background:var(--line) center/cover;cursor:pointer}
+.queue button[aria-pressed="true"]{border-color:var(--accent)}
+.queue button:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.meta{font:12px/1.5 var(--mono);color:var(--ink-2);font-variant-numeric:tabular-nums;display:flex;flex-direction:column;gap:2px}
+.pill{display:inline-flex;align-items:center;gap:6px;font:500 11.5px/1 var(--mono);padding:5px 8px;border-radius:99px;border:1px solid var(--line-2);color:var(--ink-2)}
+.pill::before{content:"";width:7px;height:7px;border-radius:50%;background:currentColor}
+.pill.ok{color:var(--ok);border-color:color-mix(in srgb,var(--ok) 45%,transparent)}
+.pill.warn{color:var(--warn);border-color:color-mix(in srgb,var(--warn) 45%,transparent)}
+.swatches{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.swatch{display:flex;gap:8px;align-items:center;border:1px solid var(--line);border-radius:8px;padding:6px;background:transparent;color:var(--ink);font:inherit;cursor:pointer;text-align:left}
+.swatch:hover,.swatch:focus-visible{border-color:var(--accent);outline:none}
+.swatch[aria-pressed="true"]{border-color:var(--accent);box-shadow:0 0 0 2px var(--accent-soft)}
+.swatch i{width:26px;height:26px;border-radius:5px;border:1px solid var(--line-2);flex:none}
+.swatch b{display:block;font-weight:600;font-size:12.5px}
+.swatch small{display:block;font:11px var(--mono);color:var(--ink-3)}
+.ctl{display:grid;grid-template-columns:1fr auto;gap:2px 10px;align-items:center}
+.ctl label{font-weight:500;font-size:13px}
+.ctl output{font:12px var(--mono);color:var(--ink-2);font-variant-numeric:tabular-nums}
+.ctl input[type=range]{grid-column:1/-1;width:100%;accent-color:var(--accent)}
+.ctl .hint{grid-column:1/-1;font-size:11.5px;color:var(--ink-3);display:flex;justify-content:space-between}
+.seg{display:inline-flex;border:1px solid var(--line-2);border-radius:8px;overflow:hidden}
+.seg input{position:absolute;opacity:0;pointer-events:none}
+.seg label{padding:6px 10px;font-size:12.5px;font-weight:500;cursor:pointer;color:var(--ink-2);border-left:1px solid var(--line-2)}
+.seg label:first-of-type{border-left:0}
+.seg input:checked+label{background:var(--ink);color:var(--panel)}
+.seg input:focus-visible+label{outline:2px solid var(--accent);outline-offset:-2px}
+.field{display:flex;justify-content:space-between;align-items:center;gap:10px}
+.field>span{font-weight:500;font-size:13px}
+select{font:inherit;font-size:13px;padding:5px 8px;border-radius:7px;border:1px solid var(--line-2);background:var(--panel);color:var(--ink)}
+.check{display:flex;gap:8px;align-items:center;font-size:13px;cursor:pointer}
+.check input{accent-color:var(--accent);width:15px;height:15px}
+.btn{font:600 13px var(--body);padding:8px 12px;border-radius:8px;border:1px solid var(--line-2);background:var(--panel);color:var(--ink);cursor:pointer}
+.btn:hover{border-color:var(--ink-3)}
+.btn:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.btn.primary{background:var(--accent);color:var(--accent-ink);border-color:var(--accent)}
+.btn.primary:hover{filter:brightness(1.07)}
+.btn.small{padding:5px 9px;font-size:12px}
+.btn[disabled]{opacity:.45;cursor:not-allowed}
+.exports{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.exports .wide{grid-column:1/-1}
+.stagewrap{display:flex;flex-direction:column;min-width:0;min-height:0}
+.toolbar{display:flex;gap:10px 16px;align-items:center;flex-wrap:wrap;padding:10px 16px;border-bottom:1px solid var(--line);background:var(--panel)}
+.toolbar .spacer{flex:1}
+.zoom{display:flex;gap:8px;align-items:center;font:12px var(--mono);color:var(--ink-2)}
+.zoom input{width:110px;accent-color:var(--accent)}
+.stage{position:relative;flex:1;min-height:0;background:var(--mat);overflow:hidden;touch-action:none;cursor:grab}
+.stage.picking{cursor:crosshair}
+.stage.dragging{cursor:grabbing}
+.stage canvas{position:absolute;inset:0;width:100%;height:100%;display:block}
+.busy{position:absolute;top:12px;left:12px;font:500 12px var(--mono);background:rgba(0,0,0,.55);color:#fff;padding:6px 10px;border-radius:6px}
+.statusbar{display:flex;gap:6px 18px;flex-wrap:wrap;padding:8px 16px;font:12px var(--mono);color:var(--ink-2);border-top:1px solid var(--line);background:var(--panel);font-variant-numeric:tabular-nums}
+.statusbar b{color:var(--ink);font-weight:500}
+.toast{position:fixed;left:50%;bottom:calc(20px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);background:var(--ink);color:var(--panel);padding:9px 14px;border-radius:8px;font-size:13px;box-shadow:0 6px 24px rgba(0,0,0,.25);z-index:10}
+.pickhint{position:absolute;top:12px;right:12px;font-size:12.5px;background:var(--panel);color:var(--ink);padding:6px 10px;border-radius:6px;border:1px solid var(--line-2)}
+.kbd{font:11px var(--mono);color:var(--ink-3)}
+@media (max-width:820px){
+  html,body{height:auto}
+  .app{grid-template-columns:1fr;height:auto}
+  .panel{border-right:0;border-bottom:1px solid var(--line);order:2}
+  .stagewrap{order:1}
+  .stage{height:62vh;flex:none}
+}
+@media (prefers-reduced-motion: reduce){*{transition:none!important;animation:none!important}}
+</style>
+</head>
+<body>
+<div class="app" id="app">
+  <aside class="panel">
+    <div class="brand">
+      <h1>Seamless Separator</h1>
+      <p>Turn found pattern tiles into clean black-and-white, color-ID and vector repeats. Every step wraps around the tile edges, so results stay seamless.</p>
+    </div>
+
+    <section class="group" aria-labelledby="h-src">
+      <h2 id="h-src">Source tiles</h2>
+      <button class="drop" id="dropBtn" type="button">
+        <strong>Add tiles</strong>
+        <span>Drop images anywhere, choose files, or paste an image with ⌘V / Ctrl+V.</span>
+      </button>
+      <input type="file" id="file" accept="image/*" multiple hidden>
+      <div class="queue" id="queue" aria-label="Loaded tiles"></div>
+      <div class="meta" id="srcMeta"></div>
+      <div class="row" id="seamRow"></div>
+    </section>
+
+    <section class="group" aria-labelledby="h-ink">
+      <h2 id="h-ink">Ink &amp; paper</h2>
+      <div class="swatches">
+        <button class="swatch" id="pickInk" type="button" aria-pressed="false" title="Click, then click the pattern to sample the ink color"><i id="inkSw"></i><span><b>Ink</b><small id="inkHex">—</small></span></button>
+        <button class="swatch" id="pickPaper" type="button" aria-pressed="false" title="Click, then click the pattern to sample the paper color"><i id="paperSw"></i><span><b>Paper</b><small id="paperHex">—</small></span></button>
+      </div>
+      <div class="row"><button class="btn small" id="autoDetect" type="button">Auto-detect</button><span class="kbd" id="inkMode">Auto-detected</span></div>
+      <div class="field"><span>Shapes are</span>
+        <div class="seg"><input type="radio" name="tone" id="toneDark" value="dark" checked><label for="toneDark">Dark</label><input type="radio" name="tone" id="toneLight" value="light"><label for="toneLight">Light</label></div>
+      </div>
+    </section>
+
+    <section class="group" aria-labelledby="h-clean">
+      <h2 id="h-clean">Clean up</h2>
+      <div class="row"><span class="kbd">Presets</span><button class="btn small" id="presetOrganic" type="button">Organic / brush</button><button class="btn small" id="presetGeo" type="button">Geometric</button><button class="btn small" id="presetRough" type="button">Rough photo / scan</button></div>
+      <div class="field"><span>Detail</span>
+        <div class="seg"><input type="radio" name="res" id="res1" value="1"><label for="res1">1×</label><input type="radio" name="res" id="res2" value="2" checked><label for="res2">2×</label><input type="radio" name="res" id="res4" value="4"><label for="res4">4×</label></div>
+      </div>
+      <div class="ctl"><label for="flatten">Even out lighting</label><output id="flattenOut"></output><input type="range" id="flatten" min="0" max="100" step="1" value="0"><div class="hint"><span>off</span><span>strong (photos, shadows)</span></div></div>
+      <div class="ctl"><label for="smooth">Edge smoothing</label><output id="smoothOut"></output><input type="range" id="smooth" min="0" max="10" step="0.1" value="1.2"><div class="hint"><span>crisp corners</span><span>rounded</span></div></div>
+      <div class="ctl"><label for="weight">Line weight</label><output id="weightOut"></output><input type="range" id="weight" min="-40" max="40" step="1" value="0"><div class="hint"><span>thinner</span><span>heavier</span></div></div>
+      <div class="ctl"><label for="specks">Remove specks under</label><output id="specksOut"></output><input type="range" id="specks" min="0" max="3000" step="10" value="40"></div>
+      <div class="ctl"><label for="holes">Fill pinholes under</label><output id="holesOut"></output><input type="range" id="holes" min="0" max="3000" step="10" value="40"></div>
+    </section>
+
+    <section class="group" aria-labelledby="h-bw">
+      <h2 id="h-bw">Black &amp; white output</h2>
+      <div class="field"><span>Edges</span>
+        <div class="seg"><input type="radio" name="edges" id="edgeHard" value="hard" checked><label for="edgeHard">Hard, 2 colors</label><input type="radio" name="edges" id="edgeAA" value="aa"><label for="edgeAA">Anti-aliased</label></div>
+      </div>
+      <div class="field"><span>Colors</span>
+        <div class="seg"><input type="radio" name="bwc" id="bwPure" value="pure" checked><label for="bwPure">Pure</label><input type="radio" name="bwc" id="bwSrc" value="source"><label for="bwSrc">Source</label></div>
+      </div>
+      <label class="check"><input type="checkbox" id="invertOut"> Invert (light on dark)</label>
+    </section>
+
+    <section class="group" aria-labelledby="h-id">
+      <h2 id="h-id">Color ID output</h2>
+      <div class="field"><label for="palette"><span>Palette</span></label>
+        <select id="palette"><option value="distinct">Distinct hues</option><option value="random">Random RGB</option><option value="index">Index-encoded (R+G+B = ID)</option></select>
+      </div>
+      <div class="field"><label for="idBg"><span>Background</span></label>
+        <select id="idBg"><option value="white">White</option><option value="black">Black</option><option value="transparent">Transparent</option><option value="regions">Own IDs per region</option></select>
+      </div>
+      <div class="row"><button class="btn small" id="shuffle" type="button">Shuffle colors</button><span class="kbd">Shapes cut by the tile edge keep one ID.</span></div>
+    </section>
+
+    <section class="group" aria-labelledby="h-vec">
+      <h2 id="h-vec">Vector output</h2>
+      <div class="field"><span>Outline</span>
+        <div class="seg"><input type="radio" name="curve" id="curvePoly" value="poly" checked><label for="curvePoly">Sharp</label><input type="radio" name="curve" id="curveSmooth" value="smooth"><label for="curveSmooth">Smooth curves</label></div>
+      </div>
+      <div class="ctl"><label for="simplify">Simplify</label><output id="simplifyOut"></output><input type="range" id="simplify" min="0" max="2" step="0.05" value="0.4"><div class="hint"><span>exact</span><span>fewer points</span></div></div>
+    </section>
+
+    <section class="group" aria-labelledby="h-exp">
+      <h2 id="h-exp">Export</h2>
+      <div class="exports">
+        <button class="btn primary" id="saveBW" type="button">B&amp;W PNG</button>
+        <button class="btn primary" id="saveID" type="button">Color ID PNG</button>
+        <button class="btn" id="saveSVG" type="button">SVG</button>
+        <button class="btn" id="saveAll" type="button">All tiles (.zip)</button>
+      </div>
+      <span class="kbd" id="exportNote"></span>
+    </section>
+  </aside>
+
+  <main class="stagewrap">
+    <div class="toolbar">
+      <div class="seg" role="radiogroup" aria-label="View">
+        <input type="radio" name="view" id="vSrc" value="source"><label for="vSrc">Source</label>
+        <input type="radio" name="view" id="vBW" value="bw" checked><label for="vBW">B&amp;W</label>
+        <input type="radio" name="view" id="vID" value="id"><label for="vID">Color ID</label>
+        <input type="radio" name="view" id="vVec" value="vector"><label for="vVec">Vector</label>
+      </div>
+      <div class="seg" role="radiogroup" aria-label="Tiling">
+        <input type="radio" name="tile" id="tOne" value="single"><label for="tOne">1 tile</label>
+        <input type="radio" name="tile" id="tRep" value="repeat" checked><label for="tRep">Repeat</label>
+      </div>
+      <label class="check"><input type="checkbox" id="showEdges" checked> Tile edges</label>
+      <div class="spacer"></div>
+      <div class="zoom"><label for="zoom">Zoom</label><input type="range" id="zoom" min="-3" max="3" step="0.01" value="0"><span id="zoomOut">100%</span><button class="btn small" id="fit" type="button">Fit</button></div>
+    </div>
+    <div class="stage" id="stage">
+      <canvas id="cv"></canvas>
+      <div class="busy" id="busy" hidden>Processing…</div>
+      <div class="pickhint" id="pickHint" hidden>Click the pattern to sample the color. Esc cancels.</div>
+    </div>
+    <div class="statusbar" id="status"></div>
+  </main>
+</div>
+<div class="toast" id="toast" hidden></div>
+
+<script>
+"use strict";
+/* ============================================================
+   Seamless Separator. All image math treats the tile as a torus:
+   blur, labeling and tracing wrap across the edges, so the
+   outputs repeat without seams.
+   ============================================================ */
+
+const $ = id => document.getElementById(id);
+const MAX_SIDE = 4096;      // cap on source size
+const WORK_MAX = 3200;      // cap on the upscaled working resolution
+const TRACE_MAX = 2048;     // cap on the vector-trace grid
+
+// ---------------------------------------------------------- state
+const items = [];          // loaded tiles
+let cur = null;            // current item
+let seed = 1;
+let view = "bw", tileMode = "repeat";
+let zoomLog = 0, panX = 0, panY = 0;
+let pickMode = null;       // "ink" | "paper" | null
+const cache = {};          // processing cache for the current item
+
+function settings(){
+  const r = n => document.querySelector(`input[name=${n}]:checked`).value;
+  return {
+    res: +r("res"), flatten: +$("flatten").value, smooth: +$("smooth").value, weight: +$("weight").value,
+    specks: +$("specks").value, holes: +$("holes").value, tone: r("tone"),
+    edges: r("edges"), bwc: r("bwc"), invert: $("invertOut").checked,
+    palette: $("palette").value, idBg: $("idBg").value, seed,
+    curve: r("curve"), simplify: +$("simplify").value,
+  };
+}
+
+// ---------------------------------------------------------- math helpers
+const mod = (a, n) => ((a % n) + n) % n;
+
+function boxesForGauss(sigma, n){
+  const wIdeal = Math.sqrt(12 * sigma * sigma / n + 1);
+  let wl = Math.floor(wIdeal); if (wl % 2 === 0) wl--;
+  const wu = wl + 2;
+  const m = Math.round((12 * sigma * sigma - n * wl * wl - 4 * n * wl - 3 * n) / (-4 * wl - 4));
+  const sizes = [];
+  for (let i = 0; i < n; i++) sizes.push(i < m ? wl : wu);
+  return sizes;
+}
+function boxH(s, d, W, H, r){
+  const inv = 1 / (2 * r + 1);
+  for (let y = 0; y < H; y++){
+    const o = y * W; let acc = 0;
+    for (let k = -r; k <= r; k++) acc += s[o + mod(k, W)];
+    for (let x = 0; x < W; x++){
+      d[o + x] = acc * inv;
+      acc += s[o + mod(x + r + 1, W)] - s[o + mod(x - r, W)];
+    }
+  }
+}
+function boxV(s, d, W, H, r){
+  const inv = 1 / (2 * r + 1);
+  for (let x = 0; x < W; x++){
+    let acc = 0;
+    for (let k = -r; k <= r; k++) acc += s[mod(k, H) * W + x];
+    for (let y = 0; y < H; y++){
+      d[y * W + x] = acc * inv;
+      acc += s[mod(y + r + 1, H) * W + x] - s[mod(y - r, H) * W + x];
+    }
+  }
+}
+// Gaussian blur on a torus (3 box passes).
+function blurWrap(src, W, H, sigma){
+  const a = Float32Array.from(src);
+  if (sigma < 0.3) return a;
+  const tmp = new Float32Array(W * H);
+  for (const size of boxesForGauss(sigma, 3)){
+    const r = (size - 1) >> 1;
+    if (r < 1) continue;
+    boxH(a, tmp, W, H, r); boxV(tmp, a, W, H, r);
+  }
+  return a;
+}
+// Bilinear upscale with wraparound sampling.
+function upscale(f, W, H, s){
+  if (s === 1) return f;
+  const Wk = W * s, Hk = H * s, o = new Float32Array(Wk * Hk);
+  const x0 = new Int32Array(Wk), x1 = new Int32Array(Wk), fx = new Float32Array(Wk);
+  for (let X = 0; X < Wk; X++){
+    const sx = (X + 0.5) / s - 0.5, xf = Math.floor(sx);
+    x0[X] = mod(xf, W); x1[X] = mod(xf + 1, W); fx[X] = sx - xf;
+  }
+  for (let Y = 0; Y < Hk; Y++){
+    const sy = (Y + 0.5) / s - 0.5, yf = Math.floor(sy), fy = sy - yf;
+    const r0 = mod(yf, H) * W, r1 = mod(yf + 1, H) * W, oo = Y * Wk;
+    for (let X = 0; X < Wk; X++){
+      const a = f[r0 + x0[X]], b = f[r0 + x1[X]], c = f[r1 + x0[X]], d = f[r1 + x1[X]], t = fx[X];
+      const top = a + (b - a) * t, bot = c + (d - c) * t;
+      o[oo + X] = top + (bot - top) * fy;
+    }
+  }
+  return o;
+}
+// Connected components on a torus. Pixels equal to `val` are labeled.
+function labelTorus(mask, W, H, val, conn8){
+  const N = W * H, P = new Int32Array(N);
+  for (let i = 0; i < N; i++) P[i] = mask[i] === val ? i : -1;
+  const find = i => { while (P[i] !== i){ P[i] = P[P[i]]; i = P[i]; } return i; };
+  const uni = (a, b) => { a = find(a); b = find(b); if (a !== b){ if (a < b) P[b] = a; else P[a] = b; } };
+  for (let y = 0; y < H; y++){
+    const yd = (y + 1) % H;
+    for (let x = 0; x < W; x++){
+      const i = y * W + x; if (P[i] < 0) continue;
+      const xr = (x + 1) % W;
+      let j = y * W + xr; if (P[j] >= 0) uni(i, j);
+      j = yd * W + x; if (P[j] >= 0) uni(i, j);
+      if (conn8){
+        j = yd * W + xr; if (P[j] >= 0) uni(i, j);
+        j = yd * W + (x - 1 + W) % W; if (P[j] >= 0) uni(i, j);
+      }
+    }
+  }
+  const lab = new Int32Array(N).fill(-1), map = new Int32Array(N).fill(-1), areas = [];
+  let count = 0;
+  for (let i = 0; i < N; i++){
+    if (P[i] < 0) continue;
+    const r = find(i); let l = map[r];
+    if (l < 0){ l = map[r] = count++; areas.push(0); }
+    lab[i] = l; areas[l]++;
+  }
+  return { lab, count, areas };
+}
+function otsu(f){
+  const hist = new Float64Array(256);
+  for (let i = 0; i < f.length; i++) hist[Math.min(255, Math.max(0, Math.round(f[i] * 255)))]++;
+  const total = f.length; let sum = 0;
+  for (let i = 0; i < 256; i++) sum += i * hist[i];
+  let sumB = 0, wB = 0, best = 0, thr = 128;
+  for (let t = 0; t < 256; t++){
+    wB += hist[t]; if (!wB) continue;
+    const wF = total - wB; if (!wF) break;
+    sumB += t * hist[t];
+    const mB = sumB / wB, mF = (sum - sumB) / wF, v = wB * wF * (mB - mF) * (mB - mF);
+    if (v > best){ best = v; thr = t; }
+  }
+  return (thr + 0.5) / 255;
+}
+function mulberry32(a){ return () => { a |= 0; a = a + 0x6D2B79F5 | 0; let t = Math.imul(a ^ a >>> 15, 1 | a); t = t + Math.imul(t ^ t >>> 7, 61 | t) ^ t; return ((t ^ t >>> 14) >>> 0) / 4294967296; }; }
+function hsl2rgb(h, s, l){
+  const k = n => (n + h / 30) % 12, a = s * Math.min(l, 1 - l);
+  const f = n => l - a * Math.max(-1, Math.min(k(n) - 3, Math.min(9 - k(n), 1)));
+  return [Math.round(f(0) * 255), Math.round(f(8) * 255), Math.round(f(4) * 255)];
+}
+const hex = c => "#" + c.map(v => Math.round(v).toString(16).padStart(2, "0")).join("");
+const lum = c => 0.2126 * c[0] + 0.7152 * c[1] + 0.0722 * c[2];
+
+// ---------------------------------------------------------- source analysis
+function composite(data, i){ // RGBA over white
+  const a = data[i + 3] / 255;
+  return [data[i] * a + 255 * (1 - a), data[i + 1] * a + 255 * (1 - a), data[i + 2] * a + 255 * (1 - a)];
+}
+// Two-means clustering on colors: darker cluster = ink.
+function detectInkPaper(item){
+  const { data, W, H } = item, N = W * H, step = Math.max(1, Math.floor(N / 40000));
+  const samples = [];
+  for (let p = 0; p < N; p += step) samples.push(composite(data, p * 4));
+  let lo = samples[0], hi = samples[0];
+  for (const s of samples){ if (lum(s) < lum(lo)) lo = s; if (lum(s) > lum(hi)) hi = s; }
+  let A = lo.slice(), B = hi.slice();
+  for (let it = 0; it < 12; it++){
+    const sa = [0, 0, 0, 0], sb = [0, 0, 0, 0];
+    for (const s of samples){
+      const da = (s[0]-A[0])**2 + (s[1]-A[1])**2 + (s[2]-A[2])**2;
+      const db = (s[0]-B[0])**2 + (s[1]-B[1])**2 + (s[2]-B[2])**2;
+      const t = da <= db ? sa : sb; t[0] += s[0]; t[1] += s[1]; t[2] += s[2]; t[3]++;
+    }
+    if (sa[3]) A = [sa[0]/sa[3], sa[1]/sa[3], sa[2]/sa[3]];
+    if (sb[3]) B = [sb[0]/sb[3], sb[1]/sb[3], sb[2]/sb[3]];
+  }
+  A = A.map(Math.round); B = B.map(Math.round);
+  if (Math.abs(lum(A) - lum(B)) < 8) return { ink: [0, 0, 0], paper: [255, 255, 255] };
+  return lum(A) < lum(B) ? { ink: A, paper: B } : { ink: B, paper: A };
+}
+// Project each pixel onto the ink→paper axis: 0 = ink, 1 = paper.
+function computeField0(item){
+  const { data, W, H, ink, paper } = item;
+  const dr = paper[0]-ink[0], dg = paper[1]-ink[1], db = paper[2]-ink[2], dd = dr*dr + dg*dg + db*db || 1;
+  const f = new Float32Array(W * H);
+  for (let p = 0; p < W * H; p++){
+    const c = composite(data, p * 4);
+    const t = ((c[0]-ink[0])*dr + (c[1]-ink[1])*dg + (c[2]-ink[2])*db) / dd;
+    f[p] = t < 0 ? 0 : t > 1 ? 1 : t;
+  }
+  return f;
+}
+// Even out lighting (shadows, vignetting, uneven scans, fabric folds). Estimates the local
+// ink level and local paper level with wide wraparound blurs, then rescales each pixel
+// between them. Strength 0 = off; higher = smaller neighborhood = more local.
+function flattenLighting(f, W, H, strength){
+  if (!strength) return f;
+  const N = f.length, sigma = Math.max(W, H) * (0.12 - 0.1 * strength / 100);
+  const t0 = otsu(f), fp = new Float32Array(N), wp = new Float32Array(N), fi = new Float32Array(N), wi = new Float32Array(N);
+  for (let i = 0; i < N; i++){ if (f[i] >= t0){ fp[i] = f[i]; wp[i] = 1; } else { fi[i] = f[i]; wi[i] = 1; } }
+  const Fp = blurWrap(fp, W, H, sigma), Wp = blurWrap(wp, W, H, sigma), Fi = blurWrap(fi, W, H, sigma), Wi = blurWrap(wi, W, H, sigma);
+  const o = new Float32Array(N);
+  for (let i = 0; i < N; i++){
+    const paper = Wp[i] > 1e-3 ? Fp[i] / Wp[i] : 1, ink = Wi[i] > 1e-3 ? Fi[i] / Wi[i] : 0;
+    const span = Math.max(0.08, paper - ink), v = (f[i] - ink) / span;
+    o[i] = v < 0 ? 0 : v > 1 ? 1 : v;
+  }
+  return o;
+}
+// Compare the wrap seam with ordinary neighbor differences.
+function seamCheck(item){
+  const { data, W, H } = item, L = (x, y) => lum(composite(data, (y * W + x) * 4));
+  const stepY = Math.max(1, Math.floor(H / 400)), stepX = Math.max(1, Math.floor(W / 400));
+  // Baseline: the same measurement across 15 interior column/row pairs.
+  const K = 15;
+  let seamLR = 0, baseLR = 0;
+  for (let y = 0; y < H; y += stepY){
+    seamLR += Math.abs(L(W - 1, y) - L(0, y));
+    let b = 0; for (let k = 1; k <= K; k++){ const x = Math.floor(k * W / (K + 1)); b += Math.abs(L(x, y) - L(x + 1, y)); }
+    baseLR += b / K;
+  }
+  let seamTB = 0, baseTB = 0;
+  for (let x = 0; x < W; x += stepX){
+    seamTB += Math.abs(L(x, H - 1) - L(x, 0));
+    let b = 0; for (let k = 1; k <= K; k++){ const y = Math.floor(k * H / (K + 1)); b += Math.abs(L(x, y) - L(x, y + 1)); }
+    baseTB += b / K;
+  }
+  const rLR = (seamLR + 1) / (baseLR + 1), rTB = (seamTB + 1) / (baseTB + 1);
+  return { lr: rLR < 2, tb: rTB < 2, rLR, rTB };
+}
+
+// ---------------------------------------------------------- pipeline
+function effScale(item, s){ return Math.max(1, Math.min(s.res, Math.floor(WORK_MAX / Math.max(item.W, item.H)))); }
+
+function run(item, s, C){
+  const k1 = item.id + "|" + item.ink + "|" + item.paper + "|" + s.flatten;
+  if (C.k1 !== k1){ C.f0 = flattenLighting(computeField0(item), item.W, item.H, s.flatten); C.otsu = otsu(C.f0); C.k1 = k1; C.k2 = null; }
+  const sc = effScale(item, s), Wk = item.W * sc, Hk = item.H * sc;
+  const k2 = k1 + "|" + sc + "|" + s.smooth;
+  if (C.k2 !== k2){
+    C.F = blurWrap(upscale(C.f0, item.W, item.H, sc), Wk, Hk, s.smooth * sc);
+    C.sc = sc; C.Wk = Wk; C.Hk = Hk; C.k2 = k2; C.k3 = null;
+  }
+  const k3 = k2 + "|" + s.weight + "|" + s.specks + "|" + s.holes + "|" + s.tone;
+  if (C.k3 !== k3){
+    const N = Wk * Hk, thr = C.otsu + s.weight / 200, F = C.F, mask = new Uint8Array(N);
+    // mask: 1 = shape. Dark shapes are pixels below the threshold.
+    const dark = s.tone === "dark";
+    for (let i = 0; i < N; i++) mask[i] = (F[i] < thr) === dark ? 1 : 0;
+    const a2 = sc * sc;
+    let removed = 0, filled = 0;
+    if (s.specks > 0){
+      const L = labelTorus(mask, Wk, Hk, 1, false), small = L.areas.map(a => a < s.specks * a2);
+      removed = small.filter(Boolean).length;
+      if (removed) for (let i = 0; i < N; i++) if (L.lab[i] >= 0 && small[L.lab[i]]) mask[i] = 0;
+    }
+    if (s.holes > 0){
+      const L = labelTorus(mask, Wk, Hk, 0, true);
+      if (L.count > 1){
+        const small = L.areas.map(a => a < s.holes * a2);
+        filled = small.filter(Boolean).length;
+        if (filled) for (let i = 0; i < N; i++) if (L.lab[i] >= 0 && small[L.lab[i]]) mask[i] = 1;
+      }
+    }
+    C.mask = mask; C.shapes = labelTorus(mask, Wk, Hk, 1, false); C.regions = null;
+    C.removed = removed; C.filled = filled; C.thr = thr;
+    C.k3 = k3; C.kbw = C.kid = C.ksvg = null;
+  }
+  return C;
+}
+
+function darkCoverage(C, s){ // 1 where the output should be ink-colored
+  const N = C.Wk * C.Hk, d = new Float32Array(N), m = C.mask, dark = s.tone === "dark";
+  for (let i = 0; i < N; i++) d[i] = dark ? m[i] : 1 - m[i];
+  return d;
+}
+
+function renderBW(item, s, C){
+  const key = C.k3 + "|" + s.edges + "|" + s.bwc + "|" + s.invert;
+  if (C.kbw === key) return C.bw;
+  const { Wk, Hk } = C, N = Wk * Hk;
+  let cov = darkCoverage(C, s);
+  if (s.edges === "aa"){
+    cov = blurWrap(cov, Wk, Hk, 0.6);
+    for (let i = 0; i < N; i++){ const v = (cov[i] - 0.5) * 1.8 + 0.5; cov[i] = v < 0 ? 0 : v > 1 ? 1 : v; }
+  }
+  let ink = s.bwc === "source" ? item.ink : [0, 0, 0], paper = s.bwc === "source" ? item.paper : [255, 255, 255];
+  if (s.invert) [ink, paper] = [paper, ink];
+  const cv = makeCanvas(Wk, Hk), ctx = cv.getContext("2d"), img = ctx.createImageData(Wk, Hk), o = img.data;
+  for (let i = 0; i < N; i++){
+    const t = cov[i], j = i * 4;
+    o[j] = paper[0] + (ink[0] - paper[0]) * t; o[j+1] = paper[1] + (ink[1] - paper[1]) * t; o[j+2] = paper[2] + (ink[2] - paper[2]) * t; o[j+3] = 255;
+  }
+  ctx.putImageData(img, 0, 0);
+  C.bw = cv; C.kbw = key;
+  return cv;
+}
+
+function idColors(n, s, reserved){
+  const used = new Set(reserved), out = [], rnd = mulberry32(s.seed * 9973 + 17);
+  const off = (s.seed - 1) * 71.3;
+  for (let i = 0; i < n; i++){
+    let c;
+    if (s.palette === "index"){ const v = i + 1; c = [v & 255, (v >> 8) & 255, (v >> 16) & 255]; }
+    else if (s.palette === "random") c = [rnd() * 256 | 0, rnd() * 256 | 0, rnd() * 256 | 0];
+    else c = hsl2rgb((i * 137.50776 + off) % 360, 0.55 + 0.3 * ((i * 7) % 3) / 2, 0.40 + 0.25 * ((i * 5) % 4) / 3);
+    let key = (c[0] << 16) | (c[1] << 8) | c[2];
+    while (used.has(key)){ key = (key + 0x010307) & 0xffffff; }
+    used.add(key); out.push([(key >> 16) & 255, (key >> 8) & 255, key & 255]);
+  }
+  return out;
+}
+
+function renderID(item, s, C){
+  const key = C.k3 + "|" + s.palette + "|" + s.idBg + "|" + s.seed;
+  if (C.kid === key) return C.id;
+  const { Wk, Hk } = C, N = Wk * Hk, sh = C.shapes;
+  let reg = null;
+  if (s.idBg === "regions"){ if (!C.regions) C.regions = labelTorus(C.mask, Wk, Hk, 0, true); reg = C.regions; }
+  const bg = s.idBg === "black" ? [0, 0, 0] : [255, 255, 255];
+  const reserved = s.idBg === "white" ? [0xffffff] : s.idBg === "black" ? [0] : s.palette === "index" ? [0] : [];
+  const cols = idColors(sh.count + (reg ? reg.count : 0), s, reserved);
+  const cv = makeCanvas(Wk, Hk), ctx = cv.getContext("2d"), img = ctx.createImageData(Wk, Hk), o = img.data;
+  for (let i = 0; i < N; i++){
+    const j = i * 4, l = sh.lab[i];
+    let c, a = 255;
+    if (l >= 0) c = cols[l];
+    else if (reg) c = cols[sh.count + reg.lab[i]];
+    else if (s.idBg === "transparent"){ c = [0, 0, 0]; a = 0; }
+    else c = bg;
+    o[j] = c[0]; o[j+1] = c[1]; o[j+2] = c[2]; o[j+3] = a;
+  }
+  ctx.putImageData(img, 0, 0);
+  C.id = cv; C.kid = key; C.idCount = sh.count + (reg ? reg.count : 0);
+  return cv;
+}
+
+// ---------------------------------------------------------- vector trace
+function rdpLoop(pts, tol){
+  const n = pts.length >> 1;
+  if (n < 5 || tol <= 0) return pts;
+  const X = i => pts[(i % n) * 2], Y = i => pts[(i % n) * 2 + 1];
+  let far = 0, fd = -1;
+  for (let i = 1; i < n; i++){ const d = (X(i) - X(0)) ** 2 + (Y(i) - Y(0)) ** 2; if (d > fd){ fd = d; far = i; } }
+  const keep = new Uint8Array(n); keep[0] = keep[far] = 1;
+  const stack = [[0, far], [far, n]], t2 = tol * tol;
+  while (stack.length){
+    const [a, b] = stack.pop(); if (b - a < 2) continue;
+    const ax = X(a), ay = Y(a), bx = X(b), by = Y(b), dx = bx - ax, dy = by - ay, len2 = dx * dx + dy * dy || 1e-9;
+    let mi = -1, md = -1;
+    for (let i = a + 1; i < b; i++){
+      const px = X(i) - ax, py = Y(i) - ay, cr = px * dy - py * dx, d = cr * cr / len2;
+      if (d > md){ md = d; mi = i; }
+    }
+    if (md > t2){ keep[mi % n] = 1; stack.push([a, mi], [mi, b]); }
+  }
+  const out = [];
+  for (let i = 0; i < n; i++) if (keep[i]) out.push(pts[i * 2], pts[i * 2 + 1]);
+  return out;
+}
+
+function traceSVG(item, s, C){
+  const key = C.k3 + "|" + s.curve + "|" + s.simplify + "|" + s.bwc + "|" + s.invert;
+  if (C.ksvg === key) return C.svg;
+  const { Wk, Hk } = C;
+  const cov = darkCoverage(C, s);
+  // Trace grid: downsample big tiles by averaging (which also anti-aliases), otherwise soften slightly.
+  const f = Math.max(1, Math.ceil(Math.max(Wk, Hk) / TRACE_MAX));
+  let Wt = Wk, Ht = Hk, field;
+  if (f > 1 && Wk % f === 0 && Hk % f === 0){
+    Wt = Wk / f; Ht = Hk / f; field = new Float32Array(Wt * Ht); const inv = 1 / (f * f);
+    for (let y = 0; y < Hk; y++) for (let x = 0; x < Wk; x++) field[((y / f) | 0) * Wt + ((x / f) | 0)] += cov[y * Wk + x] * inv;
+  } else field = blurWrap(cov, Wk, Hk, 0.7);
+  const P = 3, Wp = Wt + 2 * P + 2, Hp = Ht + 2 * P + 2, G = new Float32Array(Wp * Hp);
+  for (let y = 1; y < Hp - 1; y++) for (let x = 1; x < Wp - 1; x++) G[y * Wp + x] = field[mod(y - 1 - P, Ht) * Wt + mod(x - 1 - P, Wt)];
+  // Marching squares. Edge ids: horizontal edge (x,y)->(x+1,y) = y*Wp+x; vertical (x,y)->(x,y+1) = NH + y*Wp+x.
+  const NH = Wp * Hp, adj = new Map();
+  const link = (a, b) => {
+    let e = adj.get(a); if (!e) adj.set(a, e = [-1, -1]); e[e[0] < 0 ? 0 : 1] = b;
+    let g = adj.get(b); if (!g) adj.set(b, g = [-1, -1]); g[g[0] < 0 ? 0 : 1] = a;
+  };
+  for (let y = 0; y < Hp - 1; y++){
+    for (let x = 0; x < Wp - 1; x++){
+      const tl = G[y * Wp + x], tr = G[y * Wp + x + 1], br = G[(y + 1) * Wp + x + 1], bl = G[(y + 1) * Wp + x];
+      const c = (tl >= .5 ? 8 : 0) | (tr >= .5 ? 4 : 0) | (br >= .5 ? 2 : 0) | (bl >= .5 ? 1 : 0);
+      if (c === 0 || c === 15) continue;
+      const T = y * Wp + x, B = (y + 1) * Wp + x, L = NH + y * Wp + x, R = NH + y * Wp + x + 1;
+      switch (c){
+        case 1: case 14: link(L, B); break;
+        case 2: case 13: link(B, R); break;
+        case 3: case 12: link(L, R); break;
+        case 4: case 11: link(T, R); break;
+        case 6: case 9: link(T, B); break;
+        case 7: case 8: link(T, L); break;
+        case 5: if ((tl + tr + br + bl) / 4 >= .5){ link(T, L); link(R, B); } else { link(T, R); link(L, B); } break;
+        case 10: if ((tl + tr + br + bl) / 4 >= .5){ link(T, R); link(L, B); } else { link(T, L); link(R, B); } break;
+      }
+    }
+  }
+  const pos = id => {
+    let x, y, a, b, t;
+    if (id < NH){ y = (id / Wp) | 0; x = id - y * Wp; a = G[id]; b = G[id + 1]; t = (0.5 - a) / (b - a); x += t; }
+    else { const k = id - NH; y = (k / Wp) | 0; x = k - y * Wp; a = G[k]; b = G[k + Wp]; t = (0.5 - a) / (b - a); y += t; }
+    return [x - 1 - P + 0.5, y - 1 - P + 0.5];
+  };
+  const seen = new Set(), paths = [];
+  let pointCount = 0;
+  for (const start of adj.keys()){
+    if (seen.has(start)) continue;
+    const pts = []; let prev = -1, cur = start, minX = 1e9, minY = 1e9, maxX = -1e9, maxY = -1e9;
+    for (;;){
+      seen.add(cur);
+      const [px, py] = pos(cur); pts.push(px, py);
+      if (px < minX) minX = px; if (px > maxX) maxX = px; if (py < minY) minY = py; if (py > maxY) maxY = py;
+      const e = adj.get(cur), nx = e[0] !== prev ? e[0] : e[1];
+      prev = cur; cur = nx;
+      if (cur < 0 || cur === start || seen.has(cur)) break;
+    }
+    if (maxX < 0 || maxY < 0 || minX > Wt || minY > Ht || pts.length < 6) continue;
+    const simp = rdpLoop(pts, s.simplify);
+    if (simp.length < 6) continue;
+    pointCount += simp.length >> 1;
+    paths.push(s.curve === "smooth" ? smoothPath(simp) : polyPath(simp));
+  }
+  let ink = s.bwc === "source" ? item.ink : [0, 0, 0], paper = s.bwc === "source" ? item.paper : [255, 255, 255];
+  if (s.invert) [ink, paper] = [paper, ink];
+  const outW = Math.round(item.W * C.sc), outH = Math.round(item.H * C.sc);
+  const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="${outW}" height="${outH}" viewBox="0 0 ${Wt} ${Ht}" shape-rendering="geometricPrecision">\n` +
+    `<!-- Seamless tile: shapes crossing the edges continue past the viewBox and are clipped, so the tile repeats cleanly. -->\n` +
+    `<rect width="${Wt}" height="${Ht}" fill="${hex(paper)}"/>\n` +
+    `<path fill="${hex(ink)}" fill-rule="evenodd" d="${paths.join("")}"/>\n</svg>\n`;
+  C.svg = { text: svg, W: Wt, H: Ht, paths: paths.length, points: pointCount };
+  C.ksvg = key; C.svgCanvas = null;
+  return C.svg;
+}
+const n1 = v => Math.round(v * 10) / 10;
+function polyPath(p){
+  let d = "M" + n1(p[0]) + " " + n1(p[1]);
+  for (let i = 2; i < p.length; i += 2) d += "L" + n1(p[i]) + " " + n1(p[i + 1]);
+  return d + "Z";
+}
+function smoothPath(p){ // quadratic B-spline through the midpoints of each segment
+  const n = p.length >> 1, X = i => p[(i % n) * 2], Y = i => p[(i % n) * 2 + 1];
+  let d = "M" + n1((X(0) + X(1)) / 2) + " " + n1((Y(0) + Y(1)) / 2);
+  for (let i = 1; i <= n; i++) d += "Q" + n1(X(i)) + " " + n1(Y(i)) + " " + n1((X(i) + X(i + 1)) / 2) + " " + n1((Y(i) + Y(i + 1)) / 2);
+  return d + "Z";
+}
+function svgToCanvas(svg){
+  return new Promise((res, rej) => {
+    const url = URL.createObjectURL(new Blob([svg.text], { type: "image/svg+xml" }));
+    const img = new Image();
+    img.onload = () => { const cv = makeCanvas(svg.W, svg.H); cv.getContext("2d").drawImage(img, 0, 0, svg.W, svg.H); URL.revokeObjectURL(url); res(cv); };
+    img.onerror = e => { URL.revokeObjectURL(url); rej(e); };
+    img.src = url;
+  });
+}
+
+// ---------------------------------------------------------- loading
+function makeCanvas(w, h){ const c = document.createElement("canvas"); c.width = w; c.height = h; return c; }
+let nextId = 1;
+function addImage(img, name){
+  let W = img.naturalWidth || img.width, H = img.naturalHeight || img.height;
+  const k = Math.min(1, MAX_SIDE / Math.max(W, H));
+  const note = k < 1 ? `Scaled from ${W}×${H} to fit the ${MAX_SIDE}px limit.` : "";
+  W = Math.round(W * k); H = Math.round(H * k);
+  const cv = makeCanvas(W, H), ctx = cv.getContext("2d", { willReadFrequently: true });
+  ctx.drawImage(img, 0, 0, W, H);
+  const data = ctx.getImageData(0, 0, W, H).data;
+  const item = { id: nextId++, name: (name || "tile").replace(/\.[a-z0-9]+$/i, ""), W, H, data, canvas: cv, note, auto: true };
+  Object.assign(item, detectInkPaper(item));
+  item.seam = seamCheck(item);
+  const th = makeCanvas(92, 92); th.getContext("2d").drawImage(cv, 0, 0, 92, 92);
+  item.thumb = th.toDataURL();
+  items.push(item);
+  select(item);
+  renderQueue();
+}
+function loadFile(file){
+  if (!file || !file.type.startsWith("image/")) return;
+  const url = URL.createObjectURL(file), img = new Image();
+  img.onload = () => { addImage(img, file.name); URL.revokeObjectURL(url); };
+  img.onerror = () => { toast(`Couldn't read ${file.name}. Try saving it as PNG or JPG.`); URL.revokeObjectURL(url); };
+  img.src = url;
+}
+function select(item){
+  cur = item;
+  for (const k of Object.keys(cache)) delete cache[k];
+  pickMode = null; updatePick();
+  updateSourceUI();
+  fitView();
+  schedule();
+  renderQueue();
+}
+function renderQueue(){
+  const q = $("queue"); q.innerHTML = "";
+  for (const it of items){
+    const b = document.createElement("button");
+    b.type = "button"; b.style.backgroundImage = `url(${it.thumb})`; b.title = it.name;
+    b.setAttribute("aria-label", `Show ${it.name}`); b.setAttribute("aria-pressed", it === cur);
+    b.onclick = () => select(it);
+    q.appendChild(b);
+  }
+}
+function updateSourceUI(){
+  if (!cur) return;
+  $("srcMeta").innerHTML = "";
+  const lines = [`${cur.name}`, `${cur.W} × ${cur.H} px source`];
+  if (cur.note) lines.push(cur.note);
+  for (const l of lines){ const d = document.createElement("span"); d.textContent = l; $("srcMeta").appendChild(d); }
+  const seam = cur.seam, sr = $("seamRow"); sr.innerHTML = "";
+  const pill = (ok, txt, title) => { const p = document.createElement("span"); p.className = "pill " + (ok ? "ok" : "warn"); p.textContent = txt; p.title = title; sr.appendChild(p); };
+  pill(seam.lr, seam.lr ? "Left–right seam clean" : "Left–right seam visible", `Edge difference is ${seam.rLR.toFixed(1)}× a normal pixel step`);
+  pill(seam.tb, seam.tb ? "Top–bottom seam clean" : "Top–bottom seam visible", `Edge difference is ${seam.rTB.toFixed(1)}× a normal pixel step`);
+  $("inkSw").style.background = hex(cur.ink); $("inkHex").textContent = hex(cur.ink);
+  $("paperSw").style.background = hex(cur.paper); $("paperHex").textContent = hex(cur.paper);
+  $("inkMode").textContent = cur.auto ? "Auto-detected" : "Picked by hand";
+}
+
+// Built-in sample: a hand-cut pebble stack with soft, JPEG-damaged edges, generated here so the tool opens working.
+function makeSample(){
+  const S = 768, cv = makeCanvas(S, S), ctx = cv.getContext("2d"), rnd = mulberry32(7);
+  ctx.fillStyle = "#f1ede4"; ctx.fillRect(0, 0, S, S);
+  ctx.fillStyle = "#161514";
+  const shapes = [];
+  const cols = 6, cw = S / cols;
+  for (let c = 0; c < cols; c++){
+    let y = rnd() * 60;
+    const x0 = c * cw + (c % 2 ? cw * 0.18 : 0);
+    while (y < S){
+      const w = cw * (0.78 + rnd() * 0.16), h = 22 + rnd() * 70, kind = rnd();
+      shapes.push({ x: x0 + (cw - w) / 2, y, w, h, kind });
+      y += h + 9 + rnd() * 6;
+    }
+  }
+  const draw = (sh, ox, oy) => {
+    const { x, y, w, h, kind } = sh, X = x + ox, Y = y + oy;
+    ctx.beginPath();
+    if (kind < 0.33){ ctx.ellipse(X + w / 2, Y + h, w / 2, h, 0, Math.PI, 2 * Math.PI); }
+    else if (kind < 0.62){ ctx.ellipse(X + w / 2, Y, w / 2, h, 0, 0, Math.PI); }
+    else if (kind < 0.85){ ctx.roundRect(X, Y, w, Math.min(h, 34), 9); }
+    else { ctx.ellipse(X + w / 2, Y + h, w / 2, h, 0, Math.PI, 2 * Math.PI); ctx.fill(); ctx.fillStyle = "#f1ede4"; ctx.beginPath(); ctx.ellipse(X + w / 2, Y + h + 2, w / 6, h * 0.45, 0, Math.PI, 2 * Math.PI); ctx.fill(); ctx.fillStyle = "#161514"; return; }
+    ctx.fill();
+  };
+  for (const sh of shapes) for (const ox of [-S, 0, S]) for (const oy of [-S, 0, S]) draw(sh, ox, oy);
+  for (let i = 0; i < 90; i++){ ctx.fillRect(rnd() * S, rnd() * S, 1 + rnd() * 3, 1 + rnd() * 3); }
+  const soft = makeCanvas(S, S), sctx = soft.getContext("2d");
+  sctx.filter = "blur(1.1px)"; sctx.drawImage(cv, 0, 0); sctx.filter = "none";
+  const img = new Image();
+  img.onload = () => { if (!items.length) addImage(img, "sample-pebbles.jpg"); };
+  img.src = soft.toDataURL("image/jpeg", 0.35);
+}
+
+// ---------------------------------------------------------- stage
+const stage = $("stage"), cvs = $("cv"), g = cvs.getContext("2d");
+let viewCanvas = null, pending = 0;
+
+function schedule(){
+  if (!cur) return;
+  const token = ++pending;
+  $("busy").hidden = false;
+  setTimeout(() => requestAnimationFrame(() => { if (token === pending) compute(token); }), 30);
+}
+async function compute(token){
+  const s = settings(), t0 = performance.now();
+  try {
+    if (view === "source") viewCanvas = cur.canvas;
+    else {
+      run(cur, s, cache);
+      if (view === "bw") viewCanvas = renderBW(cur, s, cache);
+      else if (view === "id") viewCanvas = renderID(cur, s, cache);
+      else {
+        const svg = traceSVG(cur, s, cache);
+        if (!cache.svgCanvas) cache.svgCanvas = await svgToCanvas(svg);
+        viewCanvas = cache.svgCanvas;
+      }
+    }
+  } catch (e){ console.error(e); toast("Processing failed: " + e.message); }
+  if (token !== pending) return;
+  $("busy").hidden = true;
+  updateStatus(s, performance.now() - t0);
+  draw();
+}
+function updateStatus(s, ms){
+  const st = $("status"); st.innerHTML = "";
+  const add = (label, val) => { const sp = document.createElement("span"); sp.append(label + " "); const b = document.createElement("b"); b.textContent = val; sp.appendChild(b); st.appendChild(sp); };
+  if (!cur) return;
+  if (view === "source"){ add("Source", `${cur.W}×${cur.H}`); add("Ink", hex(cur.ink)); add("Paper", hex(cur.paper)); }
+  else {
+    const C = cache;
+    add("Output", `${C.Wk}×${C.Hk}`);
+    add("Shapes", C.shapes.count.toLocaleString());
+    add("Specks removed", C.removed.toLocaleString());
+    add("Pinholes filled", C.filled.toLocaleString());
+    add("Threshold", C.thr.toFixed(3));
+    if (view === "id") add("IDs", C.idCount.toLocaleString());
+    if (view === "vector" && C.svg){ add("Paths", C.svg.paths.toLocaleString()); add("Points", C.svg.points.toLocaleString()); add("SVG", (C.svg.text.length / 1024).toFixed(0) + " KB"); }
+  }
+  add("Time", Math.round(ms) + " ms");
+}
+
+function zoom(){ return Math.pow(2, zoomLog); }
+function fitView(){
+  if (!cur) return;
+  const r = stage.getBoundingClientRect();
+  const target = tileMode === "repeat" ? 0.42 : 0.88;
+  zoomLog = Math.log2(Math.max(0.05, target * Math.min(r.width, r.height) / Math.max(cur.W, cur.H)));
+  zoomLog = Math.max(-3, Math.min(3, zoomLog));
+  panX = panY = 0;
+  $("zoom").value = zoomLog;
+  draw();
+}
+function geometry(){
+  const dpr = window.devicePixelRatio || 1, z = zoom() * dpr;
+  const tw = cur.W * z, th = cur.H * z;
+  const ox = cvs.width / 2 + panX * dpr - tw / 2, oy = cvs.height / 2 + panY * dpr - th / 2;
+  return { dpr, tw, th, ox, oy };
+}
+function draw(){
+  const r = stage.getBoundingClientRect(), dpr = window.devicePixelRatio || 1;
+  const w = Math.max(1, Math.round(r.width * dpr)), h = Math.max(1, Math.round(r.height * dpr));
+  if (cvs.width !== w || cvs.height !== h){ cvs.width = w; cvs.height = h; }
+  const css = getComputedStyle(document.documentElement);
+  g.setTransform(1, 0, 0, 1, 0, 0);
+  g.fillStyle = css.getPropertyValue("--mat").trim(); g.fillRect(0, 0, w, h);
+  // cutting-mat grid: fine lines every 16 px, heavy every 80 px
+  for (const [step, col] of [[16, "--mat-grid"], [80, "--mat-grid-2"]]){
+    g.strokeStyle = css.getPropertyValue(col).trim(); g.lineWidth = 1; g.beginPath();
+    const st = step * dpr;
+    for (let x = (w / 2) % st; x < w; x += st){ g.moveTo(Math.round(x) + .5, 0); g.lineTo(Math.round(x) + .5, h); }
+    for (let y = (h / 2) % st; y < h; y += st){ g.moveTo(0, Math.round(y) + .5); g.lineTo(w, Math.round(y) + .5); }
+    g.stroke();
+  }
+  $("zoomOut").textContent = Math.round(zoom() * 100) + "%";
+  if (!cur || !viewCanvas) return;
+  const { tw, th, ox, oy } = geometry();
+  g.imageSmoothingEnabled = tw / viewCanvas.width < 1.5;
+  g.imageSmoothingQuality = "high";
+  if (tileMode === "repeat"){
+    const pat = g.createPattern(viewCanvas, "repeat"), sx = tw / viewCanvas.width, sy = th / viewCanvas.height;
+    pat.setTransform(new DOMMatrix([sx, 0, 0, sy, ox, oy]));
+    g.fillStyle = pat; g.fillRect(0, 0, w, h);
+  } else {
+    if (view === "id" && settings().idBg === "transparent"){ g.fillStyle = "#fff"; g.fillRect(ox, oy, tw, th); }
+    g.drawImage(viewCanvas, ox, oy, tw, th);
+  }
+  if ($("showEdges").checked){
+    g.save(); g.setLineDash([6 * dpr, 5 * dpr]); g.lineWidth = 1.25 * dpr; g.strokeStyle = "rgba(233,65,120,.9)";
+    g.beginPath();
+    if (tileMode === "repeat"){
+      for (let x = mod(ox, tw); x < w; x += tw){ g.moveTo(x, 0); g.lineTo(x, h); }
+      for (let y = mod(oy, th); y < h; y += th){ g.moveTo(0, y); g.lineTo(w, y); }
+    } else g.rect(ox, oy, tw, th);
+    g.stroke(); g.restore();
+  }
+}
+new ResizeObserver(() => draw()).observe(stage);
+
+// pan, zoom, pick
+let drag = null;
+stage.addEventListener("pointerdown", e => {
+  drag = { x: e.clientX, y: e.clientY, px: panX, py: panY, moved: false };
+  stage.setPointerCapture(e.pointerId);
+});
+stage.addEventListener("pointermove", e => {
+  if (!drag) return;
+  const dx = e.clientX - drag.x, dy = e.clientY - drag.y;
+  if (Math.abs(dx) + Math.abs(dy) > 3) drag.moved = true;
+  if (drag.moved && !pickMode){ stage.classList.add("dragging"); panX = drag.px + dx; panY = drag.py + dy; draw(); }
+});
+stage.addEventListener("pointerup", e => {
+  stage.classList.remove("dragging");
+  if (drag && !drag.moved && pickMode && cur){
+    const r = stage.getBoundingClientRect(), { dpr, tw, th, ox, oy } = geometry();
+    const px = (e.clientX - r.left) * dpr, py = (e.clientY - r.top) * dpr;
+    if (tileMode === "repeat" || (px >= ox && px < ox + tw && py >= oy && py < oy + th)){
+      const tx = mod(Math.floor((px - ox) / tw * cur.W), cur.W), ty = mod(Math.floor((py - oy) / th * cur.H), cur.H);
+      // average a 5×5 neighborhood so JPEG noise doesn't skew the pick
+      const acc = [0, 0, 0]; let n = 0;
+      for (let dy = -2; dy <= 2; dy++) for (let dx = -2; dx <= 2; dx++){ const c = composite(cur.data, (mod(ty + dy, cur.H) * cur.W + mod(tx + dx, cur.W)) * 4); acc[0] += c[0]; acc[1] += c[1]; acc[2] += c[2]; n++; }
+      cur[pickMode] = acc.map(v => Math.round(v / n));
+      cur.auto = false;
+      toast(`${pickMode === "ink" ? "Ink" : "Paper"} set to ${hex(cur[pickMode])}`);
+      pickMode = null; updatePick(); updateSourceUI(); schedule();
+    }
+  }
+  drag = null;
+});
+stage.addEventListener("wheel", e => {
+  e.preventDefault();
+  const r = stage.getBoundingClientRect(), mx = e.clientX - r.left - r.width / 2, my = e.clientY - r.top - r.height / 2;
+  const old = zoom();
+  zoomLog = Math.max(-3, Math.min(3, zoomLog - e.deltaY * 0.0015));
+  const k = zoom() / old;
+  panX = mx - (mx - panX) * k; panY = my - (my - panY) * k;
+  $("zoom").value = zoomLog; draw();
+}, { passive: false });
+$("zoom").addEventListener("input", e => { const old = zoom(); zoomLog = +e.target.value; const k = zoom() / old; panX *= k; panY *= k; draw(); });
+$("fit").onclick = fitView;
+
+function updatePick(){
+  $("pickInk").setAttribute("aria-pressed", pickMode === "ink");
+  $("pickPaper").setAttribute("aria-pressed", pickMode === "paper");
+  stage.classList.toggle("picking", !!pickMode);
+  $("pickHint").hidden = !pickMode;
+}
+function startPick(which){
+  pickMode = pickMode === which ? null : which;
+  if (pickMode && view !== "source"){ document.getElementById("vSrc").checked = true; view = "source"; schedule(); }
+  updatePick();
+}
+$("pickInk").onclick = () => startPick("ink");
+$("pickPaper").onclick = () => startPick("paper");
+$("autoDetect").onclick = () => { if (!cur) return; Object.assign(cur, detectInkPaper(cur)); cur.auto = true; updateSourceUI(); schedule(); };
+
+// ---------------------------------------------------------- controls
+function syncOutputs(){
+  $("flattenOut").textContent = +$("flatten").value ? $("flatten").value + "%" : "off";
+  $("smoothOut").textContent = (+$("smooth").value).toFixed(1) + " px";
+  const w = +$("weight").value; $("weightOut").textContent = (w > 0 ? "+" : "") + w;
+  $("specksOut").textContent = $("specks").value + " px²";
+  $("holesOut").textContent = $("holes").value + " px²";
+  $("simplifyOut").textContent = (+$("simplify").value).toFixed(2) + " px";
+}
+document.querySelectorAll(".panel input, .panel select").forEach(el => {
+  if (el.id === "file") return;
+  el.addEventListener("input", () => { syncOutputs(); schedule(); });
+});
+document.querySelectorAll("input[name=view]").forEach(el => el.addEventListener("change", () => { view = el.value; if (view !== "source" && pickMode){ pickMode = null; updatePick(); } schedule(); }));
+document.querySelectorAll("input[name=tile]").forEach(el => el.addEventListener("change", () => { tileMode = el.value; fitView(); }));
+$("showEdges").addEventListener("change", draw);
+$("shuffle").onclick = () => { seed++; if (view !== "id"){ $("vID").checked = true; view = "id"; } schedule(); };
+function preset(p){
+  const set = (id, v) => { $(id).value = v; };
+  if (p === "organic"){ $("res2").checked = true; set("flatten", 0); set("smooth", 1.4); set("specks", 60); set("holes", 60); $("curveSmooth").checked = true; set("simplify", 0.5); }
+  else if (p === "rough"){ $("res2").checked = true; set("flatten", 60); set("smooth", 2); set("specks", 300); set("holes", 300); $("curveSmooth").checked = true; set("simplify", 0.7); }
+  else { set("flatten", 0); $("res1").checked = true; set("smooth", 0.4); set("specks", 20); set("holes", 20); $("curvePoly").checked = true; set("simplify", 0.6); }
+  syncOutputs(); schedule();
+}
+$("presetOrganic").onclick = () => preset("organic");
+$("presetGeo").onclick = () => preset("geometric");
+$("presetRough").onclick = () => preset("rough");
+
+document.addEventListener("keydown", e => {
+  if (e.key === "Escape" && pickMode){ pickMode = null; updatePick(); return; }
+  if (e.target.closest("input,select,textarea") && e.target.type !== "radio" && e.target.type !== "checkbox") return;
+  const map = { "1": "vSrc", "2": "vBW", "3": "vID", "4": "vVec" };
+  if (map[e.key] && !e.metaKey && !e.ctrlKey){ const el = $(map[e.key]); el.checked = true; el.dispatchEvent(new Event("change")); }
+});
+
+// files: button, drop, paste
+$("dropBtn").onclick = () => $("file").click();
+$("file").addEventListener("change", e => { [...e.target.files].forEach(loadFile); e.target.value = ""; });
+document.addEventListener("dragover", e => { e.preventDefault(); });
+document.addEventListener("drop", e => {
+  e.preventDefault();
+  const files = [...(e.dataTransfer?.files || [])].filter(f => f.type.startsWith("image/"));
+  if (files.length) files.forEach(loadFile);
+  else toast("Drop an image file. For images on a web page, save or copy the image first, then drop or paste it here.");
+});
+document.addEventListener("paste", e => {
+  const files = [...(e.clipboardData?.items || [])].filter(i => i.type.startsWith("image/")).map(i => i.getAsFile());
+  if (files.length){ files.forEach((f, i) => { if (!f.name || f.name === "image.png") Object.defineProperty(f, "name", { value: `pasted-${items.length + i + 1}.png` }); loadFile(f); }); }
+});
+
+// ---------------------------------------------------------- export
+let toastTimer;
+function toast(msg){ const t = $("toast"); t.textContent = msg; t.hidden = false; clearTimeout(toastTimer); toastTimer = setTimeout(() => t.hidden = true, 3200); }
+const downloadsP = (window.claude && typeof window.claude.use === "function") ? window.claude.use("downloads").catch(() => null) : Promise.resolve(null);
+async function saveFile(filename, data){
+  const blob = data instanceof Blob ? data : new Blob([data], { type: filename.endsWith(".svg") ? "image/svg+xml" : "application/octet-stream" });
+  const dl = await downloadsP;
+  if (dl){
+    try { await dl.save({ filename, data: blob }); toast("Saved " + filename); }
+    catch (e){ toast(e && e.code === "declined" ? "Save cancelled" : `Couldn't save ${filename}${e && e.message ? ": " + e.message : ""}`); }
+    return;
+  }
+  const url = URL.createObjectURL(blob), a = document.createElement("a");
+  a.href = url; a.download = filename; document.body.appendChild(a); a.click(); a.remove();
+  setTimeout(() => URL.revokeObjectURL(url), 4000);
+}
+const toBlob = cv => new Promise(r => cv.toBlob(r, "image/png"));
+async function withBusy(fn){ $("busy").hidden = false; await new Promise(r => setTimeout(r, 30)); try { await fn(); } finally { $("busy").hidden = true; } }
+$("saveBW").onclick = () => cur && withBusy(async () => { const s = settings(); run(cur, s, cache); await saveFile(`${cur.name}_bw.png`, await toBlob(renderBW(cur, s, cache))); });
+$("saveID").onclick = () => cur && withBusy(async () => { const s = settings(); run(cur, s, cache); await saveFile(`${cur.name}_id.png`, await toBlob(renderID(cur, s, cache))); });
+$("saveSVG").onclick = () => cur && withBusy(async () => { const s = settings(); run(cur, s, cache); await saveFile(`${cur.name}.svg`, traceSVG(cur, s, cache).text); });
+$("saveAll").onclick = () => {
+  if (!window.JSZip){ toast("ZIP export needs the JSZip library, which didn't load. Export tiles one at a time instead."); return; }
+  withBusy(async () => {
+    const s = settings(), zip = new JSZip();
+    for (const it of items){
+      const C = it === cur ? cache : {};
+      run(it, s, C);
+      zip.file(`${it.name}_bw.png`, await toBlob(renderBW(it, s, C)));
+      zip.file(`${it.name}_id.png`, await toBlob(renderID(it, s, C)));
+      zip.file(`${it.name}.svg`, traceSVG(it, s, C).text);
+    }
+    await saveFile(`seamless-tiles-${items.length}.zip`, await zip.generateAsync({ type: "blob" }));
+  });
+};
+
+syncOutputs();
+draw();
+makeSample();
+</script>
+</body>
+</html>
