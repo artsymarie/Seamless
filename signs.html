@@ -128,9 +128,9 @@ form.copy label em{font:400 12px/1.35 var(--body);letter-spacing:0;text-transfor
   <header class="top">
     <div class="brand"><img id="brandLogo" alt="artsy"><b>Sign Studio</b></div>
     <div class="seg" id="shapeSeg" role="radiogroup" aria-label="Sign shape">
-      <input type="radio" name="shape" id="shape-square" value="square" checked><label for="shape-square">Square <small>1 tile</small></label>
-      <input type="radio" name="shape" id="shape-landscape" value="landscape"><label for="shape-landscape">Landscape <small>2 tiles</small></label>
-      <input type="radio" name="shape" id="shape-portrait" value="portrait"><label for="shape-portrait">Portrait <small>2 tiles</small></label>
+      <input type="radio" name="shape" id="shape-square" value="square" checked><label for="shape-square">Square <small>1:1</small></label>
+      <input type="radio" name="shape" id="shape-landscape" value="landscape"><label for="shape-landscape">Landscape <small>2:1</small></label>
+      <input type="radio" name="shape" id="shape-portrait" value="portrait"><label for="shape-portrait">Portrait <small>1:2</small></label>
     </div>
     <div class="seg" id="winSeg" role="radiogroup" aria-label="Ticker strip shape" hidden>
       <input type="radio" name="win" id="win-1" value="1"><label for="win-1">Strip <small>8:1</small></label>
@@ -189,28 +189,28 @@ form.copy label em{font:400 12px/1.35 var(--body);letter-spacing:0;text-transfor
 /* ==========================================================================
    artsy Sign Studio: one looping glass slide per message, for Second Life.
 
-   Every sheet is 2048 x 2048: a 4 x 4 grid of 16 frames, 512 x 512 each, so a
-   1 m tile shows 512 px per metre and no cell is ever empty. Landscape and
-   portrait slides are two tiles side by side or stacked, one sheet each,
-   played in sync by one script.
+   Every slide is 8 frames, and every frame shows the whole message: there is
+   no blank or half-built frame anywhere in the loop.
+     square     512 x 512 frames,  4 x 2 grid, 2048 x 1024 sheet
+     landscape  1024 x 512 frames, 2 x 4 grid, 2048 x 2048 sheet
+     portrait   512 x 1024 frames, 4 x 2 grid, 2048 x 2048 sheet
+   That is 512 px per metre at 1 x 1, 2 x 1 and 1 x 2 m, every cell used.
 
-   The 16 frames are the same plan for every slide:
-     0      pause: background only
-     1-7    entrance. The exit plays these backwards, so it costs no frames.
-     8      the message, held while people read
-     9-15   accent: a second state that is held too (toggle), or a light
-            passing across the glass (pulse, stored backwards so it plays in
-            one reverse run)
+   The motion comes from the slide itself:
+     toggle  frame 0 is the first state, 7 the second, 1-6 the move between
+             them. It plays forwards, holds, then plays backwards and holds.
+     pulse   frame 0 is the message, 1-7 a light passing across the glass
+             (and whatever the illustration does with it).
    Holds live in the script, never in repeated frames.
    ========================================================================== */
 
-const TILE = 512, GRID = 4, FRAMES = 16;
+const FRAMES = 8;
 const SHAPES = {
-  square:    {id: 'square',    name: 'Square',    ratio: '1:1', tx: 1, ty: 1, prim: '1 × 1 m', tiles: ['']},
-  landscape: {id: 'landscape', name: 'Landscape', ratio: '2:1', tx: 2, ty: 1, prim: '2 × 1 m (two 1 m tiles)', tiles: ['left', 'right']},
-  portrait:  {id: 'portrait',  name: 'Portrait',  ratio: '1:2', tx: 1, ty: 2, prim: '1 × 2 m (two 1 m tiles)', tiles: ['top', 'bottom']},
+  square:    {id: 'square',    name: 'Square',    ratio: '1:1', w: 512,  h: 512,  cols: 4, rows: 2, prim: '1 × 1 m'},
+  landscape: {id: 'landscape', name: 'Landscape', ratio: '2:1', w: 1024, h: 512,  cols: 2, rows: 4, prim: '2 × 1 m'},
+  portrait:  {id: 'portrait',  name: 'Portrait',  ratio: '1:2', w: 512,  h: 1024, cols: 4, rows: 2, prim: '1 × 2 m'},
 };
-const IN_STEP = 0.06, ACC_STEP = 0.08, QUICK = 0.5;
+const ACC_STEP = 0.08, QUICK = 0.5;
 const WHITE = '#ffffff', BLACK = '#000000';
 
 /* ---------- small utilities ---------- */
@@ -559,7 +559,12 @@ class G {
   get tall() { return this.o === 'portrait'; }
   p(a, b) { return ease.out(seg(this.st.pin, a, b)); }
   fade(x) { this.ctx.globalAlpha = clamp(x, 0, 1) * this.alpha; }
-  glintPos() { return lerp(-0.45, 1.45, ease.sine(this.st.pacc)); }
+  // where the passing light is: off the card on held frames, on it for every in-between frame
+  glintPos() {
+    const a = this.st.pacc;
+    if (this.st.kind === 'pulse') return a === 0 ? null : lerp(-0.3, 1.3, a);
+    return lerp(-0.45, 1.45, ease.sine(a));
+  }
 
   background() { this.ctx.drawImage(this.cache.bg, 0, 0); }
   // frosted smoked glass: blurred backdrop, a sheen, a light edge, and an optional passing glint
@@ -1304,7 +1309,7 @@ function logoArt(g, r) {
   ctx.globalAlpha = a0;
   // the glint runs across the logo itself
   const pos = g.glintPos();
-  if (pos > -0.3 && pos < 1.3) {
+  if (pos != null && pos > -0.3 && pos < 1.3) {
     const layer = makeCanvas(Math.ceil(lr.w), Math.ceil(lr.h)), lc = layer.getContext('2d');
     lc.drawImage(ASSETS.logoWhite, 0, 0, layer.width, layer.height);
     lc.globalCompositeOperation = 'source-in';
@@ -1368,11 +1373,9 @@ function buttonPill(g, text, x, y) {
 }
 
 /* ---------- frames, timeline, sheets ---------- */
-// Frame k on the sheet: entrance progress and accent progress.
+// Frame k on the sheet. Every frame is the finished slide (pin 1: fully in); only the accent moves.
 function frameState(k, kind) {
-  if (k <= 8) return {pin: k / 8, pacc: 0};
-  const j = k - 8;
-  return kind === 'toggle' ? {pin: 1, pacc: j / 7} : {pin: 1, pacc: (8 - j) / 8};
+  return {pin: 1, pacc: kind === 'toggle' ? k / 7 : k / 8, kind};
 }
 function copyOf(item, overrides = {}) {
   const c = {};
@@ -1383,24 +1386,21 @@ function wordsIn(c) { return Object.values(c).join(' ').split(/\s+/).filter(Bool
 function defaultHolds(slide, c) {
   const read = clamp(1.4 + 0.2 * wordsIn(c), 2.6, 5.5);
   return slide.kind === 'toggle'
-    ? {read: +(read * 0.75).toFixed(1), alt: +(read * 0.75).toFixed(1), after: 0.8, rest: 0.6}
-    : {read: +read.toFixed(1), alt: 0, after: 1.2, rest: 0.6};
+    ? {read: +(read * 0.8).toFixed(1), alt: +(read * 0.8).toFixed(1)}
+    : {read: +read.toFixed(1)};
 }
 // The loop in display order: [frame, seconds]. The script groups it into runs.
 function timelineOf(slide, holds) {
   const t = [];
-  for (let k = 1; k <= 7; k++) t.push([k, IN_STEP, 'in']);
-  t.push([8, holds.read, 'hold: message']);
   if (slide.kind === 'toggle') {
-    for (let k = 9; k <= 14; k++) t.push([k, ACC_STEP, 'to second state']);
-    t.push([15, holds.alt, 'hold: second state']);
-    for (let k = 14; k >= 9; k--) t.push([k, ACC_STEP, 'back']);
+    for (let k = 1; k <= 6; k++) t.push([k, ACC_STEP, 'to second state']);
+    t.push([7, holds.alt, 'hold: second state']);
+    for (let k = 6; k >= 1; k--) t.push([k, ACC_STEP, 'back']);
+    t.push([0, holds.read, 'hold: first state']);
   } else {
-    for (let k = 15; k >= 9; k--) t.push([k, ACC_STEP, 'glint']);
+    for (let k = 1; k <= 7; k++) t.push([k, ACC_STEP, 'light passes']);
+    t.push([0, holds.read, 'hold: message']);
   }
-  t.push([8, holds.after, 'hold']);
-  for (let k = 7; k >= 1; k--) t.push([k, IN_STEP, 'out']);
-  t.push([0, holds.rest, 'pause']);
   return t;
 }
 // Mirror of build() in the LSL player: runs of consecutive frames (up or down) with one
@@ -1426,7 +1426,7 @@ function runsOf(tl) {
   return runs;
 }
 function renderFrames(slide, shape, copy) {
-  const W = shape.tx * TILE, H = shape.ty * TILE, out = [];
+  const W = shape.w, H = shape.h, out = [];
   for (let k = 0; k < FRAMES; k++) {
     const c = makeCanvas(W, H);
     const g = new G(c, frameState(k, slide.kind));
@@ -1436,46 +1436,40 @@ function renderFrames(slide, shape, copy) {
   }
   return out;
 }
-// one 2048 x 2048 sheet per tile, frames left to right, top to bottom
+// the sheet: frames left to right, top to bottom, the way llSetTextureAnim counts them
 function sheetsOf(frames, shape) {
-  const sheets = [];
-  for (let ty = 0; ty < shape.ty; ty++) for (let tx = 0; tx < shape.tx; tx++) {
-    const s = makeCanvas(TILE * GRID, TILE * GRID), ctx = s.getContext('2d');
-    frames.forEach((f, i) => ctx.drawImage(f, tx * TILE, ty * TILE, TILE, TILE, (i % GRID) * TILE, Math.floor(i / GRID) * TILE, TILE, TILE));
-    sheets.push(s);
-  }
-  return sheets;
+  const s = makeCanvas(shape.w * shape.cols, shape.h * shape.rows), ctx = s.getContext('2d');
+  frames.forEach((f, i) => ctx.drawImage(f, (i % shape.cols) * shape.w, Math.floor(i / shape.cols) * shape.h));
+  return [s];
 }
 
 /* ---------- checks ---------- */
 const isPow2 = n => n > 0 && (n & (n - 1)) === 0;
-function cellStats(sheet) {
+function cellStats(sheet, shape) {
   const ctx = sheet.getContext('2d'), out = [];
   for (let i = 0; i < FRAMES; i++) {
-    const d = ctx.getImageData((i % GRID) * TILE, Math.floor(i / GRID) * TILE, TILE, TILE).data;
+    const d = ctx.getImageData((i % shape.cols) * shape.w, Math.floor(i / shape.cols) * shape.h, shape.w, shape.h).data;
     let sum = 0, lo = 255, hi = 0, hash = 2166136261;
     for (let j = 0; j < d.length; j += 4) {
       const v = d[j];
       sum += v; if (v < lo) lo = v; if (v > hi) hi = v;
       hash = Math.imul(hash ^ v, 16777619);
     }
-    out.push({mean: sum / (TILE * TILE * 255), lo, hi, hash: hash >>> 0});
+    out.push({mean: sum / (shape.w * shape.h * 255), lo, hi, hash: hash >>> 0});
   }
   return out;
 }
-function runChecks(sheets, frames, tl) {
+function runChecks(sheets, frames, tl, shape) {
   const list = [];
-  const sw = sheets[0].width, sh = sheets[0].height;
-  list.push({ok: sheets.every(s => isPow2(s.width) && isPow2(s.height) && s.width <= 2048 && s.height <= 2048), text: `${sheets.length === 1 ? 'Sheet' : sheets.length + ' sheets,'} ${sw} × ${sh}: powers of two, within 2048`});
-  list.push({ok: sw % GRID === 0 && sh % GRID === 0 && sw / GRID === TILE, text: `${GRID} × ${GRID} grid divides it exactly: ${TILE} × ${TILE} frames`});
-  let blank = 0, dup = 0;
-  sheets.forEach(s => {
-    const st = cellStats(s);
-    blank += st.filter(x => x.hi - x.lo < 8).length;
-    dup += FRAMES - new Set(st.map(x => x.hash)).size;
-  });
-  list.push({ok: blank === 0, text: blank ? `${blank} blank cell(s)` : `All ${FRAMES} cells used on every sheet`});
-  list.push({ok: dup === 0 || sheets.length > 1, text: dup ? `${dup} repeated cell(s), where only the other tile moves` : 'Every cell is a different frame'});
+  const sheet = sheets[0], sw = sheet.width, sh = sheet.height;
+  list.push({ok: isPow2(sw) && isPow2(sh) && sw <= 2048 && sh <= 2048, text: `Sheet ${sw} × ${sh}: powers of two, within 2048`});
+  list.push({ok: sw === shape.w * shape.cols && sh === shape.h * shape.rows, text: `${shape.cols} × ${shape.rows} grid divides it exactly: ${shape.w} × ${shape.h} frames`});
+  const st = cellStats(sheet, shape);
+  // a blank is a cell with little in it: the bare background, or a card with nothing on it yet
+  const spread = st.map(x => x.hi - x.lo), blank = spread.filter(v => v < 160).length;
+  const dup = FRAMES - new Set(st.map(x => x.hash)).size;
+  list.push({ok: blank === 0, text: blank ? `${blank} blank cell(s)` : `All ${FRAMES} cells used, no blanks`});
+  list.push({ok: dup === 0, text: dup ? `${dup} repeated cell(s)` : 'Every cell is a different frame'});
   // light/dark flips within any 1 s of the loop
   const means = frames.map(f => { const d = f.getContext('2d').getImageData(0, 0, f.width, f.height).data; let s = 0; for (let j = 0; j < d.length; j += 16) s += d[j]; return s / (d.length / 16) / 255; });
   const times = [];
@@ -1638,61 +1632,37 @@ async function encodePNG(canvas, alpha = false) {
 /* ---------- LSL ---------- */
 const fmtSec = s => (Math.round(s * 100) / 100).toFixed(2);
 function baseName(slide, shape) { return `artsy-${slide.id}-${shape.id}`; }
-function sheetNames(slide, shape) {
-  const b = baseName(slide, shape);
-  return shape.tiles.map(t => t ? `${b}-${t}` : b);
-}
+function sheetNames(slide, shape) { return [baseName(slide, shape)]; }
 function lslPlayer(slide, shape, tl) {
   const runs = runsOf(tl);
   const total = tl.reduce((a, x) => a + x[1], 0);
   const names = sheetNames(slide, shape);
   const rows = tl.map(([k, s, note], i) => `    ${String(k).padStart(2)}, ${fmtSec(s)}${i < tl.length - 1 ? ',' : ' '}   // ${note}`).join('\n');
-  const tiles = shape.tiles.length > 1
-    ? `// This is a ${shape.name.toLowerCase()} slide made of two 1 m square tiles:
-//   1. Make two flat boxes the same size, edge to edge, and link them.
-//   2. Name both "tile" (Build > General > Name).
-//   3. Put ${names[0]} on the ${shape.tiles[0]} tile and ${names[1]} on the ${shape.tiles[1]} one.
-//   4. Drop this script into the linked object. Both tiles play in step.`
-    : `// Put the sheet on the display face and drop this script into the same prim.`;
   return `// artsy slide player
 // Slide: ${slide.name}, ${shape.name.toLowerCase()} ${shape.ratio}
-// Sheet${names.length > 1 ? 's' : ''}: ${names.join(', ')}
-//        each 2048 x 2048, 4 x 4 grid, 16 frames of 512 x 512
+// Sheet: ${names[0]}
+//        ${shape.w * shape.cols} x ${shape.h * shape.rows}, ${shape.cols} x ${shape.rows} grid, ${FRAMES} frames of ${shape.w} x ${shape.h}
 // Loop:  ${fmtSec(total)} s in ${runs.length} runs
 //
-${tiles}
-// Face settings: Full Bright on, Glow 0, Alpha mode None. Repeats and offsets don't
-// matter; the animation sets them.
+// Put the sheet on the display face (${shape.ratio}, for example ${shape.prim}) and drop this
+// script into the same prim. Face settings: Full Bright on, Glow 0, Alpha mode None.
+// Repeats and offsets don't matter; the animation sets them.
 //
-// The pauses are timed here, not drawn as repeated frames, and the exit plays the
-// entrance backwards. That's how a whole slide fits in 16 frames. Edit TIMELINE to
-// change the timing: frame, seconds on screen.
+// Every frame is the whole slide, so it is never blank. The pauses are timed here
+// instead of drawn as repeated frames${slide.kind === 'toggle' ? ', and the way back plays the move in reverse' : ''}.
+// Edit TIMELINE to change the timing: frame, seconds on screen.
 
 integer FACE = ALL_SIDES;   // set your display face number if other faces have their own textures
-integer COLS = 4;
-integer ROWS = 4;
+integer COLS = ${shape.cols};
+integer ROWS = ${shape.rows};
 float   QUICK = 0.5;        // frames shorter than this are motion, played inside one run
 
 list TIMELINE = [
 ${rows}
 ];
 
-list tiles;     // link numbers that show the slide
 list runs;      // lowest frame, frame count, frames per second, seconds, backwards
 integer run;
-
-findTiles()
-{
-    tiles = [];
-    integer n = llGetNumberOfPrims();
-    if (n > 1)
-    {
-        integer i;
-        for (i = 1; i <= n; ++i)
-            if (llToLower(llGetLinkName(i)) == "tile") tiles += i;
-    }
-    if (llGetListLength(tiles) == 0) tiles = [LINK_THIS];
-}
 
 build()
 {
@@ -1751,11 +1721,8 @@ play()
     // A late timer only stretches a hold; it never shows a wrong frame.
     integer mode = ANIM_ON;
     if (llList2Integer(runs, run + 4)) mode = mode | REVERSE;
-    integer i;
-    integer n = llGetListLength(tiles);
-    for (i = 0; i < n; ++i)
-        llSetLinkTextureAnim(llList2Integer(tiles, i), mode, FACE, COLS, ROWS,
-            llList2Integer(runs, run), llList2Integer(runs, run + 1), llList2Float(runs, run + 2));
+    llSetTextureAnim(mode, FACE, COLS, ROWS,
+        llList2Integer(runs, run), llList2Integer(runs, run + 1), llList2Float(runs, run + 2));
     llSetTimerEvent(llList2Float(runs, run + 3));
 }
 
@@ -1763,7 +1730,6 @@ default
 {
     state_entry()
     {
-        findTiles();
         build();
         run = 0;
         play();
@@ -1774,11 +1740,6 @@ default
         run += 5;
         if (run >= llGetListLength(runs)) run = 0;
         play();
-    }
-
-    changed(integer change)
-    {
-        if (change & CHANGED_LINK) llResetScript();
     }
 
     on_rez(integer start_param)
@@ -1931,17 +1892,17 @@ function setupNotes(slide, shape, tl) {
   return `${slide.name.toUpperCase()}, ${shape.name.toUpperCase()} ${shape.ratio}
 
 Files
-${names.map(n => `  ${n}.png   spritesheet to upload (2048 x 2048, 24-bit, no alpha)`).join('\n')}
+  ${names[0]}.png   spritesheet to upload (${shape.w * shape.cols} x ${shape.h * shape.rows}, 24-bit, no alpha)
   ${baseName(slide, shape)}.lsl   player script
   ${baseName(slide, shape)}.gif   preview with the real timing (not for upload)
 
-Each sheet: 4 x 4 grid, 16 frames of 512 x 512, read left to right, top to bottom.
-Every cell is used. No empty rows or columns.
+Sheet: ${shape.cols} x ${shape.rows} grid, ${FRAMES} frames of ${shape.w} x ${shape.h}, read left to right, top to bottom.
+Every cell is used and every frame is the whole slide. No blanks.
 
 In Second Life
-  1. Upload the PNG${names.length > 1 ? 's' : ''}.
-  2. ${names.length > 1 ? `Make two 1 x 1 m flat boxes, edge to edge, link them and name both "tile". Put each sheet on its tile (${shape.tiles.join(' / ')}).` : 'Make a flat box and size its display face 1:1 (for example 1 x 1 m).'}
-  3. Full Bright on, Glow 0, Alpha mode None.
+  1. Upload the PNG.
+  2. Make a flat box and size its display face ${shape.ratio} (for example ${shape.prim}).
+  3. Apply the sheet to that face. Full Bright on, Glow 0, Alpha mode None.
   4. Drop the script in. Loop: ${fmtSec(total)} s.
 `;
 }
@@ -1988,7 +1949,7 @@ window.SignStudio = {
       sheets: sheetPngs,
       gif: b64(encodeGIF(tl.map(([k]) => scaled(frames[k], gifScale)), tl.map(([, s]) => s))),
       lsl: lslPlayer(slide, shape, tl),
-      checks: runChecks(sheets, frames, tl),
+      checks: runChecks(sheets, frames, tl, shape),
       runs: runsOf(tl).length,
       loop: tl.reduce((a, x) => a + x[1], 0),
       timeline: tl.map(([k, s]) => [k, s]),
@@ -2003,10 +1964,10 @@ window.SignStudio = {
       badge: {png: b64(await encodePNG(renderBadge(copyOf(b)), true)), lsl: lslBadge(b.seconds)},
     };
   },
-  // every slide's held frame (8) and second state (15) for review
-  async contact(shapeId, frames = [8, 15]) {
+  // every slide's first and last frame for review
+  async contact(shapeId, frames = [0, 7]) {
     await READY;
-    const shape = SHAPES[shapeId], W = shape.tx * TILE, H = shape.ty * TILE, sc = 0.5, pad = 8;
+    const shape = SHAPES[shapeId], W = shape.w, H = shape.h, sc = 0.5, pad = 8;
     const fw = W * sc, fh = H * sc, cols = frames.length;
     const c = makeCanvas(Math.round(cols * (fw + pad) + pad), Math.round(SLIDES.length * (fh + pad) + pad));
     const ctx = c.getContext('2d');
@@ -2021,11 +1982,11 @@ window.SignStudio = {
     await READY;
     const slide = SLIDES.find(s => s.id === id), shape = SHAPES[shapeId];
     const fr = renderFrames(slide, shape, copyOf(slide));
-    const W = shape.tx * TILE * scale, H = shape.ty * TILE * scale, pad = 6;
-    const c = makeCanvas(Math.round(8 * (W + pad) + pad), Math.round(2 * (H + pad) + pad));
+    const W = shape.w * scale, H = shape.h * scale, pad = 6;
+    const c = makeCanvas(Math.round(8 * (W + pad) + pad), Math.round(H + 2 * pad));
     const ctx = c.getContext('2d');
     ctx.fillStyle = '#6f6f6f'; ctx.fillRect(0, 0, c.width, c.height);
-    fr.forEach((f, i) => ctx.drawImage(f, pad + (i % 8) * (W + pad), pad + Math.floor(i / 8) * (H + pad), W, H));
+    fr.forEach((f, i) => ctx.drawImage(f, pad + i * (W + pad), pad, W, H));
     return c.toDataURL('image/png');
   },
 };
@@ -2105,7 +2066,7 @@ function buildTiming() {
   box.innerHTML = '';
   const s = current.slide;
   const h = holdsFor(s, current.copy);
-  const fields = [['read', s.kind === 'toggle' ? 'First state' : 'Message'], ...(s.kind === 'toggle' ? [['alt', 'Second state']] : []), ['after', 'Before exit'], ['rest', 'Pause']];
+  const fields = [['read', s.kind === 'toggle' ? 'First state' : 'Message'], ...(s.kind === 'toggle' ? [['alt', 'Second state']] : [])];
   fields.forEach(([key, name]) => {
     const lab = document.createElement('label'); lab.className = 'field';
     const span = document.createElement('span'); span.textContent = name + ' (s)';
@@ -2124,7 +2085,7 @@ function buildTiming() {
 function buildFrames() {
   const ol = $('frames');
   ol.innerHTML = '';
-  const names = k => k === 0 ? 'pause' : k < 8 ? 'in' : k === 8 ? 'hold' : current.slide.kind === 'toggle' ? (k === 15 ? 'state 2' : 'to 2') : 'glint';
+  const names = k => current.slide.kind === 'toggle' ? (k === 0 ? 'state 1' : k === 7 ? 'state 2' : 'move') : (k === 0 ? 'message' : 'light');
   current.frames.forEach((f, k) => {
     const li = document.createElement('li');
     const b = document.createElement('button');
@@ -2142,10 +2103,11 @@ function buildFrames() {
   });
 }
 function drawSheets(sheets, grid) {
+  const cols = grid ? current.shape.cols : 1, rows = grid ? current.shape.rows : 1;
   const box = $('sheetbox');
   box.innerHTML = '';
   const names = current.kind === 'slide' ? sheetNames(current.slide, current.shape) : [current.kind === 'ticker' ? 'artsy-ticker-2048x256' : 'artsy-badge-512'];
-  const each = Math.min(300, (box.clientWidth || 310) - 22) / (sheets.length > 1 ? 2.1 : 1);
+  const each = Math.min(300, (box.clientWidth || 310) - 22);
   sheets.forEach((s, i) => {
     const fig = document.createElement('figure');
     const cv = makeCanvas(Math.round(each), Math.round(each * s.height / s.width));
@@ -2153,12 +2115,10 @@ function drawSheets(sheets, grid) {
     ctx.imageSmoothingQuality = 'high';
     ctx.drawImage(s, 0, 0, cv.width, cv.height);
     if (grid) {
-      const cw = cv.width / GRID, ch = cv.height / GRID;
+      const cw = cv.width / cols, ch = cv.height / rows;
       ctx.strokeStyle = 'rgba(255,255,255,.7)'; ctx.lineWidth = 1; ctx.setLineDash([3, 3]);
-      for (let k = 1; k < GRID; k++) {
-        ctx.beginPath(); ctx.moveTo(Math.round(k * cw) + 0.5, 0); ctx.lineTo(Math.round(k * cw) + 0.5, cv.height); ctx.stroke();
-        ctx.beginPath(); ctx.moveTo(0, Math.round(k * ch) + 0.5); ctx.lineTo(cv.width, Math.round(k * ch) + 0.5); ctx.stroke();
-      }
+      for (let k = 1; k < cols; k++) { ctx.beginPath(); ctx.moveTo(Math.round(k * cw) + 0.5, 0); ctx.lineTo(Math.round(k * cw) + 0.5, cv.height); ctx.stroke(); }
+      for (let k = 1; k < rows; k++) { ctx.beginPath(); ctx.moveTo(0, Math.round(k * ch) + 0.5); ctx.lineTo(cv.width, Math.round(k * ch) + 0.5); ctx.stroke(); }
     }
     const cap = document.createElement('figcaption'); cap.textContent = names[i] || '';
     fig.append(cv, cap); box.append(fig);
@@ -2196,14 +2156,15 @@ function retime() {
   current.tl.forEach(([, d]) => { current.starts.push(t); t += d; });
   current.total = t;
   const runs = runsOf(current.tl);
+  const sh = current.shape;
   setSpec([
-    ['Sheets', `${current.sheets.length} × (2048 × 2048)`],
-    ['Grid', '4 × 4, frames read left to right'],
-    ['Frame', '512 × 512 px, 512 px per metre on a 1 m tile'],
-    ['Prim', current.shape.prim],
+    ['Sheet', `${sh.w * sh.cols} × ${sh.h * sh.rows} px`],
+    ['Grid', `${sh.cols} × ${sh.rows}, frames read left to right`],
+    ['Frame', `${sh.w} × ${sh.h} px, 512 px per metre`],
+    ['Prim face', `${sh.ratio}, e.g. ${sh.prim}`],
     ['Loop', `${fmtSec(t)} s, ${runs.length} script runs`],
   ]);
-  setChecks(runChecks(current.sheets, current.frames, current.tl));
+  setChecks(runChecks(current.sheets, current.frames, current.tl, sh));
 }
 
 function rebuild(full = true) {
@@ -2220,7 +2181,7 @@ function rebuild(full = true) {
     const shape = SHAPES[state.shape] || SHAPES.square;
     const frames = renderFrames(item, shape, copy);
     current = {kind: 'slide', slide: item, shape, copy, frames, sheets: sheetsOf(frames, shape)};
-    $('sheetTitle').textContent = current.sheets.length > 1 ? 'Spritesheets' : 'Spritesheet';
+    $('sheetTitle').textContent = 'Spritesheet';
     retime();
     buildTiming();
     buildFrames();
@@ -2258,7 +2219,7 @@ function rebuild(full = true) {
 }
 function sizeLive() {
   const cv = $('live');
-  if (current.kind === 'slide') { cv.width = current.shape.tx * TILE; cv.height = current.shape.ty * TILE; }
+  if (current.kind === 'slide') { cv.width = current.shape.w; cv.height = current.shape.h; }
   else if (current.kind === 'ticker') { cv.width = 2048 / state.win; cv.height = 256; }
   else { cv.width = 512; cv.height = 512; }
 }
@@ -2339,12 +2300,7 @@ function wire() {
   $('play').addEventListener('click', () => { state.playing = !state.playing; setPlayLabel(); });
   $('exPng').addEventListener('click', e => busy(e.currentTarget, async () => {
     if (current.kind !== 'slide') { await saveFile(fileBase() + '.png', await encodePNG(current.tex, current.kind === 'badge'), 'image/png'); return; }
-    const names = sheetNames(current.slide, current.shape);
-    if (current.sheets.length === 1) { await saveFile(names[0] + '.png', await encodePNG(current.sheets[0]), 'image/png'); return; }
-    if (typeof JSZip === 'undefined') { await saveFile(names[0] + '.png', await encodePNG(current.sheets[0]), 'image/png'); toast('Saved the first sheet. Use Everything (.zip) for both.'); return; }
-    const zip = new JSZip();
-    for (let i = 0; i < names.length; i++) zip.file(names[i] + '.png', await encodePNG(current.sheets[i]));
-    await saveFile(fileBase() + '-sheets.zip', await zip.generateAsync({type: 'blob'}), 'application/zip');
+    await saveFile(sheetNames(current.slide, current.shape)[0] + '.png', await encodePNG(current.sheets[0]), 'image/png');
   }));
   $('exGif').addEventListener('click', e => busy(e.currentTarget, async () => {
     await saveFile(fileBase() + '.gif', encodeGIF(current.tl.map(([k]) => current.frames[k]), current.tl.map(([, s]) => s)), 'image/gif');

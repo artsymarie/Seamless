@@ -1,22 +1,24 @@
 // Renders the slides in signs.html to ready-to-upload files:
-//   signs/<slide>/artsy-<slide>-<shape>[-left|-right|-top|-bottom].png   2048 x 2048 sheets (24-bit, no alpha)
-//   signs/<slide>/artsy-<slide>-<shape>.lsl                              player script
-//   signs/<slide>/artsy-<slide>-<shape>-preview.gif                      half-size preview with the real timing
-//   signs/extras/                                                         ticker strip and spinning badge
+//   signs/<slide>/artsy-<slide>-<shape>.png           spritesheet (24-bit, no alpha), 8 frames, no blanks
+//   signs/<slide>/artsy-<slide>-<shape>.lsl           player script
+//   signs/<slide>/artsy-<slide>-<shape>-preview.gif   half-size preview with the real timing
+//   signs/extras/                                     ticker strip and spinning badge
 //
 // Same renderer as the studio, so the files match what signs.html shows on this machine,
 // including its fonts. Avenir LT Pro is used only if it is installed here.
 //
 // Needs Node 18+ and Playwright:  npm i -D playwright && npx playwright install chromium
-// Run from the repo root:          node tools/render-signs.js [square] [landscape] [portrait]
+// Run from the repo root:          node tools/render-signs.js [square] [landscape] [portrait] [--out=dir]
 'use strict';
 const fs = require('fs');
 const path = require('path');
 const { chromium } = require('playwright');
 
 const root = path.resolve(__dirname, '..');
-const out = path.join(root, 'signs');
-const shapes = process.argv.slice(2).length ? process.argv.slice(2) : ['square'];
+const args = process.argv.slice(2);
+const outArg = args.find(a => a.startsWith('--out='));
+const out = outArg ? path.resolve(outArg.slice(6)) : path.join(root, 'signs');
+const shapes = args.filter(a => !a.startsWith('--')).length ? args.filter(a => !a.startsWith('--')) : ['square'];
 
 (async () => {
   const browser = await chromium.launch();
@@ -43,7 +45,7 @@ const shapes = process.argv.slice(2).length ? process.argv.slice(2) : ['square']
       fs.writeFileSync(path.join(dir, r.base + '.lsl'), r.lsl);
       const bad = r.checks.filter(c => !c.ok);
       failed += bad.length;
-      console.log(`${bad.length ? 'FAIL' : 'ok  '} ${r.base}  ${r.sheets.length} sheet(s)  ${r.loop.toFixed(2)} s loop  ${r.runs} runs`);
+      console.log(`${bad.length ? 'FAIL' : 'ok  '} ${r.base}  ${r.loop.toFixed(2)} s loop  ${r.runs} runs`);
       bad.forEach(c => console.log('       ! ' + c.text));
     }
   }
