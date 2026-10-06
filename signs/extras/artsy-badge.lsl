@@ -4,7 +4,7 @@
 // Repeats 1 x 1, Offset 0, Rotation 0.
 
 integer FACE    = ALL_SIDES;  // set your display face number if other faces have their own textures
-float   SECONDS = 14.00;    // one full turn; make it negative to spin the other way
+float   SECONDS = 16.00;    // one full turn; make it negative to spin the other way
 
 default
 {

@@ -31,6 +31,8 @@ Open `index.html` in a browser. There's nothing to install or build.
 
 # Sign Studio
 
-`signs.html` makes kinetic black-and-white display signs for the Second Life store. The six signs are redelivery, freebies, tint, reflection probes, purchase info and welcome. Each comes in portrait, landscape and square and exports as an even spritesheet: power-of-two size, every cell used, 8 frames at 512 px per metre. A GIF preview and an LSL player script that handles the hold times come with each sheet. There's also a smooth ticker strip and a spinning badge that use no frames at all.
+`signs.html` makes looping glass slides for the Second Life store, one per message: redelivery, collections, delivery, permissions, textures, tint, shine, reflection probes, tutorials, welcome, freebies and patterns. Each slide slides and fades in, makes one small move, and plays its entrance backwards to loop. It is set in Poppins and Avenir LT Pro, using your own copy of Avenir.
 
-Open `signs.html` in a browser to change the copy and timing and export. The ready-made sheets, previews, scripts and setup steps are in [`signs/`](signs/README.md).
+Every slide fits one 2048 × 2048 sheet: 16 frames of 512 × 512, every cell used. Landscape and portrait slides are two such tiles kept in step by one LSL script. The script also times the pauses, so no frame is ever repeated. There's also a smooth ticker strip and a spinning badge that use no frames at all.
+
+Open `signs.html` in a browser to change the copy and timing and export. Ready-made square slides, previews, scripts and setup steps are in [`signs/`](signs/README.md).

@@ -1,12 +1,14 @@
-// Renders every kinetic sign in signs.html to ready-to-upload files:
-//   signs/<sign>/artsy-<sign>-<format>-<cols>x<rows>.png   spritesheet (24-bit, no alpha)
-//   signs/<sign>/artsy-<sign>-<format>-<cols>x<rows>.gif   preview with the real timing
-//   signs/<sign>/artsy-<sign>-<format>-<cols>x<rows>.lsl   player script
-//   signs/extras/                                          ticker strip and spinning badge
+// Renders the slides in signs.html to ready-to-upload files:
+//   signs/<slide>/artsy-<slide>-<shape>[-left|-right|-top|-bottom].png   2048 x 2048 sheets (24-bit, no alpha)
+//   signs/<slide>/artsy-<slide>-<shape>.lsl                              player script
+//   signs/<slide>/artsy-<slide>-<shape>-preview.gif                      half-size preview with the real timing
+//   signs/extras/                                                         ticker strip and spinning badge
 //
-// It uses the same renderer as the studio, so the files match what signs.html shows.
+// Same renderer as the studio, so the files match what signs.html shows on this machine,
+// including its fonts. Avenir LT Pro is used only if it is installed here.
+//
 // Needs Node 18+ and Playwright:  npm i -D playwright && npx playwright install chromium
-// Run from the repo root:          node tools/render-signs.js
+// Run from the repo root:          node tools/render-signs.js [square] [landscape] [portrait]
 'use strict';
 const fs = require('fs');
 const path = require('path');
@@ -14,33 +16,34 @@ const { chromium } = require('playwright');
 
 const root = path.resolve(__dirname, '..');
 const out = path.join(root, 'signs');
-const page_url = 'file://' + path.join(root, 'signs.html');
+const shapes = process.argv.slice(2).length ? process.argv.slice(2) : ['square'];
 
 (async () => {
   const browser = await chromium.launch();
   const page = await browser.newPage();
   const problems = [];
   page.on('pageerror', e => problems.push('page error: ' + e.message));
-  await page.goto(page_url);
-  const fontsOk = await page.evaluate(() => window.SignStudio.ready);
-  if (!fontsOk) {
-    console.error('The web fonts did not load (Archivo, Instrument Serif, Space Mono). Check the network and run again.');
+  await page.goto('file://' + path.join(root, 'signs.html'));
+  const poppins = await page.evaluate(() => window.SignStudio.ready);
+  if (!poppins) {
+    console.error('Poppins did not load from Google Fonts. Check the network and run again.');
     process.exit(1);
   }
-  const { signs, formats } = await page.evaluate(() => ({ signs: window.SignStudio.signs, formats: window.SignStudio.formats }));
+  const fonts = await page.evaluate(() => window.SignStudio.fonts());
+  console.log(`Body font: ${fonts.avenir === 'stand-in' ? 'Nunito Sans (Avenir LT Pro is not installed here)' : 'Avenir (' + fonts.avenir + ')'}`);
+  const slides = await page.evaluate(() => window.SignStudio.slides);
   let failed = 0;
-  for (const id of signs) {
+  for (const id of slides) {
     const dir = path.join(out, id);
     fs.mkdirSync(dir, { recursive: true });
-    for (const fmt of formats) {
-      const r = await page.evaluate(([id, fmt]) => window.SignStudio.build(id, fmt), [id, fmt]);
-      fs.writeFileSync(path.join(dir, r.name + '.png'), Buffer.from(r.png, 'base64'));
-      fs.writeFileSync(path.join(dir, r.name + '.gif'), Buffer.from(r.gif, 'base64'));
-      fs.writeFileSync(path.join(dir, r.name + '.lsl'), r.lsl);
+    for (const shape of shapes) {
+      const r = await page.evaluate(([id, shape]) => window.SignStudio.build(id, shape, 0.5), [id, shape]);
+      r.sheets.forEach(s => fs.writeFileSync(path.join(dir, s.name + '.png'), Buffer.from(s.png, 'base64')));
+      fs.writeFileSync(path.join(dir, r.base + '-preview.gif'), Buffer.from(r.gif, 'base64'));
+      fs.writeFileSync(path.join(dir, r.base + '.lsl'), r.lsl);
       const bad = r.checks.filter(c => !c.ok);
       failed += bad.length;
-      const loop = r.holds.reduce((a, b) => a + b, 0).toFixed(2);
-      console.log(`${bad.length ? 'FAIL' : 'ok  '} ${r.name}  ${r.sheet.join('x')}  ${r.grid.join('x')} grid  ${r.cell.join('x')} cells  ${loop}s loop  ${r.runs} runs`);
+      console.log(`${bad.length ? 'FAIL' : 'ok  '} ${r.base}  ${r.sheets.length} sheet(s)  ${r.loop.toFixed(2)} s loop  ${r.runs} runs`);
       bad.forEach(c => console.log('       ! ' + c.text));
     }
   }

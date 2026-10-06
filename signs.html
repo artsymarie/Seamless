@@ -6,97 +6,93 @@
 <title>Artsy Sign Studio</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,100..900&family=Instrument+Serif:ital@0;1&family=Space+Mono:wght@400;700&display=block">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Nunito+Sans:wght@300..800&display=block">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
 <style>
-/* Layout: sign list | the sign on a dark wall with its timeline | spritesheet, checks, exports and copy */
+/* Layout: slide list | the slide on a dark wall with its timing | sheets, checks, exports, copy and fonts */
 :root{
-  --void:#000000;
-  --panel:#0b0b0b;
-  --raise:#161616;
-  --line:#272727;
-  --line-2:#3c3c3c;
+  --void:#09090a;
+  --panel:#101012;
+  --raise:#18181b;
+  --line:#25252a;
+  --line-2:#37373d;
   --ink:#f4f4f2;
-  --ink-2:#ababa7;
-  --ink-3:#75756f;
+  --ink-2:#b3b3ae;
+  --ink-3:#7c7c77;
   --ok:#c6f0d0;
   --warn:#ffc47d;
-  --wall:#121212;
-  --display:"Archivo","Arial Narrow",system-ui,sans-serif;
-  --mono:"Space Mono",ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
-  --serif:"Instrument Serif",Georgia,"Times New Roman",serif;
+  --wall:#131315;
+  --head:"Poppins","Helvetica Neue",Arial,sans-serif;
+  --body:"Avenir LT Pro","Avenir","Nunito Sans","Helvetica Neue",Arial,sans-serif;
   color-scheme:dark;
 }
 *{box-sizing:border-box}
 [hidden]{display:none!important}
 html,body{height:100%}
-body{margin:0;background:var(--void);color:var(--ink);font:14px/1.45 var(--display)}
+body{margin:0;background:var(--void);color:var(--ink);font:14px/1.5 var(--body)}
 button,input,select{font:inherit;color:inherit}
-.app{display:grid;grid-template-columns:232px minmax(0,1fr) 344px;grid-template-rows:auto minmax(0,1fr);height:100%;min-height:0}
-.top{grid-column:1/-1;display:flex;align-items:center;gap:12px 20px;padding:12px 16px;border-bottom:1px solid var(--line);flex-wrap:wrap}
+.app{display:grid;grid-template-columns:236px minmax(0,1fr) 352px;grid-template-rows:auto minmax(0,1fr);height:100%;min-height:0}
+.top{grid-column:1/-1;display:flex;align-items:center;gap:12px 20px;padding:12px 18px;border-bottom:1px solid var(--line);flex-wrap:wrap;background:var(--panel)}
 .brand{display:flex;align-items:center;gap:14px;margin-right:auto}
 .brand img{height:30px;width:auto;display:block}
-.brand b{font:700 11px/1 var(--mono);letter-spacing:.18em;text-transform:uppercase;color:var(--ink-2);padding-left:14px;border-left:1px solid var(--line-2)}
-.seg{display:inline-flex;border:1px solid var(--line-2);flex-wrap:wrap}
+.brand b{font:500 11px/1 var(--head);letter-spacing:.24em;text-transform:uppercase;color:var(--ink-2);padding-left:14px;border-left:1px solid var(--line-2)}
+.seg{display:inline-flex;padding:3px;gap:2px;border:1px solid var(--line-2);border-radius:999px;background:var(--void);flex-wrap:wrap}
 .seg input{position:absolute;opacity:0;pointer-events:none}
-.seg label{padding:9px 12px;font:700 11px/1 var(--mono);letter-spacing:.1em;text-transform:uppercase;color:var(--ink-2);cursor:pointer;border-left:1px solid var(--line-2);display:flex;gap:7px;align-items:baseline;white-space:nowrap}
-.seg label:first-of-type{border-left:0}
-.seg label small{font-weight:400;color:var(--ink-3);letter-spacing:.04em}
-.seg input:checked+label{background:var(--ink);color:var(--void)}
-.seg input:checked+label small{color:#444}
-.seg input:focus-visible+label{outline:2px solid var(--ink);outline-offset:2px}
+.seg label{padding:7px 14px;border-radius:999px;font:500 12px/1 var(--head);letter-spacing:.03em;color:var(--ink-2);cursor:pointer;display:flex;gap:6px;align-items:baseline;white-space:nowrap}
+.seg label small{font:400 11px/1 var(--body);color:var(--ink-3)}
 .seg label:hover{color:var(--ink)}
+.seg input:checked+label{background:var(--ink);color:#0b0b0c}
+.seg input:checked+label small{color:#5b5b55}
+.seg input:focus-visible+label{outline:2px solid var(--ink);outline-offset:2px}
 
-nav.signs{border-right:1px solid var(--line);overflow:auto;padding:16px 0 24px;min-height:0}
-.navh{font:700 10.5px/1 var(--mono);letter-spacing:.16em;text-transform:uppercase;color:var(--ink-3);padding:0 16px 10px}
-.navh:not(:first-child){padding-top:18px}
-.signs ol{list-style:none;margin:0;padding:0}
-.signs li button{all:unset;box-sizing:border-box;display:grid;grid-template-columns:28px 1fr;gap:2px 8px;width:100%;padding:10px 16px;cursor:pointer;border-left:3px solid transparent}
+nav.signs{border-right:1px solid var(--line);overflow:auto;padding:14px 0 24px;min-height:0;background:var(--panel)}
+.navh{font:500 10.5px/1 var(--head);letter-spacing:.2em;text-transform:uppercase;color:var(--ink-3);padding:14px 18px 8px}
+.signs ol{list-style:none;margin:0;padding:0 8px}
+.signs li button{all:unset;box-sizing:border-box;display:flex;flex-direction:column;gap:1px;width:100%;padding:8px 10px;border-radius:10px;cursor:pointer}
 .signs li button:hover{background:var(--raise)}
 .signs li button:focus-visible{outline:2px solid var(--ink);outline-offset:-2px}
-.signs li button[aria-current="true"]{background:var(--ink);color:var(--void);border-left-color:var(--ink)}
-.signs li button[aria-current="true"] .k,.signs li button[aria-current="true"] small{color:#444}
-.signs .k{font:700 11px/1.5 var(--mono);color:var(--ink-3);grid-row:span 2}
-.signs strong{font:800 15px/1.2 var(--display);font-stretch:112.5%;text-transform:uppercase;letter-spacing:.01em}
-.signs small{font:400 11px/1.3 var(--mono);color:var(--ink-3)}
+.signs li button[aria-current="true"]{background:var(--ink);color:#0b0b0c}
+.signs li button[aria-current="true"] small{color:#5b5b55}
+.signs strong{font:500 14px/1.3 var(--head)}
+.signs small{font:400 12px/1.3 var(--body);color:var(--ink-3)}
 
 main.stage{display:flex;flex-direction:column;min-width:0;min-height:0;overflow:auto}
-.wall{flex:1 0 auto;display:grid;place-items:center;padding:28px 16px;min-height:340px;background:radial-gradient(120% 90% at 50% 40%,#1b1b1b 0%,var(--wall) 55%,#070707 100%)}
-.wall canvas{display:block;max-width:100%;max-height:min(60vh,720px);width:auto;height:auto;box-shadow:0 0 0 1px #2a2a2a,0 30px 80px -30px rgba(0,0,0,.9)}
-.transport{display:flex;align-items:center;gap:14px;padding:12px 16px;border-top:1px solid var(--line);flex-wrap:wrap}
-.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;padding:9px 13px;border:1px solid var(--line-2);background:transparent;cursor:pointer;font:700 11px/1 var(--mono);letter-spacing:.1em;text-transform:uppercase;white-space:nowrap}
+.wall{flex:1 0 auto;display:grid;place-items:center;padding:28px 18px;min-height:340px;background:radial-gradient(120% 90% at 50% 40%,#1c1c1f 0%,var(--wall) 55%,#070708 100%)}
+.wall canvas{display:block;max-width:100%;max-height:min(58vh,640px);width:auto;height:auto;border-radius:4px;box-shadow:0 0 0 1px #2a2a2e,0 30px 80px -30px rgba(0,0,0,.9)}
+.transport{display:flex;align-items:center;gap:14px;padding:12px 18px;border-top:1px solid var(--line);flex-wrap:wrap}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;padding:9px 14px;border:1px solid var(--line-2);border-radius:999px;background:transparent;cursor:pointer;font:500 12px/1 var(--head);letter-spacing:.03em;white-space:nowrap}
 .btn:hover{border-color:var(--ink)}
 .btn:focus-visible{outline:2px solid var(--ink);outline-offset:2px}
-.btn.solid{background:var(--ink);color:var(--void);border-color:var(--ink)}
+.btn.solid{background:var(--ink);color:#0b0b0c;border-color:var(--ink)}
 .btn.solid:hover{background:#fff}
-.btn[disabled]{opacity:.4;cursor:not-allowed}
-.clock{font:400 12px/1 var(--mono);color:var(--ink-2);font-variant-numeric:tabular-nums}
-.hint{font:400 12px/1.5 var(--mono);color:var(--ink-3)}
-.timeline{list-style:none;margin:0;padding:4px 16px 18px;display:flex;gap:10px;overflow-x:auto}
-.timeline li{display:flex;flex-direction:column;gap:6px;align-items:center;flex:none}
-.timeline .thumb{all:unset;box-sizing:border-box;cursor:pointer;display:block;position:relative;outline:1px solid var(--line-2)}
-.timeline .thumb canvas{display:block;height:76px;width:auto}
-.timeline .thumb span{position:absolute;left:0;top:0;font:700 10px/1 var(--mono);background:var(--ink);color:var(--void);padding:3px 4px}
-.timeline .thumb:focus-visible{outline:2px solid var(--ink);outline-offset:2px}
-.timeline li.on .thumb{outline:2px solid var(--ink);outline-offset:2px}
-.timeline label{display:flex;align-items:center;gap:3px;font:400 11px/1 var(--mono);color:var(--ink-3)}
-.timeline input[type=number]{width:58px;background:var(--raise);border:1px solid var(--line-2);padding:4px 5px;font:400 11px/1 var(--mono);color:var(--ink);font-variant-numeric:tabular-nums}
-.extras{padding:4px 16px 18px;display:flex;gap:18px;flex-wrap:wrap;align-items:flex-end}
+.btn[disabled]{opacity:.45;cursor:not-allowed}
+.clock{font:400 12.5px/1 var(--body);color:var(--ink-2);font-variant-numeric:tabular-nums}
+.hint{font:400 12.5px/1.5 var(--body);color:var(--ink-3)}
+.timing{display:flex;gap:14px;flex-wrap:wrap;padding:2px 18px 14px}
 .field{display:flex;flex-direction:column;gap:6px}
-.field>span{font:700 10.5px/1 var(--mono);letter-spacing:.14em;text-transform:uppercase;color:var(--ink-3)}
-.field input[type=number]{width:90px}
-input[type=text],input[type=number],select,textarea{background:var(--raise);border:1px solid var(--line-2);padding:8px 9px;font:400 13px/1.3 var(--display);color:var(--ink);border-radius:0;width:100%}
-input:focus-visible,select:focus-visible,textarea:focus-visible{outline:2px solid var(--ink);outline-offset:0}
+.field>span{font:500 10.5px/1 var(--head);letter-spacing:.16em;text-transform:uppercase;color:var(--ink-3)}
+.field input[type=number]{width:96px}
+.frames{list-style:none;margin:0;padding:4px 18px 20px;display:flex;gap:8px;overflow-x:auto}
+.frames li{flex:none;display:flex;flex-direction:column;gap:5px;align-items:center}
+.frames button{all:unset;box-sizing:border-box;cursor:pointer;display:block;position:relative;border-radius:4px;outline:1px solid var(--line-2)}
+.frames button canvas{display:block;height:64px;width:auto;border-radius:4px}
+.frames button:focus-visible{outline:2px solid var(--ink);outline-offset:2px}
+.frames li.on button{outline:2px solid var(--ink);outline-offset:2px}
+.frames small{font:400 10.5px/1 var(--body);color:var(--ink-3);font-variant-numeric:tabular-nums}
+input[type=text],input[type=number],select{background:var(--raise);border:1px solid var(--line-2);border-radius:8px;padding:8px 10px;font:400 13.5px/1.3 var(--body);color:var(--ink);width:100%}
+input:focus-visible,select:focus-visible{outline:2px solid var(--ink);outline-offset:0}
 
-aside.side{border-left:1px solid var(--line);overflow:auto;min-height:0;padding:16px 16px 28px;display:flex;flex-direction:column;gap:22px}
-aside h2{margin:0;font:700 10.5px/1 var(--mono);letter-spacing:.16em;text-transform:uppercase;color:var(--ink-3)}
+aside.side{border-left:1px solid var(--line);overflow:auto;min-height:0;padding:16px 18px 28px;display:flex;flex-direction:column;gap:24px;background:var(--panel)}
+aside h2{margin:0;font:500 10.5px/1 var(--head);letter-spacing:.2em;text-transform:uppercase;color:var(--ink-3)}
 section.p{display:flex;flex-direction:column;gap:12px;min-width:0}
-.sheetbox{background:var(--wall);border:1px solid var(--line);padding:10px;display:grid;place-items:center}
-.sheetbox canvas{display:block;max-width:100%;height:auto}
-dl.spec{margin:0;display:grid;grid-template-columns:auto 1fr;gap:6px 14px;font:400 12px/1.35 var(--mono);font-variant-numeric:tabular-nums}
+.sheetbox{background:var(--wall);border:1px solid var(--line);border-radius:10px;padding:10px;display:flex;gap:8px;justify-content:center;flex-wrap:wrap}
+.sheetbox figure{margin:0;display:flex;flex-direction:column;gap:4px;align-items:center;min-width:0}
+.sheetbox canvas{display:block;max-width:100%;height:auto;border-radius:3px}
+.sheetbox figcaption{font:400 11px/1.2 var(--body);color:var(--ink-3)}
+dl.spec{margin:0;display:grid;grid-template-columns:auto 1fr;gap:6px 14px;font:400 12.5px/1.4 var(--body);font-variant-numeric:tabular-nums}
 dl.spec dt{color:var(--ink-3)}
 dl.spec dd{margin:0;color:var(--ink);min-width:0}
-ul.checks{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:6px;font:400 12px/1.35 var(--mono)}
+ul.checks{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:6px;font:400 12.5px/1.4 var(--body)}
 ul.checks li{display:grid;grid-template-columns:18px 1fr;gap:6px}
 ul.checks li::before{content:"✓";color:var(--ok);font-weight:700}
 ul.checks li.bad::before{content:"!";color:var(--warn)}
@@ -104,35 +100,37 @@ ul.checks li.bad{color:var(--warn)}
 .exports{display:grid;grid-template-columns:1fr 1fr;gap:8px}
 .exports .wide{grid-column:1/-1}
 form.copy{display:flex;flex-direction:column;gap:12px}
-form.copy label{display:flex;flex-direction:column;gap:5px;font:700 10.5px/1.2 var(--mono);letter-spacing:.1em;text-transform:uppercase;color:var(--ink-3)}
-form.copy label em{font:400 11px/1.35 var(--mono);letter-spacing:0;text-transform:none;font-style:normal;color:var(--ink-3)}
-.toast{position:fixed;left:50%;bottom:calc(18px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);background:var(--ink);color:var(--void);font:700 12px/1.3 var(--mono);padding:10px 14px;max-width:calc(100% - 32px);z-index:5}
-.loading{font:400 12px/1.5 var(--mono);color:var(--ink-3)}
+form.copy label{display:flex;flex-direction:column;gap:5px;font:500 10.5px/1.2 var(--head);letter-spacing:.12em;text-transform:uppercase;color:var(--ink-3)}
+form.copy label em{font:400 12px/1.35 var(--body);letter-spacing:0;text-transform:none;font-style:normal;color:var(--ink-3)}
+.fontrow{display:grid;grid-template-columns:auto 1fr;gap:4px 12px;font:400 12.5px/1.4 var(--body)}
+.fontrow b{font:500 12.5px/1.4 var(--head)}
+.fontrow span{color:var(--ink-2)}
+.fontrow span.warn{color:var(--warn)}
+.note{font:400 12px/1.45 var(--body);color:var(--ink-3);margin:0}
+.toast{position:fixed;left:50%;bottom:calc(18px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);background:var(--ink);color:#0b0b0c;font:500 12.5px/1.3 var(--head);padding:10px 16px;border-radius:999px;max-width:calc(100% - 32px);z-index:5}
 
 @media (max-width:1100px){
-  .app{grid-template-columns:200px minmax(0,1fr);grid-template-rows:auto auto auto}
+  .app{grid-template-columns:210px minmax(0,1fr);grid-template-rows:auto auto auto;height:auto}
   aside.side{grid-column:1/-1;border-left:0;border-top:1px solid var(--line);display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:24px}
-  .app{height:auto}
 }
 @media (max-width:720px){
   .app{grid-template-columns:minmax(0,1fr)}
-  nav.signs{border-right:0;border-bottom:1px solid var(--line);padding:12px 0}
-  .signs ol{display:flex;overflow-x:auto}
-  .signs li button{width:auto;min-width:150px;border-left:0;border-bottom:3px solid transparent}
+  nav.signs{border-right:0;border-bottom:1px solid var(--line);padding:8px 0}
   .navh{display:none}
-  .wall{min-height:300px;padding:20px 16px}
+  .signs ol{display:flex;overflow-x:auto;padding:0 8px}
+  .signs li button{width:auto;min-width:130px}
+  .wall{min-height:280px;padding:20px 16px}
 }
-@media (prefers-reduced-motion:reduce){*{scroll-behavior:auto}}
 </style>
 </head>
 <body>
 <div class="app">
   <header class="top">
     <div class="brand"><img id="brandLogo" alt="artsy"><b>Sign Studio</b></div>
-    <div class="seg" id="fmtSeg" role="radiogroup" aria-label="Sign format">
-      <input type="radio" name="fmt" id="fmt-portrait" value="portrait" checked><label for="fmt-portrait">Portrait <small>1:2</small></label>
-      <input type="radio" name="fmt" id="fmt-landscape" value="landscape"><label for="fmt-landscape">Landscape <small>2:1</small></label>
-      <input type="radio" name="fmt" id="fmt-square" value="square"><label for="fmt-square">Square <small>1:1</small></label>
+    <div class="seg" id="shapeSeg" role="radiogroup" aria-label="Sign shape">
+      <input type="radio" name="shape" id="shape-square" value="square" checked><label for="shape-square">Square <small>1 tile</small></label>
+      <input type="radio" name="shape" id="shape-landscape" value="landscape"><label for="shape-landscape">Landscape <small>2 tiles</small></label>
+      <input type="radio" name="shape" id="shape-portrait" value="portrait"><label for="shape-portrait">Portrait <small>2 tiles</small></label>
     </div>
     <div class="seg" id="winSeg" role="radiogroup" aria-label="Ticker strip shape" hidden>
       <input type="radio" name="win" id="win-1" value="1"><label for="win-1">Strip <small>8:1</small></label>
@@ -141,30 +139,23 @@ form.copy label em{font:400 11px/1.35 var(--mono);letter-spacing:0;text-transfor
     </div>
   </header>
 
-  <nav class="signs" aria-label="Signs">
-    <div class="navh">Kinetic signs</div>
-    <ol id="signList"></ol>
-    <div class="navh">Zero-frame motion</div>
-    <ol id="extraList"></ol>
-  </nav>
+  <nav class="signs" aria-label="Slides" id="nav"></nav>
 
   <main class="stage">
-    <div class="wall"><canvas id="live" width="512" height="1024" aria-label="Animated sign preview"></canvas></div>
+    <div class="wall"><canvas id="live" width="512" height="512" aria-label="Animated slide preview"></canvas></div>
     <div class="transport">
       <button class="btn solid" id="play" type="button">Pause</button>
       <output class="clock" id="clock">0.0 / 0.0 s</output>
       <span class="hint" id="stageHint"></span>
     </div>
-    <ol class="timeline" id="timeline" aria-label="Frames and hold times"></ol>
-    <div class="extras" id="extraCtl" hidden>
-      <label class="field"><span id="speedLabel">Seconds per pass</span><input type="number" id="speed" min="2" max="120" step="1" value="20"></label>
-    </div>
+    <div class="timing" id="timing"></div>
+    <ol class="frames" id="frames" aria-label="The 16 frames on the sheet"></ol>
   </main>
 
   <aside class="side">
     <section class="p">
       <h2 id="sheetTitle">Spritesheet</h2>
-      <div class="sheetbox"><canvas id="sheet" width="300" height="300" aria-label="Spritesheet with grid"></canvas></div>
+      <div class="sheetbox" id="sheetbox"></div>
       <dl class="spec" id="spec"></dl>
       <ul class="checks" id="checks"></ul>
       <div class="exports">
@@ -172,13 +163,21 @@ form.copy label em{font:400 11px/1.35 var(--mono);letter-spacing:0;text-transfor
         <button class="btn" type="button" id="exGif">Preview GIF</button>
         <button class="btn" type="button" id="exLsl">LSL script</button>
         <button class="btn" type="button" id="exCopy">Copy script</button>
-        <button class="btn wide" type="button" id="exZip">Everything (.zip)</button>
+        <button class="btn wide" type="button" id="exZip">Everything for this slide (.zip)</button>
+        <button class="btn wide" type="button" id="exAll">All slides in this shape (.zip)</button>
       </div>
     </section>
     <section class="p">
       <h2>Copy</h2>
       <form class="copy" id="copyForm" autocomplete="off"></form>
       <button class="btn" type="button" id="resetCopy">Reset copy and timing</button>
+    </section>
+    <section class="p">
+      <h2>Fonts</h2>
+      <div class="fontrow"><b>Poppins</b><span id="fontPoppins">Loading…</span><b>Avenir LT Pro</b><span id="fontAvenir">Checking…</span></div>
+      <label class="btn" for="fontFiles">Add Avenir LT Pro files</label>
+      <input type="file" id="fontFiles" accept=".otf,.ttf,.woff,.woff2" multiple hidden>
+      <p class="note">Avenir LT Pro is a licensed font, so it is never bundled here. If it's installed on this computer the studio uses it. Otherwise add your own .otf or .ttf files. They stay in this browser and are not uploaded.</p>
     </section>
   </aside>
 </div>
@@ -188,26 +187,42 @@ form.copy label em{font:400 11px/1.35 var(--mono);letter-spacing:0;text-transfor
 <script>
 'use strict';
 /* ==========================================================================
-   artsy Sign Studio
-   Kinetic signs for Second Life, rendered to even spritesheets.
-   - Every sign is 8 frames. Every format fills its grid exactly:
-       portrait  512x1024 cells, 4x2 grid, 2048x2048 sheet
-       landscape 1024x512 cells, 2x4 grid, 2048x2048 sheet
-       square    512x512 cells,  4x2 grid, 2048x1024 sheet
-     That is 512 px per metre at the suggested prim sizes, with no empty cells.
-   - Hold times live in the LSL script, not in repeated frames.
+   artsy Sign Studio: one looping glass slide per message, for Second Life.
+
+   Every sheet is 2048 x 2048: a 4 x 4 grid of 16 frames, 512 x 512 each, so a
+   1 m tile shows 512 px per metre and no cell is ever empty. Landscape and
+   portrait slides are two tiles side by side or stacked, one sheet each,
+   played in sync by one script.
+
+   The 16 frames are the same plan for every slide:
+     0      pause: background only
+     1-7    entrance. The exit plays these backwards, so it costs no frames.
+     8      the message, held while people read
+     9-15   accent: a second state that is held too (toggle), or a light
+            passing across the glass (pulse, stored backwards so it plays in
+            one reverse run)
+   Holds live in the script, never in repeated frames.
    ========================================================================== */
 
-const FORMATS = {
-  portrait:  {id: 'portrait',  name: 'Portrait',  ratio: '1:2', w: 512,  h: 1024, cols: 4, rows: 2, prim: '1 × 2 m'},
-  landscape: {id: 'landscape', name: 'Landscape', ratio: '2:1', w: 1024, h: 512,  cols: 2, rows: 4, prim: '2 × 1 m'},
-  square:    {id: 'square',    name: 'Square',    ratio: '1:1', w: 512,  h: 512,  cols: 4, rows: 2, prim: '1 × 1 m'},
+const TILE = 512, GRID = 4, FRAMES = 16;
+const SHAPES = {
+  square:    {id: 'square',    name: 'Square',    ratio: '1:1', tx: 1, ty: 1, prim: '1 × 1 m', tiles: ['']},
+  landscape: {id: 'landscape', name: 'Landscape', ratio: '2:1', tx: 2, ty: 1, prim: '2 × 1 m (two 1 m tiles)', tiles: ['left', 'right']},
+  portrait:  {id: 'portrait',  name: 'Portrait',  ratio: '1:2', tx: 1, ty: 2, prim: '1 × 2 m (two 1 m tiles)', tiles: ['top', 'bottom']},
 };
-const BLACK = '#000000', WHITE = '#ffffff';
+const IN_STEP = 0.06, ACC_STEP = 0.08, QUICK = 0.5;
+const WHITE = '#ffffff', BLACK = '#000000';
 
 /* ---------- small utilities ---------- */
 const R = (x, y, w, h) => ({x, y, w, h});
 const clamp = (v, a, b) => Math.max(a, Math.min(b, v));
+const lerp = (a, b, t) => a + (b - a) * t;
+const seg = (p, a, b) => clamp((p - a) / (b - a), 0, 1);
+const ease = {
+  out: t => 1 - Math.pow(1 - t, 3),
+  inOut: t => t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2,
+  sine: t => (1 - Math.cos(Math.PI * t)) / 2,
+};
 function rng(seed) {
   let s = seed >>> 0;
   return () => {
@@ -230,34 +245,33 @@ function splitCols(r, weights, gap = 0) {
 }
 const gray = v => { const k = Math.round(clamp(v, 0, 1) * 255); return `rgb(${k},${k},${k})`; };
 const hex2 = v => Math.round(clamp(v, 0, 1) * 255).toString(16).padStart(2, '0').toUpperCase();
+function makeCanvas(w, h) { const c = document.createElement('canvas'); c.width = w; c.height = h; return c; }
 
-/* ---------- type ---------- */
-const STRETCH = [
-  ['extra-condensed', 62.5], ['condensed', 75], ['semi-condensed', 87.5],
-  ['normal', 100], ['semi-expanded', 112.5], ['expanded', 125],
-];
+/* ---------- type: Poppins for headings and labels, Avenir LT Pro for body ---------- */
+const POPPINS = '"Poppins", "Helvetica Neue", Arial, sans-serif';
+const BODY = '"Avenir LT Pro", "Avenir", "Nunito Sans", "Helvetica Neue", Arial, sans-serif';
 const FACE = {
-  display: {family: 'Archivo', fallback: '"Arial Narrow", Arial, sans-serif', weight: 900, style: 'normal', track: -0.012},
-  bold:    {family: 'Archivo', fallback: 'Arial, sans-serif', weight: 800, style: 'normal', track: 0},
-  mono:    {family: 'Space Mono', fallback: 'ui-monospace, Menlo, monospace', weight: 700, style: 'normal', track: 0.08},
-  monoReg: {family: 'Space Mono', fallback: 'ui-monospace, Menlo, monospace', weight: 400, style: 'normal', track: 0.04},
-  serif:   {family: 'Instrument Serif', fallback: 'Georgia, serif', weight: 400, style: 'italic', track: -0.01},
+  head:  {family: POPPINS, weight: 600, style: 'normal', track: -0.012},
+  light: {family: POPPINS, weight: 300, style: 'normal', track: 0},
+  label: {family: POPPINS, weight: 500, style: 'normal', track: 0.22},
+  num:   {family: POPPINS, weight: 500, style: 'normal', track: 0.04},
+  body:  {family: BODY, weight: 400, style: 'normal', track: 0},
+  bodyB: {family: BODY, weight: 600, style: 'normal', track: 0},
 };
 const HAS_SPACING = 'letterSpacing' in CanvasRenderingContext2D.prototype;
-function applyFont(ctx, face, size, stretch = 'normal') {
-  ctx.font = `${face.style} ${face.weight} ${size}px "${face.family}", ${face.fallback}`;
-  ctx.fontStretch = stretch;
-  if (HAS_SPACING) ctx.letterSpacing = (face.track * size).toFixed(2) + 'px';
+function applyFont(ctx, face, size, track = face.track) {
+  ctx.font = `${face.style} ${face.weight} ${size}px ${face.family}`;
+  if (HAS_SPACING) ctx.letterSpacing = (track * size).toFixed(2) + 'px';
   ctx.textAlign = 'left';
   ctx.textBaseline = 'alphabetic';
 }
 const MEASURES = new Map();
-// Ink metrics at 100 px. l/r: ink left/right of the pen position, a/d: ink above/below the baseline.
-function measure(ctx, face, stretch, text) {
-  const key = `${face.family}|${face.weight}|${face.style}|${stretch}|${face.track}|${text}`;
+// metrics at 100 px: l/r ink either side of the pen, a/d ink above/below the baseline, adv advance
+function measure(ctx, face, text, track = face.track) {
+  const key = `${face.family}|${face.weight}|${face.style}|${track}|${text}`;
   let m = MEASURES.get(key);
   if (!m) {
-    applyFont(ctx, face, 100, stretch);
+    applyFont(ctx, face, 100, track);
     const t = ctx.measureText(text);
     m = {l: t.actualBoundingBoxLeft, r: t.actualBoundingBoxRight, a: t.actualBoundingBoxAscent, d: t.actualBoundingBoxDescent, adv: t.width};
     m.w = m.l + m.r;
@@ -265,122 +279,12 @@ function measure(ctx, face, stretch, text) {
   }
   return m;
 }
-
-// "RE|DE|LIV|ERY": spaces and | are optional line breaks (| joins without a space), a newline forces one.
-function tokenize(text) {
-  const out = [];
-  let cur = '';
-  for (const ch of text) {
-    if (ch === ' ' || ch === '|' || ch === '\n') {
-      if (cur) { out.push({t: cur, join: ch === '|' ? '' : ch}); cur = ''; }
-      else if (ch === '\n' && out.length) out[out.length - 1].join = '\n';
-    } else cur += ch;
-  }
-  if (cur) out.push({t: cur, join: null});
-  if (out.length) out[out.length - 1].join = null;
-  return out;
-}
-function partitions(tokens, maxLines) {
-  const soft = [];
-  for (let i = 0; i < tokens.length - 1; i++) if (tokens[i].join !== '\n') soft.push(i);
-  const res = [];
-  const count = 1 << Math.min(soft.length, 10);
-  for (let mask = 0; mask < count; mask++) {
-    const brk = new Set();
-    soft.forEach((b, j) => { if (mask >> j & 1) brk.add(b); });
-    const lines = [];
-    let cur = '', midword = 0;
-    tokens.forEach((tk, i) => {
-      cur += tk.t;
-      if (i === tokens.length - 1) { lines.push(cur); return; }
-      if (tk.join === '\n' || brk.has(i)) { lines.push(cur); cur = ''; if (tk.join === '') midword++; }
-      else cur += tk.join;
-    });
-    if (lines.length <= maxLines) res.push({lines, midword});
-  }
-  return res;
-}
-
-/* Fit display type into a box. The width axis is part of the fit: a narrow box
-   gets condensed Archivo, a wide one gets expanded, so the same copy reads as a
-   designed block in every format.
-   mode 'uniform': one size for every line. mode 'justify': each line fills the width. */
-function fitDisplay(ctx, text, box, o = {}) {
-  const face = o.face || FACE.display;
-  const mode = o.mode || 'uniform';
-  const lead = o.lead ?? 0.2;
-  const src = text.toUpperCase();
-  const parts = partitions(tokenize(src), o.maxLines || 5);
-  const lo = o.minStretch ?? 62.5, hi = o.maxStretch ?? 125;
-  const stretches = o.stretch ? STRETCH.filter(s => s[0] === o.stretch) : STRETCH.filter(s => s[1] >= lo && s[1] <= hi);
-  const maxS = o.maxSize || Infinity;
-  let best = null;
-  for (const [st, pct] of stretches) {
-    const cap = measure(ctx, face, st, 'H').a;
-    for (const p of parts) {
-      const ms = p.lines.map(t => measure(ctx, face, st, t));
-      const n = ms.length;
-      let sizes;
-      if (mode === 'justify') {
-        sizes = ms.map(m => Math.min(maxS, box.w * 100 / m.w));
-        let total = 0;
-        sizes.forEach((s, i) => { total += cap * s / 100; if (i < n - 1) total += lead * cap * Math.min(s, sizes[i + 1]) / 100; });
-        if (total > box.h) { const k = box.h / total; sizes = sizes.map(s => s * k); }
-      } else {
-        const s = Math.min(maxS, ...ms.map(m => box.w * 100 / m.w), box.h * 100 / (cap * (n + lead * (n - 1))));
-        sizes = ms.map(() => s);
-      }
-      let area = 0, h = 0, wMax = 0;
-      sizes.forEach((s, i) => {
-        const lw = ms[i].w * s / 100, lh = cap * s / 100;
-        area += lw * lh; h += lh; wMax = Math.max(wMax, lw);
-        if (i < n - 1) h += lead * cap * Math.min(s, sizes[i + 1]) / 100;
-      });
-      const minS = Math.min(...sizes);
-      let score = mode === 'justify'
-        ? (area / (box.w * box.h)) * Math.pow(minS / Math.max(...sizes), 0.25)
-        : minS * (1 + 0.25 * wMax / box.w);
-      score *= Math.pow(o.breakCost ?? 0.8, p.midword) * Math.pow(o.lineCost ?? 0.985, n - 1);
-      if (!best || score > best.score) {
-        best = {score, face, stretch: st, pct, cap, lead, w: wMax, h,
-          lines: p.lines.map((t, i) => ({t, S: sizes[i], m: ms[i]}))};
-      }
-    }
-  }
-  return best;
-}
-// style.colors: one colour per line. style.outline(i): stroke that line instead of filling it.
-// style.letters(k, n): one colour per letter (single-line gradients).
-function drawDisplay(ctx, lay, x, y, align, cw, color, style = {}) {
-  let top = y;
-  lay.lines.forEach((ln, i) => {
-    const capH = lay.cap * ln.S / 100, w = ln.m.w * ln.S / 100;
-    const xx = align === 'right' ? x + cw - w : align === 'center' ? x + (cw - w) / 2 : x;
-    const col = style.colors ? style.colors[i] : color;
-    const pen = xx + ln.m.l * ln.S / 100, base = top + capH;
-    applyFont(ctx, lay.face, ln.S, lay.stretch);
-    if (style.outline && style.outline(i)) {
-      ctx.strokeStyle = col; ctx.lineWidth = Math.max(2, ln.S * 0.024); ctx.lineJoin = 'miter'; ctx.miterLimit = 3;
-      ctx.strokeText(ln.t, pen, base);
-    } else if (style.letters) {
-      const chars = [...ln.t];
-      chars.forEach((ch, k) => {
-        ctx.fillStyle = style.letters(k, chars.length);
-        ctx.fillText(ch, pen + ctx.measureText(chars.slice(0, k).join('')).width, base);
-      });
-    } else {
-      ctx.fillStyle = col;
-      ctx.fillText(ln.t, pen, base);
-    }
-    if (i < lay.lines.length - 1) top += capH + lay.lead * lay.cap * Math.min(ln.S, lay.lines[i + 1].S) / 100;
-  });
-}
 function wrapWords(ctx, face, words, size, maxW) {
   const lines = [];
   let cur = '';
   for (const w of words) {
     const t = cur ? cur + ' ' + w : w;
-    if (cur && measure(ctx, face, 'normal', t).w * size / 100 > maxW) { lines.push(cur); cur = w; }
+    if (cur && measure(ctx, face, t).w * size / 100 > maxW) { lines.push(cur); cur = w; }
     else cur = t;
   }
   if (cur) lines.push(cur);
@@ -490,243 +394,395 @@ function paintSwatch(ctx, r, kind, seed = 1, cell) {
   ctx.restore();
 }
 
-/* ---------- assets ---------- */
-const ASSETS = {logoWhite: null, logoBlack: null};
+
+/* ---------- fonts and the logo ---------- */
+const ASSETS = {logoWhite: null};
+const FONT_STATE = {poppins: false, avenir: 'stand-in', files: 0};
 async function loadAssets() {
   const img = new Image();
   img.src = LOGO_PNG;
   await img.decode();
-  const white = document.createElement('canvas');
-  white.width = img.naturalWidth; white.height = img.naturalHeight;
-  white.getContext('2d').drawImage(img, 0, 0);
-  const black = document.createElement('canvas');
-  black.width = white.width; black.height = white.height;
-  const b = black.getContext('2d');
-  b.drawImage(img, 0, 0);
-  b.globalCompositeOperation = 'source-in';
-  b.fillStyle = BLACK; b.fillRect(0, 0, black.width, black.height);
-  ASSETS.logoWhite = white; ASSETS.logoBlack = black;
+  const c = makeCanvas(img.naturalWidth, img.naturalHeight);
+  c.getContext('2d').drawImage(img, 0, 0);
+  ASSETS.logoWhite = c;
 }
-const FONT_FACES = ['900 100px "Archivo"', '800 100px "Archivo"', 'italic 400 100px "Instrument Serif"', '700 100px "Space Mono"', '400 100px "Space Mono"'];
-let fontsOk = false;
+// a locally installed font changes the width of a test string against a generic family
+function fontInstalled(name) {
+  const ctx = makeCanvas(10, 10).getContext('2d'), test = 'mmmmmmmmmmlli1WQ@#Avenir';
+  return ['monospace', 'serif'].some(base => {
+    ctx.font = `72px ${base}`;
+    const w0 = ctx.measureText(test).width;
+    ctx.font = `72px "${name}", ${base}`;
+    return ctx.measureText(test).width !== w0;
+  });
+}
 async function loadFonts() {
   try {
-    await Promise.all(FONT_FACES.map(f => document.fonts.load(f, 'AaBbHh0123?&›')));
+    await Promise.all(['300', '500', '600'].map(w => document.fonts.load(`${w} 40px "Poppins"`, 'AaBb0123')));
+    await Promise.all(['400', '600'].map(w => document.fonts.load(`${w} 40px "Nunito Sans"`, 'AaBb0123')));
     await document.fonts.ready;
-  } catch (e) { /* fall through to the check */ }
-  fontsOk = FONT_FACES.every(f => document.fonts.check(f, 'H'));
+  } catch (e) { /* the checks below report it */ }
+  FONT_STATE.poppins = ['300', '500', '600'].every(w => document.fonts.check(`${w} 40px "Poppins"`, 'A'));
+  if (FONT_STATE.files) FONT_STATE.avenir = 'files';
+  else if (fontInstalled('Avenir LT Pro')) FONT_STATE.avenir = 'installed';
+  else if (fontInstalled('Avenir')) FONT_STATE.avenir = 'system';
+  else FONT_STATE.avenir = 'stand-in';
   MEASURES.clear();
+}
+// usWeightClass and the italic bit from an .otf/.ttf OS/2 table
+function sfntStyle(buf) {
+  const dv = new DataView(buf);
+  const tag = dv.getUint32(0);
+  if (tag !== 0x4F54544F && tag !== 0x00010000 && tag !== 0x74727565) return null;
+  const n = dv.getUint16(4);
+  for (let i = 0; i < n; i++) {
+    const rec = 12 + i * 16;
+    if (dv.getUint32(rec) === 0x4F532F32) {
+      const off = dv.getUint32(rec + 8);
+      return {weight: dv.getUint16(off + 4), italic: (dv.getUint16(off + 62) & 1) === 1};
+    }
+  }
+  return null;
+}
+function weightFromName(name) {
+  const n = name.toLowerCase();
+  if (/95|black/.test(n)) return 900;
+  if (/85|heavy/.test(n)) return 800;
+  if (/65|medium/.test(n)) return 500;
+  if (/35|light/.test(n)) return 300;
+  if (/45|book/.test(n)) return 400;
+  return 400;
+}
+async function addFontFiles(files) {
+  let added = 0;
+  for (const f of files) {
+    const buf = await f.arrayBuffer();
+    const st = sfntStyle(buf) || {weight: weightFromName(f.name), italic: /italic|oblique/i.test(f.name)};
+    try {
+      const face = new FontFace('Avenir LT Pro', buf, {weight: String(st.weight), style: st.italic ? 'italic' : 'normal'});
+      await face.load();
+      document.fonts.add(face);
+      added++;
+    } catch (e) { /* not a font this browser can read */ }
+  }
+  FONT_STATE.files += added;
+  await loadFonts();
+  return added;
+}
+
+/* ---------- the background every slide sits on ---------- */
+function backdrop(W, H) {
+  const c = makeCanvas(W, H), ctx = c.getContext('2d');
+  const u = Math.min(W, H) / 100, big = Math.max(W, H);
+  const g = ctx.createLinearGradient(0, 0, W * 0.35, H);
+  g.addColorStop(0, '#222225'); g.addColorStop(0.55, '#111113'); g.addColorStop(1, '#060607');
+  ctx.fillStyle = g; ctx.fillRect(0, 0, W, H);
+  const orb = (x, y, r, a) => {
+    const rg = ctx.createRadialGradient(x, y, 0, x, y, r);
+    rg.addColorStop(0, `rgba(255,255,255,${a})`); rg.addColorStop(0.55, `rgba(255,255,255,${a * 0.35})`); rg.addColorStop(1, 'rgba(255,255,255,0)');
+    ctx.fillStyle = rg; ctx.fillRect(0, 0, W, H);
+  };
+  orb(W * 0.14, H * 0.16, big * 0.42, 0.26);
+  orb(W * 0.9, H * 0.88, big * 0.4, 0.15);
+  orb(W * 0.84, H * 0.1, big * 0.16, 0.14);
+  // fine diagonal lines: crisp around the glass, frosted behind it
+  ctx.save();
+  ctx.globalAlpha = 0.07; ctx.strokeStyle = WHITE; ctx.lineWidth = Math.max(1, 0.24 * u);
+  for (let x = -H; x < W; x += 2.8 * u) { ctx.beginPath(); ctx.moveTo(x, H); ctx.lineTo(x + H, 0); ctx.stroke(); }
+  ctx.restore();
+  // darker edges, so neighbouring frames on the sheet never bleed light at a distance
+  const v = ctx.createRadialGradient(W / 2, H / 2, Math.min(W, H) * 0.3, W / 2, H / 2, big * 0.78);
+  v.addColorStop(0, 'rgba(0,0,0,0)'); v.addColorStop(1, 'rgba(0,0,0,0.6)');
+  ctx.fillStyle = v; ctx.fillRect(0, 0, W, H);
+  return c;
+}
+// three box blurs on the gray channel: a frosted copy for the glass (same result in every browser)
+function frosted(src, radius) {
+  const W = src.width, H = src.height;
+  const img = src.getContext('2d').getImageData(0, 0, W, H), d = img.data;
+  let a = new Float32Array(W * H), b = new Float32Array(W * H);
+  for (let i = 0, j = 0; j < a.length; i += 4, j++) a[j] = d[i];
+  const r = Math.max(1, Math.round(radius)), k = 1 / (2 * r + 1);
+  const pass = (s, t, horiz) => {
+    const n = horiz ? W : H, lines = horiz ? H : W;
+    for (let L = 0; L < lines; L++) {
+      const at = i => horiz ? L * W + clamp(i, 0, n - 1) : clamp(i, 0, n - 1) * W + L;
+      let acc = 0;
+      for (let i = -r; i <= r; i++) acc += s[at(i)];
+      for (let i = 0; i < n; i++) {
+        t[at(i)] = acc * k;
+        acc += s[at(i + r + 1)] - s[at(i - r)];
+      }
+    }
+  };
+  for (let p = 0; p < 3; p++) { pass(a, b, true); pass(b, a, false); }
+  for (let i = 0, j = 0; j < a.length; i += 4, j++) { const v = a[j]; d[i] = d[i + 1] = d[i + 2] = v; d[i + 3] = 255; }
+  const out = makeCanvas(W, H);
+  out.getContext('2d').putImageData(img, 0, 0);
+  return out;
+}
+const BACKDROPS = new Map();
+function backdropFor(W, H) {
+  const key = W + 'x' + H;
+  if (!BACKDROPS.has(key)) {
+    const bg = backdrop(W, H);
+    BACKDROPS.set(key, {bg, blur: frosted(bg, Math.min(W, H) * 0.028)});
+  }
+  return BACKDROPS.get(key);
 }
 
 /* ==========================================================================
-   Frame graphics: one instance per frame. Holds the responsive layout grid
-   and the components every sign is built from.
+   Frame graphics: one per frame. st.pin is entrance progress (0..1),
+   st.pacc accent progress (0..1).
    ========================================================================== */
 class G {
-  constructor(canvas, fmt, meta) {
+  constructor(canvas, st) {
     this.c = canvas;
     this.ctx = canvas.getContext('2d');
-    this.fmt = fmt;
-    this.meta = meta;
     this.W = canvas.width; this.H = canvas.height;
     const u = this.u = Math.min(this.W, this.H) / 100;
     this.o = this.W > this.H ? 'landscape' : this.W < this.H ? 'portrait' : 'square';
-    this.dark = true;
-    this.m = Math.round(6 * u);
-    this.edge = Math.max(4, Math.round(1.2 * u));
-    this.prog = R(this.m, Math.round(3.8 * u), this.W - 2 * this.m, Math.max(3, Math.round(0.8 * u)));
-    this.head = R(this.m, Math.round(7.4 * u), this.W - 2 * this.m, Math.round(5.6 * u));
-    this.ruleY = Math.round(15.4 * u);
-    const top = Math.round(20 * u);
-    this.body = R(this.m, top, this.W - 2 * this.m, this.H - top - this.m);
+    this.st = st;
+    this.cache = backdropFor(this.W, this.H);
+    this.t = ease.inOut(st.pacc);              // toggles: 0 first state, 1 second state
+    this.wave = Math.sin(Math.PI * st.pacc);   // pulses: 0, up to 1, back to 0
+    const e = ease.out(seg(st.pin, 0, 0.55));
+    this.alpha = e;
+    const m = Math.round(5.5 * u);
+    this.card = R(m, m + (1 - e) * 7 * u, this.W - 2 * m, this.H - 2 * m);
+    this.rad = 3.4 * u;
+    const pad = Math.round(5.2 * u);
+    this.inner = R(this.card.x + pad, this.card.y + pad, this.card.w - 2 * pad, this.card.h - 2 * pad);
+    this.artAlpha = 1;
   }
-  get fg() { return this.dark ? WHITE : BLACK; }
-  get bg() { return this.dark ? BLACK : WHITE; }
-  get dim() { return this.dark ? '#474747' : '#c2c2c2'; }
-  get soft() { return this.dark ? '#9a9a9a' : '#5e5e5e'; }
   get wide() { return this.o === 'landscape'; }
   get tall() { return this.o === 'portrait'; }
-  // side by side when there is width for it, stacked otherwise
-  split(r, weights, gap, wide = this.wide) { return wide ? splitCols(r, weights, gap) : splitRows(r, weights, gap); }
+  p(a, b) { return ease.out(seg(this.st.pin, a, b)); }
+  fade(x) { this.ctx.globalAlpha = clamp(x, 0, 1) * this.alpha; }
+  glintPos() { return lerp(-0.45, 1.45, ease.sine(this.st.pacc)); }
 
-  ground(dark) {
-    this.dark = dark;
-    const {ctx, W, H, edge} = this;
-    ctx.fillStyle = BLACK; ctx.fillRect(0, 0, W, H);
-    if (!dark) { ctx.fillStyle = WHITE; ctx.fillRect(edge, edge, W - 2 * edge, H - 2 * edge); }
-  }
-  // A black rim on every frame. Mipmaps blend neighbouring cells of the sheet at a
-  // distance; a shared black rim makes that blend invisible.
-  guard() {
-    const {ctx, W, H, edge} = this;
+  background() { this.ctx.drawImage(this.cache.bg, 0, 0); }
+  // frosted smoked glass: blurred backdrop, a sheen, a light edge, and an optional passing glint
+  glass(r, rad, o = {}) {
+    const {ctx, u} = this;
+    const alpha = (o.alpha ?? 1);
+    if (alpha <= 0.002) return;
     ctx.save();
-    ctx.globalCompositeOperation = 'source-over';
-    ctx.fillStyle = BLACK;
-    ctx.fillRect(0, 0, W, edge); ctx.fillRect(0, H - edge, W, edge);
-    ctx.fillRect(0, 0, edge, H); ctx.fillRect(W - edge, 0, edge, H);
+    ctx.globalAlpha = alpha;
+    if (o.shadow !== false) {
+      ctx.save();
+      ctx.shadowColor = 'rgba(0,0,0,0.6)'; ctx.shadowBlur = 7 * u; ctx.shadowOffsetY = 2.4 * u;
+      ctx.fillStyle = 'rgba(0,0,0,0.32)';
+      ctx.beginPath(); ctx.roundRect(r.x, r.y, r.w, r.h, rad); ctx.fill();
+      ctx.restore();
+    }
+    ctx.save();
+    ctx.beginPath(); ctx.roundRect(r.x, r.y, r.w, r.h, rad); ctx.clip();
+    if (o.frost !== false) ctx.drawImage(this.cache.blur, 0, 0);
+    ctx.fillStyle = o.fill || 'rgba(255,255,255,0.055)'; ctx.fillRect(r.x, r.y, r.w, r.h);
+    const sh = ctx.createLinearGradient(r.x, r.y, r.x + r.w * 0.55, r.y + r.h);
+    sh.addColorStop(0, 'rgba(255,255,255,0.14)'); sh.addColorStop(0.6, 'rgba(255,255,255,0.02)'); sh.addColorStop(1, 'rgba(255,255,255,0)');
+    ctx.fillStyle = sh; ctx.fillRect(r.x, r.y, r.w, r.h);
+    if (o.glint != null) this.glintBand(r, o.glint, o.glintAlpha ?? 0.2);
+    ctx.restore();
+    const lw = Math.max(1.5, 0.3 * u);
+    const bd = ctx.createLinearGradient(r.x, r.y, r.x + r.w, r.y + r.h);
+    bd.addColorStop(0, 'rgba(255,255,255,0.6)'); bd.addColorStop(0.45, 'rgba(255,255,255,0.12)'); bd.addColorStop(1, 'rgba(255,255,255,0.32)');
+    ctx.strokeStyle = bd; ctx.lineWidth = lw;
+    ctx.beginPath(); ctx.roundRect(r.x + lw / 2, r.y + lw / 2, r.w - lw, r.h - lw, Math.max(0, rad - lw / 2)); ctx.stroke();
     ctx.restore();
   }
-  chrome(tag) {
-    const {ctx, u, prog, head} = this;
-    const n = this.meta.beats, k = this.meta.beat, gap = Math.round(0.9 * u);
-    const sw = (prog.w - gap * (n - 1)) / n;
-    for (let i = 0; i < n; i++) {
-      ctx.fillStyle = i <= k ? this.fg : this.dim;
-      const x0 = Math.round(prog.x + i * (sw + gap)), x1 = Math.round(prog.x + i * (sw + gap) + sw);
-      ctx.fillRect(x0, prog.y, x1 - x0, prog.h);
-    }
-    this.logo(head.x, head.y, head.h, 'left');
-    this.mono(tag || this.meta.tag, head.x + head.w, head.y + head.h * 0.56, {size: 2.6 * u, align: 'right', valign: 'middle'});
-    ctx.fillStyle = this.fg;
-    ctx.fillRect(this.m, this.ruleY, this.W - 2 * this.m, Math.max(2, Math.round(0.35 * u)));
+  glintBand(r, pos, a) {
+    const {ctx} = this;
+    const cx = r.x + r.w * pos, cy = r.y + r.h / 2, bw = Math.max(r.w, r.h) * 0.2, len = Math.hypot(r.w, r.h);
+    ctx.save();
+    ctx.translate(cx, cy); ctx.rotate(0.38);
+    const g = ctx.createLinearGradient(-bw, 0, bw, 0);
+    g.addColorStop(0, 'rgba(255,255,255,0)'); g.addColorStop(0.5, `rgba(255,255,255,${a})`); g.addColorStop(1, 'rgba(255,255,255,0)');
+    ctx.fillStyle = g; ctx.fillRect(-bw, -len, 2 * bw, 2 * len);
+    ctx.restore();
   }
-  logo(x, y, h, align = 'left', dark = this.dark) {
-    const img = dark ? ASSETS.logoWhite : ASSETS.logoBlack;
-    const w = h * img.width / img.height;
+  panel() { this.glass(this.card, this.rad, {alpha: this.alpha, glint: this.glintPos()}); }
+
+  logo(x, y, h, align = 'left') {
+    const img = ASSETS.logoWhite, w = h * img.width / img.height;
     const xx = align === 'left' ? x : align === 'right' ? x - w : x - w / 2;
     this.ctx.drawImage(img, xx, y, w, h);
     return R(xx, y, w, h);
   }
-
-  /* -- text components -- */
-  mono(text, x, y, o = {}) {
-    const {ctx, u} = this;
-    const face = o.bold === false ? FACE.monoReg : FACE.mono;
-    const size = o.size || 2.8 * u;
-    const t = String(text).toUpperCase();
-    const m = measure(ctx, face, 'normal', t), cap = measure(ctx, face, 'normal', 'H').a * size / 100;
+  label(text, x, y, size, track, color = '#d0d0cb', align = 'left') {
+    const {ctx} = this, t = String(text).toUpperCase();
+    const m = measure(ctx, FACE.label, t, track), cap = measure(ctx, FACE.label, 'H', track).a * size / 100;
     const w = m.w * size / 100;
-    const xx = o.align === 'right' ? x - w : o.align === 'center' ? x - w / 2 : x;
-    const base = o.valign === 'middle' ? y + cap / 2 : o.valign === 'top' ? y + cap : y;
-    applyFont(ctx, face, size);
-    ctx.fillStyle = o.color || this.fg;
-    ctx.fillText(t, xx + m.l * size / 100, base);
-    return R(xx, base - cap, w, cap);
+    const xx = align === 'right' ? x - w : align === 'center' ? x - w / 2 : x;
+    applyFont(ctx, FACE.label, size, track);
+    ctx.fillStyle = color;
+    ctx.fillText(t, xx + m.l * size / 100, y + cap);
+    return R(xx, y, w, cap);
   }
-  chip(text, o = {}) {
-    const {u} = this;
-    const face = FACE.mono, size = o.size || 3.1 * u;
-    const t = String(text).toUpperCase();
-    const m = measure(this.ctx, face, 'normal', t), cap = measure(this.ctx, face, 'normal', 'H').a;
-    const tw = m.w * size / 100, th = cap * size / 100;
-    const px = size * 0.6, py = size * 0.5;
-    const w = tw + 2 * px, h = th + 2 * py;
-    return {w, h, draw: (x, y) => {
-      const ctx = this.ctx;
-      if (o.outline) {
-        const lw = Math.max(2, 0.35 * u);
-        ctx.strokeStyle = this.fg; ctx.lineWidth = lw;
-        ctx.strokeRect(x + lw / 2, y + lw / 2, w - lw, h - lw);
-        ctx.fillStyle = this.fg;
-      } else {
-        ctx.fillStyle = this.fg; ctx.fillRect(x, y, w, h);
-        ctx.fillStyle = this.bg;
-      }
-      applyFont(ctx, face, size);
-      ctx.fillText(t, x + px + m.l * size / 100, y + py + th);
-    }};
+  // header: tracked label tightening as it fades in, the logo, a rule drawn left to right
+  header(label) {
+    const {ctx, u, inner} = this;
+    const a = this.p(0.1, 0.7);
+    this.fade(a);
+    this.label(label, inner.x, inner.y + 0.4 * u, 2.5 * u, lerp(0.7, 0.24, a));
+    this.fade(a * 0.92);
+    this.logo(inner.x + inner.w, inner.y - 0.9 * u, 4.8 * u, 'right');
+    const lp = this.p(0.18, 0.85);
+    this.fade(1);
+    ctx.fillStyle = 'rgba(255,255,255,0.2)';
+    ctx.fillRect(inner.x, inner.y + 6.4 * u, inner.w * lp, Math.max(1, 0.22 * u));
+    ctx.globalAlpha = 1;
+    return inner.y + 6.4 * u + 4 * u;
   }
-  text(text, box, o = {}) {
-    const lay = fitDisplay(this.ctx, text, box, o);
-    return {w: lay.w, h: lay.h, lay, draw: (x, y, align = o.align || 'left', cw = box.w) => drawDisplay(this.ctx, lay, x, y, align, cw, o.color || this.fg, o)};
-  }
-  serif(text, box, o = {}) {
-    const face = FACE.serif;
-    const m = measure(this.ctx, face, 'normal', text);
-    let S = Math.min(box.w * 100 / m.w, box.h * 100 / (m.a + m.d));
-    if (o.max) S = Math.min(S, o.max);
-    const w = m.w * S / 100, h = (m.a + m.d) * S / 100;
-    return {w, h, S, draw: (x, y, align = o.align || 'left', cw = box.w) => {
-      const xx = align === 'right' ? x + cw - w : align === 'center' ? x + (cw - w) / 2 : x;
-      applyFont(this.ctx, face, S);
-      this.ctx.fillStyle = o.color || this.fg;
-      this.ctx.fillText(text, xx + m.l * S / 100, y + m.a * S / 100);
-    }};
-  }
-  // wrapped serif paragraph, largest size that fits the box (capped by o.max)
-  para(text, box, o = {}) {
-    const face = o.face || FACE.serif, ctx = this.ctx;
+  // a wrapped text block: a fixed size, or the largest size up to max that fits
+  block(text, box, o) {
+    const {ctx} = this, face = o.face, lh = o.lh || 1.2;
     const words = String(text).split(/\s+/).filter(Boolean);
-    const asc = measure(ctx, face, 'normal', 'Hdlk').a / 100, desc = measure(ctx, face, 'normal', 'gjpy').d / 100;
-    const lh = o.lh || 1.06;
-    const fits = S => {
+    const capA = measure(ctx, face, 'H').a / 100, desc = measure(ctx, face, 'gjpqy').d / 100;
+    const lay = S => {
       const lines = wrapWords(ctx, face, words, S, box.w);
-      const h = (asc + desc) * S + (lines.length - 1) * lh * S;
-      return h <= box.h ? {lines, h} : null;
+      return {S, lines, h: (capA + desc) * S + (lines.length - 1) * lh * S};
     };
-    let lo = o.min || 6, hi = Math.min(o.max || box.h, box.h), got = fits(lo) || {lines: wrapWords(ctx, face, words, lo, box.w), h: box.h};
-    let S = lo;
-    for (let i = 0; i < 18; i++) { const mid = (lo + hi) / 2; const f = fits(mid); if (f) { lo = mid; got = f; S = mid; } else hi = mid; }
-    const widths = got.lines.map(l => measure(ctx, face, 'normal', l).w * S / 100);
-    return {w: Math.max(...widths), h: got.h, S, draw: (x, y, align = o.align || 'left', cw = box.w) => {
-      applyFont(ctx, face, S);
-      ctx.fillStyle = o.color || this.fg;
-      got.lines.forEach((l, i) => {
-        const m = measure(ctx, face, 'normal', l), w = m.w * S / 100;
-        const xx = align === 'right' ? x + cw - w : align === 'center' ? x + (cw - w) / 2 : x;
+    const fits = L => L.lines.length <= (o.maxLines || 9) && L.h <= box.h;
+    let L;
+    if (o.size) {
+      L = lay(o.size);
+      let s = o.size;
+      while (!fits(L) && s > (o.min || 6)) { s *= 0.94; L = lay(s); }
+    } else {
+      let lo = o.min || 6, hi = o.max || box.h;
+      L = lay(lo);
+      for (let i = 0; i < 18; i++) { const mid = (lo + hi) / 2, M = lay(mid); if (fits(M)) { lo = mid; L = M; } else hi = mid; }
+    }
+    L.w = Math.max(0, ...L.lines.map(l => measure(ctx, face, l).w * L.S / 100));
+    // draw: lines rise and fade in one after another between pin a and b
+    L.draw = (x, y, d = {}) => {
+      const S = L.S;
+      L.lines.forEach((line, i) => {
+        const k = d.from == null ? 1 : this.p(d.from + i * 0.07, d.to + i * 0.07);
+        if (k <= 0) return;
+        const m = measure(ctx, face, line), w = m.w * S / 100;
+        const xx = d.align === 'center' ? x + ((d.width || 0) - w) / 2 : d.align === 'right' ? x + (d.width || 0) - w : x;
+        this.fade(k * (d.alpha ?? 1));
         applyFont(ctx, face, S);
-        ctx.fillText(l, xx + m.l * S / 100, y + asc * S + i * lh * S);
+        ctx.fillStyle = d.color || WHITE;
+        ctx.fillText(line, xx + m.l * S / 100, y + capA * S + i * lh * S + (1 - k) * (d.dy ?? 2.6 * this.u));
       });
+      ctx.globalAlpha = 1;
+    };
+    return L;
+  }
+  headingSize() { return (this.tall ? 9.2 : this.wide ? 10.6 : 8.2) * this.u; }
+  bodySize() { return (this.tall ? 4.1 : this.wide ? 4.5 : 3.7) * this.u; }
+  // heading + body for a given width, drawn later at any y
+  textPlan(width, c, o = {}) {
+    const {u} = this, gap = 2.4 * u, maxH = o.maxH || 9999, reserve = o.reserve || 0;
+    const body = c.body ? this.block(c.body, R(0, 0, width, maxH * 0.5), {face: FACE.body, lh: 1.38, size: this.bodySize(), maxLines: 4}) : null;
+    const head = this.block(c.heading, R(0, 0, width, maxH - (body ? body.h + gap : 0) - reserve), {face: FACE.head, lh: 1.1, min: 3.4 * u, max: o.max || this.headingSize(), maxLines: o.lines || 3});
+    const h = head.h + (body ? gap + body.h : 0) + reserve;
+    return {h, draw: (x, y) => {
+      head.draw(x, y, {color: WHITE, from: 0.28, to: 0.8});
+      if (body) body.draw(x, y + head.h + gap, {color: '#d3d3cf', from: 0.42, to: 0.95});
     }};
   }
-  // a website button with a hard offset shadow
-  button(text, box, o = {}) {
-    const {ctx, u} = this;
-    const sh = Math.round(1.1 * u), padX = 3.2 * u, iconW = 5.5 * u;
-    const lay = fitDisplay(ctx, text, R(0, 0, box.w - 2 * padX - iconW - sh, o.textH || 4.2 * u), {face: FACE.bold, maxLines: 1, minStretch: 87.5, maxStretch: 125, lead: 0});
-    const h = lay.h + 2 * 2.4 * u, w = Math.min(box.w, lay.w + 2 * padX + iconW + sh);
-    return {w, h: h + sh, draw: (x, y) => {
-      const lw = Math.max(2, 0.4 * u);
-      ctx.strokeStyle = this.fg; ctx.lineWidth = lw;
-      ctx.strokeRect(x + sh + lw / 2, y + sh + lw / 2, w - sh - lw, h - lw);
-      ctx.fillStyle = this.fg; ctx.fillRect(x, y, w - sh, h);
-      drawDisplay(ctx, lay, x + padX, y + 2.4 * u, 'left', 0, this.bg);
-      const ar = R(x + w - sh - padX - iconW * 0.7, y + h / 2 - 1.8 * u, iconW * 0.7, 3.6 * u);
-      this.arrow(ar, 'right', {color: this.bg, lw: Math.max(2, 0.75 * u)});
-    }};
+  // text at the foot and the illustration in the room left above it; side by side when wide
+  place(top, plan, artWeight = 0.44) {
+    const {inner, u} = this;
+    const r = R(inner.x, top, inner.w, inner.y + inner.h - top);
+    if (this.wide) {
+      const [text, art] = splitCols(r, [1 - artWeight, artWeight], 5 * u);
+      const p = plan(text.w, text.h);
+      const y = text.y + (text.h - p.h) / 2;
+      return {art, text: R(text.x, y, text.w, p.h), draw: () => p.draw(text.x, y)};
+    }
+    const p = plan(r.w, r.h * (this.tall ? 0.56 : 0.62));
+    const gap = (this.tall ? 5 : 3.6) * u;
+    const ty = r.y + r.h - p.h;
+    return {art: R(r.x, r.y, r.w, ty - gap - r.y), text: R(r.x, ty, r.w, p.h), draw: () => p.draw(r.x, ty)};
   }
-  // a solid status bar: icon then words, knocked out of the foreground colour
-  status(text, box, icon) {
-    const {ctx, u} = this;
-    const pad = 2.2 * u, ic = box.h - 2 * pad;
-    const lay = fitDisplay(ctx, text, R(0, 0, box.w - 3 * pad - ic, box.h - 2 * pad), {maxLines: 1, minStretch: 75});
-    const h = lay.h + 2 * pad;
-    return {w: box.w, h, draw: (x, y) => {
-      ctx.fillStyle = this.fg; ctx.fillRect(x, y, box.w, h);
-      const ir = R(x + pad, y + pad, lay.h, lay.h);
-      if (icon === 'check') this.check(ir, {color: this.bg});
-      else this.arrow(ir, 'right', {color: this.bg});
-      drawDisplay(ctx, lay, x + 2 * pad + lay.h, y + pad, 'left', 0, this.bg);
-    }};
+  // illustrations scale up a touch and fade in with the entrance
+  art(r, fn) {
+    const {ctx} = this, e = this.p(0.3, 0.92);
+    if (e <= 0) return;
+    const s = lerp(0.92, 1, e), cx = r.x + r.w / 2, cy = r.y + r.h / 2;
+    ctx.save();
+    ctx.translate(cx, cy); ctx.scale(s, s); ctx.translate(-cx, -cy);
+    this.artAlpha = e;
+    fn(r);
+    ctx.restore();
+    this.artAlpha = 1;
+    ctx.globalAlpha = 1;
+  }
+  afade(x = 1) { this.fade(x * this.artAlpha); }
+  // the usual slide: header, illustration, heading and body
+  std(c, artWeight, draw, o = {}) {
+    this.background();
+    this.panel();
+    const top = this.header(c.label);
+    const z = this.place(top, (w, h) => this.textPlan(w, c, {...o, maxH: h}), artWeight);
+    if (draw) this.art(z.art, draw);
+    z.draw();
+    return z;
   }
 
-  /* -- icons -- */
-  arrow(r, dir = 'down', o = {}) {
-    const ctx = this.ctx, vertical = dir === 'down' || dir === 'up';
-    const len = vertical ? r.h : r.w, wide = vertical ? r.w : r.h;
-    const lw = o.lw || Math.max(2, Math.min(wide, len) * 0.16);
-    const head = Math.min(wide / 2 - lw * 0.75, len * 0.45);
+  /* -- illustrations -- */
+  tile(r, kind, seed, o = {}) {
+    const {ctx, u} = this, rad = o.rad ?? Math.min(r.w, r.h) * 0.12;
     ctx.save();
-    ctx.translate(r.x + r.w / 2, r.y + r.h / 2);
-    ctx.rotate({down: 0, left: Math.PI / 2, up: Math.PI, right: -Math.PI / 2}[dir] || 0);
-    ctx.strokeStyle = o.color || this.fg; ctx.lineWidth = lw; ctx.lineCap = 'butt'; ctx.lineJoin = 'miter'; ctx.miterLimit = 4;
-    const tip = len / 2 - lw * 0.72;
-    ctx.beginPath(); ctx.moveTo(0, -len / 2); ctx.lineTo(0, tip - lw * 0.3); ctx.stroke();
-    ctx.beginPath(); ctx.moveTo(-head, tip - head); ctx.lineTo(0, tip); ctx.lineTo(head, tip - head); ctx.stroke();
+    ctx.beginPath(); ctx.roundRect(r.x, r.y, r.w, r.h, rad); ctx.clip();
+    paintSwatch(ctx, r, kind, seed, o.cell);
+    const g = ctx.createLinearGradient(r.x, r.y, r.x + r.w, r.y + r.h);
+    g.addColorStop(0, 'rgba(255,255,255,0.22)'); g.addColorStop(0.5, 'rgba(255,255,255,0)'); g.addColorStop(1, 'rgba(0,0,0,0.28)');
+    ctx.fillStyle = g; ctx.fillRect(r.x, r.y, r.w, r.h);
     ctx.restore();
+    ctx.strokeStyle = 'rgba(255,255,255,0.3)'; ctx.lineWidth = Math.max(1, 0.2 * u);
+    ctx.beginPath(); ctx.roundRect(r.x + 0.5, r.y + 0.5, r.w - 1, r.h - 1, rad); ctx.stroke();
   }
-  check(r, o = {}) {
-    const ctx = this.ctx, s = Math.min(r.w, r.h), cx = r.x + r.w / 2, cy = r.y + r.h / 2;
+  cursor(x, y, s) {
+    const {ctx} = this, k = s / 18.5;
+    const P = [[0, 0], [0, 16], [4, 12.4], [6.9, 18.5], [9.7, 17.3], [6.8, 11.3], [12.1, 11.3]];
     ctx.save();
-    ctx.strokeStyle = o.color || this.fg; ctx.lineWidth = o.lw || s * 0.17; ctx.lineCap = 'square'; ctx.lineJoin = 'miter';
+    ctx.shadowColor = 'rgba(0,0,0,0.5)'; ctx.shadowBlur = s * 0.25; ctx.shadowOffsetY = s * 0.06;
     ctx.beginPath();
-    ctx.moveTo(cx - s * 0.36, cy + s * 0.02); ctx.lineTo(cx - s * 0.1, cy + s * 0.28); ctx.lineTo(cx + s * 0.38, cy - s * 0.26);
-    ctx.stroke();
+    P.forEach(([px, py], i) => i ? ctx.lineTo(x + px * k, y + py * k) : ctx.moveTo(x + px * k, y + py * k));
+    ctx.closePath();
+    ctx.fillStyle = WHITE; ctx.fill();
+    ctx.shadowColor = 'transparent';
+    ctx.lineJoin = 'round'; ctx.lineWidth = Math.max(1.2, 1.1 * k); ctx.strokeStyle = 'rgba(0,0,0,0.75)'; ctx.stroke();
     ctx.restore();
   }
-  sparkle(cx, cy, r, color = this.fg, waist = 0.16) {
-    const ctx = this.ctx, k = r * waist;
-    ctx.fillStyle = color;
+  ring(cx, cy, r, a, lw) {
+    const {ctx} = this;
+    if (a <= 0.01) return;
+    const prev = ctx.globalAlpha;
+    ctx.globalAlpha = prev * a;
+    ctx.strokeStyle = WHITE; ctx.lineWidth = lw;
+    ctx.beginPath(); ctx.arc(cx, cy, r, 0, Math.PI * 2); ctx.stroke();
+    ctx.globalAlpha = prev;
+  }
+  check(cx, cy, s, color = BLACK) {
+    const {ctx} = this;
+    ctx.save();
+    ctx.strokeStyle = color; ctx.lineWidth = s * 0.15; ctx.lineCap = 'round'; ctx.lineJoin = 'round';
+    ctx.beginPath(); ctx.moveTo(cx - s * 0.3, cy + s * 0.02); ctx.lineTo(cx - s * 0.08, cy + s * 0.24); ctx.lineTo(cx + s * 0.32, cy - s * 0.22); ctx.stroke();
+    ctx.restore();
+  }
+  badge(cx, cy, r, k = 1) {
+    if (k <= 0.01) return;
+    const {ctx} = this, rr = r * (0.6 + 0.4 * k);
+    const prev = ctx.globalAlpha;
+    ctx.globalAlpha = prev * clamp(k * 1.4, 0, 1);
+    ctx.save();
+    ctx.shadowColor = 'rgba(0,0,0,0.45)'; ctx.shadowBlur = r * 0.6; ctx.shadowOffsetY = r * 0.12;
+    ctx.fillStyle = WHITE; ctx.beginPath(); ctx.arc(cx, cy, rr, 0, Math.PI * 2); ctx.fill();
+    ctx.restore();
+    this.check(cx, cy, rr * 1.15, '#111');
+    ctx.globalAlpha = prev;
+  }
+  sparkle(cx, cy, r, waist = 0.12) {
+    const {ctx} = this, k = r * waist;
+    ctx.fillStyle = WHITE;
     ctx.beginPath();
     ctx.moveTo(cx, cy - r);
     ctx.quadraticCurveTo(cx + k, cy - k, cx + r, cy);
@@ -735,813 +791,705 @@ class G {
     ctx.quadraticCurveTo(cx - k, cy - k, cx, cy - r);
     ctx.fill();
   }
-  // the system pointer, tip at (x, y)
-  cursor(x, y, s) {
-    const ctx = this.ctx, k = s / 18.5;
-    const P = [[0, 0], [0, 16], [4, 12.4], [6.9, 18.5], [9.7, 17.3], [6.8, 11.3], [12.1, 11.3]];
-    ctx.save();
-    ctx.beginPath();
-    P.forEach(([px, py], i) => i ? ctx.lineTo(x + px * k, y + py * k) : ctx.moveTo(x + px * k, y + py * k));
-    ctx.closePath();
-    ctx.lineJoin = 'round'; ctx.lineWidth = Math.max(2, 1.5 * k);
-    ctx.fillStyle = WHITE; ctx.strokeStyle = BLACK;
-    ctx.fill(); ctx.stroke();
-    ctx.restore();
-  }
-  burst(x, y, r1, r2, color = this.fg) {
-    const ctx = this.ctx, lw = Math.max(2, (r2 - r1) * 0.26);
-    ctx.save();
-    ctx.lineCap = 'butt';
-    for (const [c, w] of [[color === WHITE ? BLACK : WHITE, lw * 2.2], [color, lw]]) {
-      ctx.strokeStyle = c; ctx.lineWidth = w;
-      for (const deg of [-95, -137, -180]) {
-        const a = deg * Math.PI / 180;
-        ctx.beginPath(); ctx.moveTo(x + Math.cos(a) * r1, y + Math.sin(a) * r1); ctx.lineTo(x + Math.cos(a) * r2, y + Math.sin(a) * r2); ctx.stroke();
-      }
-    }
-    ctx.restore();
-  }
-  play(r, o = {}) {
-    const ctx = this.ctx, h = Math.min(r.h, r.w / 1.42), w = h * 1.42;
-    const x = r.x + (r.w - w) / 2, y = r.y + (r.h - h) / 2, rad = h * 0.24;
-    ctx.fillStyle = o.color || this.fg;
-    ctx.beginPath(); ctx.roundRect(x, y, w, h, rad); ctx.fill();
-    ctx.fillStyle = o.knock || this.bg;
-    const cx = x + w / 2, cy = y + h / 2, t = h * 0.21;
-    ctx.beginPath(); ctx.moveTo(cx - t * 0.8, cy - t); ctx.lineTo(cx + t * 1.15, cy); ctx.lineTo(cx - t * 0.8, cy + t); ctx.closePath(); ctx.fill();
-  }
-  folder(r, o = {}) {
-    const ctx = this.ctx;
-    const w = Math.min(r.w, r.h * 1.3), h = w / 1.3, x = r.x + (r.w - w) / 2, y = r.y + (r.h - h) / 2;
-    const lw = o.lw || Math.max(2, w * 0.05), tab = h * 0.16;
-    ctx.save();
-    ctx.lineWidth = lw; ctx.lineJoin = 'miter'; ctx.strokeStyle = o.color || this.fg;
-    ctx.beginPath();
-    ctx.moveTo(x + lw / 2, y + tab + lw / 2);
-    ctx.lineTo(x + lw / 2, y + lw / 2); ctx.lineTo(x + w * 0.36, y + lw / 2); ctx.lineTo(x + w * 0.44, y + tab + lw / 2);
-    ctx.lineTo(x + w - lw / 2, y + tab + lw / 2); ctx.lineTo(x + w - lw / 2, y + h - lw / 2); ctx.lineTo(x + lw / 2, y + h - lw / 2); ctx.closePath();
-    ctx.stroke();
-    ctx.restore();
-    if (o.label) {
-      const inner = R(x + w * 0.12, y + tab + h * 0.2, w * 0.76, h * 0.5);
-      const t = this.text(o.label, inner, {mode: 'uniform', maxLines: 2, lead: 0.16, minStretch: 87.5, maxSize: h * 0.2});
-      t.draw(inner.x, inner.y + (inner.h - t.h) / 2, 'center', inner.w);
-    }
+  // a small glass pill with a tick or a dot and a few words
+  pill(text, cx, y, o = {}) {
+    const {ctx, u} = this, size = o.size || 2.9 * u;
+    const m = measure(ctx, FACE.bodyB, text), cap = measure(ctx, FACE.bodyB, 'H').a * size / 100;
+    const tw = m.w * size / 100, h = cap + 3.2 * u, icon = o.check ? h * 0.62 : 0;
+    const w = tw + 4.4 * u + (icon ? icon + 1.2 * u : 0);
+    const x = clamp(cx - w / 2, o.minX ?? -Infinity, (o.maxX ?? Infinity) - w);
+    this.glass(R(x, y, w, h), h / 2, {alpha: ctx.globalAlpha, shadow: true, fill: 'rgba(255,255,255,0.12)'});
+    let tx = x + 2.2 * u;
+    if (icon) { this.badge(tx + icon / 2, y + h / 2, icon / 2, 1); tx += icon + 1.2 * u; }
+    applyFont(ctx, FACE.bodyB, size);
+    ctx.fillStyle = WHITE;
+    ctx.fillText(text, tx + m.l * size / 100, y + h / 2 + cap / 2);
     return R(x, y, w, h);
   }
-  // a material ball: 'sky' reflects a sky gradient, 'room' reflects windows, 'tint' is a swatch under a tint
+  // material ball: base pattern under a tint, an environment reflection, a highlight
   ball(cx, cy, r, o = {}) {
-    const ctx = this.ctx;
+    const {ctx} = this;
+    const tint = o.tint ?? 1, rough = o.rough ?? 0.35, metal = o.metal ?? 0.4, room = o.room ?? 0;
     ctx.save();
     ctx.beginPath(); ctx.arc(cx, cy, r, 0, Math.PI * 2); ctx.clip();
-    if (o.mode === 'room') {
-      ctx.fillStyle = '#1d1d1d'; ctx.fillRect(cx - r, cy - r, 2 * r, 2 * r);
-      ctx.fillStyle = '#3a3a3a'; ctx.fillRect(cx - r, cy + r * 0.18, 2 * r, r);
-      for (let i = 0; i < 3; i++) {
-        const wx = cx - r * 0.78 + i * r * 0.5, wy = cy - r * 0.62;
-        ctx.fillStyle = i === 1 ? '#f2f2f2' : '#bdbdbd';
-        ctx.beginPath(); ctx.ellipse(wx + r * 0.16, wy + r * 0.32, r * 0.13, r * 0.33, -0.2 + i * 0.18, 0, Math.PI * 2); ctx.fill();
-      }
-      ctx.strokeStyle = '#6a6a6a'; ctx.lineWidth = Math.max(1.5, r * 0.02);
-      for (let i = -2; i <= 2; i++) { ctx.beginPath(); ctx.moveTo(cx + i * r * 0.36, cy + r * 0.18); ctx.lineTo(cx + i * r * 0.9, cy + r); ctx.stroke(); }
-    } else if (o.mode === 'tint') {
-      paintSwatch(ctx, R(cx - r, cy - r, 2 * r, 2 * r), 'pyramids', 3, r * 0.5);
-      ctx.globalCompositeOperation = 'multiply';
-      ctx.fillStyle = gray(o.level ?? 1);
-      ctx.fillRect(cx - r, cy - r, 2 * r, 2 * r);
-      ctx.globalCompositeOperation = 'source-over';
-    } else {
-      const g = ctx.createLinearGradient(0, cy - r, 0, cy + r);
-      g.addColorStop(0, '#fafafa'); g.addColorStop(0.47, '#9a9a9a'); g.addColorStop(0.5, '#2a2a2a'); g.addColorStop(1, '#0c0c0c');
-      ctx.fillStyle = g; ctx.fillRect(cx - r, cy - r, 2 * r, 2 * r);
+    if (o.kind === 'smooth') {
+      const base = ctx.createRadialGradient(cx - r * 0.3, cy - r * 0.35, r * 0.1, cx, cy, r);
+      base.addColorStop(0, '#9a9a9a'); base.addColorStop(1, '#3a3a3a');
+      ctx.fillStyle = base; ctx.fillRect(cx - r, cy - r, 2 * r, 2 * r);
+    } else paintSwatch(ctx, R(cx - r, cy - r, 2 * r, 2 * r), o.kind || 'pyramids', 3, r * 0.5);
+    ctx.globalCompositeOperation = 'multiply';
+    ctx.fillStyle = gray(tint); ctx.fillRect(cx - r, cy - r, 2 * r, 2 * r);
+    ctx.globalCompositeOperation = 'source-over';
+    // environment: a sky gradient, or the room's windows
+    const env = metal * 0.7;
+    if (room < 1) {
+      ctx.globalAlpha = env * (1 - room);
+      const sky = ctx.createLinearGradient(0, cy - r, 0, cy + r);
+      sky.addColorStop(0, '#f5f5f5'); sky.addColorStop(0.46, '#8e8e8e'); sky.addColorStop(0.5, '#262626'); sky.addColorStop(1, '#080808');
+      ctx.fillStyle = sky; ctx.fillRect(cx - r, cy - r, 2 * r, 2 * r);
     }
+    if (room > 0) {
+      ctx.globalAlpha = env * room;
+      ctx.fillStyle = '#1c1c1c'; ctx.fillRect(cx - r, cy - r, 2 * r, 2 * r);
+      ctx.fillStyle = '#3c3c3c'; ctx.fillRect(cx - r, cy + r * 0.2, 2 * r, r);
+      for (let i = 0; i < 3; i++) {
+        ctx.fillStyle = i === 1 ? '#f0f0f0' : '#bcbcbc';
+        ctx.beginPath(); ctx.ellipse(cx - r * 0.62 + i * r * 0.5, cy - r * 0.3, r * 0.12, r * 0.32, -0.25 + i * 0.2, 0, Math.PI * 2); ctx.fill();
+      }
+    }
+    ctx.globalAlpha = 1;
     const sh = ctx.createRadialGradient(cx - r * 0.35, cy - r * 0.4, r * 0.1, cx, cy, r);
-    sh.addColorStop(0, 'rgba(255,255,255,0.10)'); sh.addColorStop(0.65, 'rgba(0,0,0,0.05)'); sh.addColorStop(1, 'rgba(0,0,0,0.6)');
+    sh.addColorStop(0, 'rgba(255,255,255,0.12)'); sh.addColorStop(0.6, 'rgba(0,0,0,0.05)'); sh.addColorStop(1, 'rgba(0,0,0,0.62)');
     ctx.fillStyle = sh; ctx.fillRect(cx - r, cy - r, 2 * r, 2 * r);
-    ctx.fillStyle = 'rgba(255,255,255,0.92)';
-    ctx.beginPath(); ctx.ellipse(cx - r * 0.38, cy - r * 0.44, r * 0.13, r * 0.08, -0.6, 0, Math.PI * 2); ctx.fill();
+    // the highlight: sharp and small when smooth, wide and soft when rough
+    const hr = r * lerp(0.07, 0.42, rough), hx = cx - r * 0.38, hy = cy - r * 0.42;
+    const hg = ctx.createRadialGradient(hx, hy, 0, hx, hy, hr);
+    hg.addColorStop(0, `rgba(255,255,255,${lerp(0.95, 0.45, rough)})`); hg.addColorStop(lerp(0.55, 0.2, rough), `rgba(255,255,255,${lerp(0.8, 0.25, rough)})`); hg.addColorStop(1, 'rgba(255,255,255,0)');
+    ctx.fillStyle = hg; ctx.fillRect(cx - r, cy - r, 2 * r, 2 * r);
     ctx.restore();
-    ctx.strokeStyle = this.fg; ctx.lineWidth = Math.max(2, r * 0.025);
+    ctx.strokeStyle = 'rgba(255,255,255,0.45)'; ctx.lineWidth = Math.max(1.2, r * 0.018);
     ctx.beginPath(); ctx.arc(cx, cy, r, 0, Math.PI * 2); ctx.stroke();
   }
-  // wireframe probe box (isometric) around a ball
-  probe(r, o = {}) {
-    const ctx = this.ctx;
-    const s = Math.min(r.w / 3.464, r.h / 4) * (o.scale || 0.92);
-    const cx = r.x + r.w / 2, cy = r.y + r.h / 2;
+  // wireframe probe box (isometric); s scales it
+  cube(cx, cy, s, o = {}) {
+    const {ctx} = this;
     const P = (x, y, z) => [cx + (x - z) * s * 0.866, cy + (x + z) * s * 0.5 - y * s];
-    if (o.ball !== false) this.ball(cx, cy + s * 0.15, s * 0.55, {mode: o.mode || 'room'});
-    const lw = Math.max(2, s * 0.035);
+    const lw = Math.max(1.4, s * 0.03);
     ctx.save();
-    ctx.strokeStyle = this.fg; ctx.lineWidth = lw;
+    ctx.strokeStyle = WHITE; ctx.lineWidth = lw;
     const V = [-1, 1];
     for (const a of V) for (const b of V) {
       const edges = [[[-1, a, b], [1, a, b]], [[a, -1, b], [a, 1, b]], [[a, b, -1], [a, b, 1]]];
       for (const [p, q] of edges) {
-        const hidden = (p[0] === -1 && p[1] === -1 && p[2] === -1);
-        ctx.setLineDash(hidden ? [lw * 2.2, lw * 1.8] : []);
-        ctx.globalAlpha = hidden ? 0.55 : 1;
+        const hidden = p[0] === -1 && p[1] === -1 && p[2] === -1;
+        ctx.setLineDash(hidden ? [lw * 2.4, lw * 2] : []);
+        const prev = ctx.globalAlpha;
+        ctx.globalAlpha = prev * (hidden ? 0.45 : 0.9);
         const [x1, y1] = P(...p), [x2, y2] = P(...q);
         ctx.beginPath(); ctx.moveTo(x1, y1); ctx.lineTo(x2, y2); ctx.stroke();
+        ctx.globalAlpha = prev;
       }
     }
-    ctx.setLineDash([]); ctx.globalAlpha = 1;
+    ctx.setLineDash([]);
     if (o.handles) {
-      const hs = Math.max(6, s * 0.12);
-      ctx.fillStyle = this.fg;
+      const hs = Math.max(4, s * 0.09);
+      ctx.fillStyle = WHITE;
       for (const a of V) for (const b of V) for (const c of V) {
         if (a === -1 && b === -1 && c === -1) continue;
         const [x, y] = P(a, b, c); ctx.fillRect(x - hs / 2, y - hs / 2, hs, hs);
       }
     }
     ctx.restore();
-    return {s, cx, cy, P};
-  }
-  // the wall vendor: a grid of materials with hover text, one tile picked
-  vendor(r, o = {}) {
-    const {ctx, u} = this;
-    const capH = 2.5 * u, gap = 1.3 * u;
-    const top = r.y + capH * 2 + gap * 2.2;
-    const area = R(r.x, top, r.w, r.y + r.h - top);
-    const asp = area.w / area.h;
-    const cols = asp > 1.25 ? 3 : 2, rows = asp > 1.25 ? 2 : asp < 0.8 ? 3 : 2;
-    const ts = Math.min((area.w - gap * (cols - 1)) / cols, (area.h - gap * (rows - 1)) / rows);
-    const gw = cols * ts + (cols - 1) * gap, gh = rows * ts + (rows - 1) * gap;
-    const gx = area.x + (area.w - gw) / 2, gy = area.y;
-    this.mono(o.cap1 || '[ARTSY] CHROME PATTERN 0', gx + gw / 2, r.y, {size: capH, align: 'center', valign: 'top', bold: true});
-    this.mono(o.cap2 || '', gx + gw / 2, r.y + capH + gap * 0.9, {size: capH, align: 'center', valign: 'top', bold: false, color: this.soft});
-    let k = 0, sel = null;
-    for (let j = 0; j < rows; j++) for (let i = 0; i < cols; i++) {
-      const tr = R(gx + i * (ts + gap), gy + j * (ts + gap), ts, ts);
-      paintSwatch(ctx, tr, k === 0 ? 'pyramids' : SWATCHES[k % SWATCHES.length], k + 1, k === 0 ? ts / 3 : undefined);
-      if (k === 0) sel = tr;
-      k++;
-    }
-    const lw = Math.max(3, 0.9 * u), pad = 0.9 * u;
-    ctx.strokeStyle = this.fg; ctx.lineWidth = lw;
-    ctx.strokeRect(sel.x - pad - lw / 2, sel.y - pad - lw / 2, sel.w + 2 * pad + lw, sel.h + 2 * pad + lw);
-    if (o.state === 'deliver') {
-      const cr = ts * 0.19, cx = sel.x + sel.w - cr - ts * 0.06, cy = sel.y + cr + ts * 0.06;
-      ctx.fillStyle = this.fg; ctx.beginPath(); ctx.arc(cx, cy, cr, 0, Math.PI * 2); ctx.fill();
-      ctx.strokeStyle = this.bg; ctx.lineWidth = Math.max(2, cr * 0.12); ctx.stroke();
-      this.check(R(cx - cr, cy - cr, cr * 2, cr * 2), {color: this.bg});
-    }
-    const tipX = sel.x + sel.w * 0.62, tipY = sel.y + sel.h * 0.58;
-    if (o.state === 'deliver') this.burst(tipX, tipY, ts * 0.12, ts * 0.3, this.dark ? WHITE : BLACK);
-    this.cursor(tipX, tipY, Math.max(18, ts * 0.42));
-  }
-  // the build floater's texture tab, simplified
-  texTab(r, o = {}) {
-    const {ctx, u} = this;
-    const lw = Math.max(2, 0.35 * u);
-    const w = Math.min(r.w, r.h * 1.3);
-    const th = Math.min(w * 0.11, 7 * u), sw0 = (w - 15 * u) / 3;
-    const h = Math.min(r.h, th + lw + 4 * u + sw0 + 7 * u + 2 * 4.4 * u + 2 * u);
-    const x = r.x + (r.w - w) / 2, y = r.y + (r.h - h) / 2;
-    ctx.strokeStyle = this.fg; ctx.lineWidth = lw;
-    ctx.strokeRect(x + lw / 2, y + lw / 2, w - lw, h - lw);
-    const tabs = ['GEN', 'OBJ', 'FEAT', 'TEXTURE', 'CONT'];
-    const tw = (w - 2 * lw) / tabs.length;
-    tabs.forEach((t, i) => {
-      const tx = x + lw + i * tw;
-      if (t === 'TEXTURE') { ctx.fillStyle = this.fg; ctx.fillRect(tx, y + lw, tw, th); }
-      this.mono(t, tx + tw / 2, y + lw + th / 2, {size: Math.min(th * 0.34, tw * 0.17), align: 'center', valign: 'middle', color: t === 'TEXTURE' ? this.bg : this.soft});
-    });
-    ctx.fillStyle = this.fg; ctx.fillRect(x, y + th + lw, w, lw);
-    const sw = (w - 5 * 3 * u) / 3, sy = y + th + 4 * u;
-    const labels = ['MATERIAL', 'BASE', 'TINT'];
-    let tint = null;
-    labels.forEach((l, i) => {
-      const sx = x + 3 * u + i * (sw + 1.5 * 3 * u);
-      const sr = R(sx, sy, sw, sw);
-      if (l === 'MATERIAL') paintSwatch(ctx, sr, 'pyramids', 2, sw / 2);
-      else if (l === 'BASE') paintSwatch(ctx, sr, 'checker', 2, sw / 4);
-      else { ctx.fillStyle = o.tint || '#8f8f8f'; ctx.fillRect(sr.x, sr.y, sr.w, sr.h); tint = sr; }
-      ctx.strokeStyle = this.fg; ctx.lineWidth = lw; ctx.strokeRect(sr.x, sr.y, sr.w, sr.h);
-      this.mono(l, sx + sw / 2, sy + sw + 2.6 * u, {size: Math.min(2.4 * u, sw * 0.16), align: 'center', valign: 'top', color: l === 'TINT' ? this.fg : this.soft});
-    });
-    const ly = sy + sw + 7 * u;
-    const rows = [['METALLIC', 0.0], ['ROUGHNESS', 0.4]];
-    rows.forEach(([l, v], i) => {
-      const yy = ly + i * 4.4 * u;
-      if (yy + 3 * u > y + h) return;
-      this.mono(l, x + 3 * u, yy, {size: 2.2 * u, valign: 'top', bold: false, color: this.soft});
-      this.mono(v.toFixed(3), x + w - 3 * u, yy, {size: 2.2 * u, valign: 'top', align: 'right', bold: false, color: this.soft});
-    });
-    const hl = Math.max(3, 0.9 * u);
-    ctx.strokeStyle = this.fg; ctx.lineWidth = hl;
-    ctx.strokeRect(tint.x - hl * 1.5, tint.y - hl * 1.5, tint.w + hl * 3, tint.h + hl * 3);
-    this.cursor(tint.x + tint.w * 0.42, tint.y + tint.h * 0.3, Math.max(18, sw * 0.5));
-  }
-  slider(r, label, value, o = {}) {
-    const {ctx, u} = this;
-    const size = o.size || 3.6 * u;
-    this.mono(label, r.x, r.y, {size, valign: 'top'});
-    this.mono(value.toFixed(2), r.x + r.w, r.y, {size, valign: 'top', align: 'right', bold: false});
-    const k = 6 * u, th = Math.max(4, 1.6 * u), ty = r.y + size + 3 * u + k / 2 - th / 2;
-    ctx.fillStyle = this.dim; ctx.fillRect(r.x, ty, r.w, th);
-    ctx.fillStyle = this.fg; ctx.fillRect(r.x, ty, r.w * value, th);
-    const kx = clamp(r.x + r.w * value - k / 2, r.x, r.x + r.w - k);
-    ctx.fillRect(kx, ty + th / 2 - k / 2, k, k);
-    return size + 3 * u + k;
-  }
-  // a texture swatch struck through
-  noTexture(r) {
-    const ctx = this.ctx, s = Math.min(r.w, r.h), x = r.x + (r.w - s) / 2, y = r.y + (r.h - s) / 2;
-    paintSwatch(ctx, R(x, y, s, s), 'checker', 4, s / 5);
-    ctx.strokeStyle = this.fg; ctx.lineWidth = Math.max(3, s * 0.025);
-    ctx.strokeRect(x, y, s, s);
-    ctx.save();
-    ctx.beginPath(); ctx.rect(x, y, s, s); ctx.clip();
-    ctx.strokeStyle = this.bg; ctx.lineWidth = s * 0.16;
-    ctx.beginPath(); ctx.moveTo(x - s * 0.1, y + s * 1.1); ctx.lineTo(x + s * 1.1, y - s * 0.1); ctx.stroke();
-    ctx.strokeStyle = this.fg; ctx.lineWidth = s * 0.08;
-    ctx.beginPath(); ctx.moveTo(x - s * 0.1, y + s * 1.1); ctx.lineTo(x + s * 1.1, y - s * 0.1); ctx.stroke();
-    ctx.restore();
-  }
-
-  /* ======================================================================
-     Layout templates. Each one is responsive: it reads this.o and lays out
-     side by side (landscape), stacked (portrait) or compact (square).
-     ====================================================================== */
-  // Big title at the foot of the frame. Wide frames keep words whole; tall ones may break
-  // them. A single word that leaves the frame half empty repeats upward as outlines.
-  hero({dark, tag, kicker, title, mode = 'justify', sparkles = 0, art}) {
-    const {u} = this, b = this.body, gap = 3 * u;
-    const chip = kicker ? this.chip(kicker) : null;
-    const top = chip ? chip.h + gap * 1.4 : 0;
-    const avail = R(b.x, b.y + top, b.w, b.h - top);
-    const t = this.text(title, avail, {mode, lead: 0.1, maxLines: 4, breakCost: this.tall ? 0.92 : 0.2});
-    const free = avail.h - t.h;
-    if (!art && t.lay.lines.length === 1 && !/\s/.test(title.trim()) && free > avail.h * 0.3) return this.stack({dark, tag, kicker, word: title});
-    this.ground(dark); this.chrome(tag);
-    if (chip) chip.draw(b.x, b.y);
-    t.draw(b.x, b.y + b.h - t.h);
-    if (art && free > 12 * u) art(R(b.x, avail.y + gap, b.w, free - gap * 2.4));
-    else if (sparkles && free > 8 * u) this.sparkle(b.x + b.w - 5 * u, avail.y + Math.min(free / 2, 9 * u), Math.min(5 * u, free / 3));
-  }
-  // one word repeated down the frame, every row the full width: outlines above a solid row,
-  // or a row per tint level. One row in wide frames, where levels grade the letters instead.
-  stack({dark, tag, kicker, word, serif, maxRows = 6, levels}) {
-    this.ground(dark); this.chrome(tag);
-    const {u} = this, b = this.body, gap = 3 * u;
-    const chip = kicker ? this.chip(kicker) : null;
-    const s = serif ? this.serif(serif, R(0, 0, b.w, this.tall ? 12 * u : 9 * u), {max: this.tall ? 12 * u : 9 * u}) : null;
-    const top = chip ? chip.h + gap * 1.4 : 0, bottom = s ? s.h + gap * 1.2 : 0;
-    const avail = R(b.x, b.y + top, b.w, b.h - top - bottom);
-    const clean = word.replace(/[|\n]/g, '');
-    let best = null;
-    for (let n = 1; n <= maxRows; n++) {
-      const lay = fitDisplay(this.ctx, Array(n).fill(clean).join('\n'), avail, {mode: 'justify', lead: 0.12, maxLines: n});
-      const fill = lay.w * lay.h / (avail.w * avail.h);
-      if (!best || fill > best.fill + 0.03) best = {n, lay, fill};
-    }
-    const n = best.n, st = {};
-    if (levels && n > 1) st.colors = best.lay.lines.map((_, i) => gray(levels[Math.max(0, levels.length - n + i)]));
-    else if (levels) st.letters = (k, len) => gray(levels[Math.max(0, levels.length - len + k)]);
-    else st.outline = i => i < n - 1;
-    if (chip) chip.draw(b.x, b.y);
-    drawDisplay(this.ctx, best.lay, b.x, avail.y + avail.h - best.lay.h, 'left', b.w, this.fg, st);
-    if (s) s.draw(b.x, b.y + b.h - s.h);
-    return best;
-  }
-  // a light: sparkle with thin rays
-  flare(cx, cy, r) {
-    const ctx = this.ctx;
-    ctx.save();
-    ctx.strokeStyle = this.fg; ctx.lineWidth = Math.max(2, r * 0.035);
-    for (let i = 0; i < 12; i++) {
-      const a = i * Math.PI / 6 + Math.PI / 12, r1 = r * 0.42, r2 = r * (i % 2 ? 0.78 : 1);
-      ctx.beginPath(); ctx.moveTo(cx + Math.cos(a) * r1, cy + Math.sin(a) * r1); ctx.lineTo(cx + Math.cos(a) * r2, cy + Math.sin(a) * r2); ctx.stroke();
-    }
-    ctx.restore();
-    this.sparkle(cx, cy, r * 0.62);
-  }
-  // a big outlined numeral in whatever room is left
-  numeral(text, r, align = 'right') {
-    if (r.h < 14 * this.u) return;
-    const t = this.text(text, r, {mode: 'uniform', maxLines: 1, outline: () => true});
-    t.draw(r.x, r.y + (r.h - t.h) / 2, align, r.w);
-  }
-  mosaic(r, kinds) {
-    const {ctx, u} = this, gap = 1.6 * u;
-    const cols = r.w / r.h > 2.2 ? kinds.length : 2, rows = Math.ceil(kinds.length / cols);
-    const ts = Math.min((r.w - gap * (cols - 1)) / cols, (r.h - gap * (rows - 1)) / rows);
-    const lw = Math.max(2, 0.35 * u);
-    kinds.forEach((k, i) => {
-      const tr = R(r.x + (i % cols) * (ts + gap), r.y + Math.floor(i / cols) * (ts + gap), ts, ts);
-      paintSwatch(ctx, tr, k, i + 3);
-      ctx.strokeStyle = this.fg; ctx.lineWidth = lw; ctx.strokeRect(tr.x + lw / 2, tr.y + lw / 2, tr.w - lw, tr.h - lw);
-    });
-  }
-  // title + serif line, optional art beside or above
-  statement({dark, tag, title, serif, art, artWeight = 0.42, serifFirst = false, align = 'left'}) {
-    this.ground(dark); this.chrome(tag);
-    const {u} = this, b = this.body, gap = 3.5 * u;
-    let txt = b, artR = null;
-    if (art) {
-      const parts = this.split(b, this.wide ? [1 - artWeight, artWeight] : [artWeight, 1 - artWeight], 4 * u);
-      if (this.wide) [txt, artR] = parts; else [artR, txt] = parts;
-    }
-    const s = serif ? this.serif(serif, R(0, 0, txt.w, Math.min(txt.h * 0.3, 15 * u)), {max: 15 * u}) : null;
-    const tBox = R(txt.x, 0, txt.w, txt.h - (s ? s.h + gap : 0));
-    const t = this.text(title, tBox, {mode: 'uniform', lead: 0.14, maxLines: 4});
-    const blockH = t.h + (s ? s.h + gap : 0);
-    const y0 = txt.y + txt.h - blockH;
-    if (serifFirst && s) { s.draw(txt.x, y0, align, txt.w); t.draw(txt.x, y0 + s.h + gap, align, txt.w); }
-    else { t.draw(txt.x, y0, align, txt.w); if (s) s.draw(txt.x, y0 + t.h + gap, align, txt.w); }
-    if (art) art(artR);
-  }
-  step({dark, tag, n, title, note, result, icon, art}) {
-    this.ground(dark); this.chrome(tag);
-    const {u} = this, b = this.body, gap = 3 * u;
-    let txt, artR;
-    if (this.tall) [artR, txt] = splitRows(b, [0.44, 0.56], 5 * u);
-    else [txt, artR] = splitCols(b, this.wide ? [0.56, 0.44] : [0.56, 0.44], 4 * u);
-    const chip = this.chip(`Step ${n}`);
-    const st = this.status(result, R(0, 0, txt.w, this.tall ? 11 * u : 9 * u), icon);
-    const no = this.serif(note, R(0, 0, txt.w, 9 * u), {max: this.tall ? 9 * u : 7.5 * u});
-    const tH = txt.h - chip.h - no.h - st.h - gap * 3.4;
-    const t = this.text(title, R(txt.x, 0, txt.w, tH), {mode: 'uniform', lead: 0.12, maxLines: 4});
-    chip.draw(txt.x, txt.y);
-    t.draw(txt.x, txt.y + chip.h + gap * 1.2);
-    no.draw(txt.x, txt.y + chip.h + gap * 2.2 + t.h);
-    st.draw(txt.x, txt.y + txt.h - st.h);
-    art(artR);
-  }
-  signoff({dark, tag, a, b: script}) {
-    this.ground(dark); this.chrome(tag);
-    const {u} = this, b = this.body;
-    if (this.wide) {
-      const [l, r] = splitCols(b, [0.58, 0.42], 2 * u);
-      const t = this.text(a, l, {mode: 'uniform', maxLines: 1});
-      t.draw(l.x, b.y + b.h - t.h);
-      const s = this.serif(script, R(0, 0, r.w, b.h));
-      s.draw(r.x, b.y + b.h - s.h, 'right', r.w);
-    } else {
-      const t = this.text(a, R(b.x, b.y, b.w, b.h * (this.tall ? 0.34 : 0.4)), {mode: 'uniform', maxLines: 1});
-      t.draw(b.x, b.y);
-      const s = this.serif(script, R(0, 0, b.w * 0.92, b.h - t.h - 4 * u));
-      s.draw(b.x, b.y + b.h - s.h, 'right', b.w);
-    }
-    const sr = this.wide ? 4.5 * this.u : 5 * this.u;
-    this.sparkle(b.x + sr, b.y + b.h - sr, sr);
-  }
-  wayfind({dark, tag, q, a, dir}) {
-    this.ground(dark); this.chrome(tag);
-    const {u} = this, b = this.body, gap = 3 * u;
-    const vertical = dir === 'down' || dir === 'up';
-    let txt, ar;
-    if (this.wide) [txt, ar] = splitCols(b, [0.62, 0.38], 5 * u);
-    else if (vertical) [txt, ar] = splitRows(b, [0.58, 0.42], 4 * u);
-    else [txt, ar] = splitRows(b, [0.62, 0.38], 4 * u);
-    const s = this.serif(q, R(0, 0, txt.w, 10 * u), {max: this.tall ? 10 * u : 8.5 * u});
-    const t = this.text(a, R(txt.x, 0, txt.w, txt.h - s.h - gap), {mode: 'uniform', lead: 0.12, maxLines: 4});
-    s.draw(txt.x, txt.y);
-    t.draw(txt.x, txt.y + s.h + gap);
-    if (!this.wide) { const used = s.h + gap + t.h + 6 * u; ar = R(b.x, b.y + used, b.w, b.h - used); }
-    let arR;
-    if (vertical) { const w = Math.min(ar.w, ar.h * 0.8); arR = R(ar.x + (this.wide ? (ar.w - w) / 2 : 0), ar.y, w, ar.h); }
-    else { const h = Math.min(ar.h, ar.w * 0.7); arR = R(ar.x, ar.y + (ar.h - h) / 2, ar.w, h); }
-    this.arrow(arR, dir, {lw: Math.max(6, Math.min(arR.w, arR.h) * (vertical ? 0.17 : 0.2))});
-  }
-  swatch({dark, tag, name, kind, i, n, seed}) {
-    this.ground(dark); this.chrome(tag);
-    const {ctx, u} = this, b = this.body;
-    paintSwatch(ctx, b, kind, seed || i + 1);
-    const lw = Math.max(2, 0.35 * u);
-    ctx.strokeStyle = this.fg; ctx.lineWidth = lw; ctx.strokeRect(b.x + lw / 2, b.y + lw / 2, b.w - lw, b.h - lw);
-    const c = this.chip(`${String(i).padStart(2, '0')} / ${String(n).padStart(2, '0')}`);
-    c.draw(b.x + b.w - c.w, b.y);
-    const pad = 2.6 * u;
-    const box = R(0, 0, (this.wide ? b.w * 0.62 : b.w) - 2 * pad, (this.tall ? b.h * 0.3 : b.h * 0.42) - 2 * pad);
-    const t = this.text(name, box, {mode: 'uniform', lead: 0.1, maxLines: 3});
-    const lx = b.x, ly = b.y + b.h - t.h - 2 * pad;
-    ctx.fillStyle = this.bg; ctx.fillRect(lx, ly, t.w + 2 * pad, t.h + 2 * pad);
-    t.draw(lx + pad, ly + pad);
-  }
-  cta({dark, tag, serif, title, button, cursor = true, swatches}) {
-    this.ground(dark); this.chrome(tag);
-    const {u} = this, b = this.body, gap = 3.6 * u;
-    const s = this.serif(serif, R(0, 0, b.w, this.tall ? 13 * u : 10 * u), {max: this.tall ? 13 * u : 10 * u});
-    const bt = this.button(button, R(0, 0, this.wide ? b.w * 0.6 : b.w, 0), {textH: this.tall ? 5 * u : 4.4 * u});
-    const t = this.text(title, R(b.x, 0, b.w, b.h - s.h - bt.h - gap * 2.6), {mode: 'uniform', lead: 0.1, maxLines: 4});
-    s.draw(b.x, b.y);
-    t.draw(b.x, b.y + s.h + gap);
-    const by = b.y + b.h - bt.h;
-    const freeTop = b.y + s.h + gap + t.h + gap * 1.6, freeH = by - gap * 1.6 - freeTop;
-    if (swatches && freeH > 22 * u) this.mosaic(R(b.x, freeTop, b.w, freeH), swatches);
-    bt.draw(b.x, by);
-    if (cursor) this.cursor(b.x + bt.w * 0.82, by + bt.h * 0.55, this.tall ? 11 * u : 8.5 * u);
-  }
-  // two option cards, one active, like a pricing table
-  cards({dark, tag, title, cards, active}) {
-    this.ground(dark); this.chrome(tag);
-    const {ctx, u} = this, b = this.body, gap = 3 * u;
-    const head = this.text(title, R(b.x, 0, b.w, this.tall ? 9 * u : 7 * u), {mode: 'uniform', maxLines: 1});
-    head.draw(b.x, b.y);
-    const area = R(b.x, b.y + head.h + gap * 1.4, b.w, b.h - head.h - gap * 1.4);
-    const boxes = this.split(area, [1, 1], 3 * u, this.o !== 'portrait');
-    const lw = Math.max(2, 0.4 * u);
-    boxes.forEach((r, i) => {
-      const on = i === active, c = cards[i];
-      const fg = on ? this.bg : this.fg;
-      if (on) { ctx.fillStyle = this.fg; ctx.fillRect(r.x, r.y, r.w, r.h); }
-      else { ctx.strokeStyle = this.dim; ctx.lineWidth = lw; ctx.strokeRect(r.x + lw / 2, r.y + lw / 2, r.w - lw, r.h - lw); }
-      const pad = 3 * u, inner = R(r.x + pad, r.y + pad, r.w - 2 * pad, r.h - 2 * pad);
-      const lab = on ? 'Selected' : `Option ${i + 1}`;
-      this.mono(lab, inner.x, inner.y, {size: 2.5 * u, valign: 'top', color: on ? this.bg : this.soft});
-      const p = this.para(c.note, R(0, 0, inner.w, inner.h * 0.42), {max: this.tall ? 7.5 * u : 6 * u, color: on ? this.bg : this.soft});
-      const t = this.text(c.title, R(inner.x, 0, inner.w, inner.h - p.h - 7.5 * u), {mode: 'uniform', lead: 0.1, maxLines: 2, color: fg});
-      t.draw(inner.x, inner.y + 5 * u);
-      p.draw(inner.x, inner.y + inner.h - p.h);
-    });
-  }
-  stepper({dark, tag, title, steps, active}) {
-    this.ground(dark); this.chrome(tag);
-    const {ctx, u} = this, b = this.body, gap = 2.4 * u;
-    const head = this.text(title, R(b.x, 0, b.w, this.tall ? 8 * u : 6.5 * u), {mode: 'uniform', maxLines: 1});
-    head.draw(b.x, b.y);
-    const area = R(b.x, b.y + head.h + gap * 1.6, b.w, b.h - head.h - gap * 1.6);
-    const weights = steps.map((_, i) => i === active ? 2.1 : 1);
-    const boxes = this.wide ? splitCols(area, weights, gap) : splitRows(area, weights, gap);
-    const lw = Math.max(2, 0.4 * u);
-    boxes.forEach((r, i) => {
-      const on = i === active;
-      if (on) { ctx.fillStyle = this.fg; ctx.fillRect(r.x, r.y, r.w, r.h); }
-      else { ctx.strokeStyle = this.dim; ctx.lineWidth = lw; ctx.strokeRect(r.x + lw / 2, r.y + lw / 2, r.w - lw, r.h - lw); }
-      const pad = 2.6 * u, inner = R(r.x + pad, r.y + pad, r.w - 2 * pad, r.h - 2 * pad);
-      const col = on ? this.bg : this.soft;
-      this.mono(String(i + 1).padStart(2, '0'), inner.x, inner.y, {size: 2.6 * u, valign: 'top', color: col});
-      const tb = R(inner.x, 0, inner.w, inner.h - 5 * u);
-      const t = this.text(steps[i], tb, {mode: 'uniform', lead: 0.14, maxLines: on ? 4 : 3, maxSize: on ? undefined : 14 * u, color: on ? this.bg : this.soft});
-      t.draw(inner.x, inner.y + inner.h - t.h);
-    });
   }
 }
 
 /* ==========================================================================
-   Signs. Each has 8 frames: a draw function, or an effect built from another
-   frame (glitch, invert, push). hold = seconds on screen. beat = which dot of
-   the progress bar is lit.
+   Slides. kind 'toggle': two held states. kind 'pulse': one held state and a
+   passing accent. draw(g, c) paints one frame from g.st.
    ========================================================================== */
 const field = (key, label, value, hint, options) => ({key, label, value, hint, options});
 const listOf = text => String(text).split(',').map(s => s.trim()).filter(Boolean);
-const kindsOf = text => { const items = listOf(text); return [0, 1, 2, 3].map(i => swatchFor(items[i] || '', i)); };
-const SIGNS = [
+
+const SLIDES = [
   {
-    id: 'redelivery', name: 'Redelivery', tag: 'Info', beats: 5,
+    id: 'redelivery', group: 'Buying', name: 'Redelivery', kind: 'toggle',
     fields: [
-      field('kicker', 'Kicker', 'Lost a material?'),
-      field('title', 'Headline', 'Re|deliv|ery', 'A | marks where a long word may break.'),
-      field('step1', 'Step 1', 'Click the material'),
-      field('step1note', 'Step 1, small print', 'on the wall vendor'),
-      field('step1result', 'Step 1, result', 'It loads'),
-      field('step2', 'Step 2', 'Click again'),
-      field('step2note', 'Step 2, small print', 'same material, one more click'),
-      field('step2result', 'Step 2, result', 'Redelivered'),
-      field('done1', 'Sign-off', "That's"),
-      field('done2', 'Sign-off, script', 'it.'),
-      field('coll1', 'Collections, question', 'Full collections?'),
-      field('coll2', 'Collections, answer', 'Use the terminal below'),
+      field('label', 'Label', 'Redelivery'),
+      field('heading', 'Heading', 'Redeliver in two clicks'),
+      field('step1', 'Step 1', 'Click the material on the wall vendor'),
+      field('step2', 'Step 2', 'Click it again to redeliver'),
+      field('pill1', 'After step 1', 'Loaded'),
+      field('pill2', 'After step 2', 'Sent to your inventory'),
+    ],
+    draw(g, c) {
+      g.background(); g.panel();
+      const top = g.header(c.label);
+      const z = g.place(top, (w, h) => stepsPlan(g, w, h, c.heading, [c.step1, c.step2], g.t), 0.42);
+      g.art(z.art, r => vendorArt(g, r, c));
+      z.draw();
+    },
+  },
+  {
+    id: 'collections', group: 'Buying', name: 'Collections', kind: 'pulse',
+    fields: [
+      field('label', 'Label', 'Collections'),
+      field('heading', 'Heading', 'Redeliver a collection'),
+      field('body', 'Body', 'Use the redelivery terminal below.'),
       field('arrow', 'Terminal is', 'down', null, ['down', 'left', 'right', 'up']),
     ],
-    frames: [
-      {hold: 1.1, beat: 0, note: 'redelivery', draw: (g, c) => g.hero({dark: true, kicker: c.kicker, title: c.title, sparkles: 1})},
-      {hold: 0.12, beat: 0, note: 'glitch', fx: {type: 'glitch', of: 0, seed: 11}},
-      {hold: 0.12, beat: 1, note: 'scroll', fx: {type: 'push', from: 0, to: 3, t: 0.52, dir: 'up'}},
-      {hold: 2.5, beat: 1, note: 'step 1', draw: (g, c) => g.step({dark: false, tag: 'Step 1 / 2', n: 1, title: c.step1, note: c.step1note, result: c.step1result, icon: 'arrow',
-        art: r => g.vendor(r, {state: 'load', cap2: 'Owned · click again to redeliver'})})},
-      {hold: 2.5, beat: 2, note: 'step 2', draw: (g, c) => g.step({dark: true, tag: 'Step 2 / 2', n: 2, title: c.step2, note: c.step2note, result: c.step2result, icon: 'check',
-        art: r => g.vendor(r, {state: 'deliver', cap2: 'Sent to your inventory'})})},
-      {hold: 0.12, beat: 3, note: 'flash', fx: {type: 'invert', of: 6}},
-      {hold: 1.3, beat: 3, note: "that's it", draw: (g, c) => g.signoff({dark: true, a: c.done1, b: c.done2})},
-      {hold: 2.4, beat: 4, note: 'collections', draw: (g, c) => g.wayfind({dark: false, tag: 'Collections', q: c.coll1, a: c.coll2, dir: c.arrow})},
-    ],
+    draw(g, c) { g.std(c, 0.44, r => arrowArt(g, r, c.arrow)); },
   },
   {
-    id: 'freebies', name: 'Freebies', tag: 'Freebie', beats: 4,
+    id: 'delivery', group: 'Buying', name: 'Delivery', kind: 'toggle',
     fields: [
-      field('title', 'Headline', 'Free'),
-      field('kicker', 'Kicker', 'No catch'),
-      field('serif', 'Script line', 'free'),
-      field('sub', 'What it is', 'Sample materials'),
-      field('items', 'Four materials', 'Plain glass, Black tile, Wood, Metal', 'Comma separated. The first four are used.'),
-      field('more', 'And more', '& more'),
-      field('cta', 'Button', 'Click for yours'),
+      field('label', 'Label', 'Delivery'),
+      field('heading', 'Heading', 'Look in your Materials folder'),
+      field('body', 'Body', 'Individual materials are delivered there.'),
+      field('folder', 'Folder name', 'Materials'),
     ],
-    frames: [
-      {hold: 1.0, beat: 0, note: 'free', draw: (g, c) => g.stack({dark: true, kicker: c.kicker, word: c.title})},
-      {hold: 0.12, beat: 0, note: 'flash', fx: {type: 'invert', of: 0}},
-      {hold: 1.6, beat: 1, note: 'sample materials', draw: (g, c) => g.cta({dark: true, serif: c.serif, title: c.sub, button: c.cta, swatches: kindsOf(c.items)})},
-      ...[0, 1, 2, 3].map(i => ({hold: 0.6, beat: 2, note: `material ${i + 1}`, draw: (g, c) => {
-        const items = c.items.split(',').map(s => s.trim()).filter(Boolean);
-        const name = items[i % Math.max(1, items.length)] || 'Material';
-        g.swatch({dark: true, tag: 'Included', name, kind: swatchFor(name, i), i: i + 1, n: 4, seed: i + 3});
-      }})),
-      {hold: 1.8, beat: 3, note: '& more', draw: (g, c) => g.cta({dark: false, serif: c.more, title: c.sub, button: c.cta, swatches: [...kindsOf(c.items).slice(0, 2), 'pyramids', 'herringbone']})},
-    ],
+    draw(g, c) { g.std(c, 0.46, r => folderArt(g, r, c.folder)); },
   },
   {
-    id: 'tint', name: 'Tint', tag: 'Pro tip', beats: 5,
+    id: 'permissions', group: 'Buying', name: 'Permissions', kind: 'toggle',
     fields: [
-      field('title', 'Headline', 'Tint'),
-      field('serif', 'Script line', 'any material'),
-      field('where', 'Where', 'Texture tab'),
-      field('tintword', 'Swatch name', 'Tint'),
-      field('shine', 'Question', 'Shinier? Less metal?'),
+      field('label', 'Label', 'Permissions'),
+      field('heading', 'Heading', 'Two ways to buy'),
+      field('opt1', 'Option 1', 'Copy / Mod'),
+      field('opt1note', 'Option 1, detail', 'For objects you own'),
+      field('opt2', 'Option 2', 'Full Perm'),
+      field('opt2note', 'Option 2, detail', 'For anything you make. Single-user license.'),
+    ],
+    draw(g, c) {
+      g.background(); g.panel();
+      const top = g.header(c.label);
+      const {u} = g;
+      const r = R(g.inner.x, top, g.inner.w, g.inner.y + g.inner.h - top);
+      if (g.wide) {
+        const [l, rr] = splitCols(r, [0.4, 0.6], 5 * u);
+        const p = g.textPlan(l.w, {heading: c.heading}, {max: 9 * u, maxH: l.h});
+        p.draw(l.x, l.y + (l.h - p.h) / 2);
+        optionsArt(g, rr, c);
+      } else {
+        const head = g.block(c.heading, R(0, 0, r.w, r.h * 0.3), {face: FACE.head, lh: 1.1, min: 3.4 * u, max: g.headingSize(), maxLines: 2});
+        const cardsH = Math.min(r.h - head.h - 4 * u, 2 * 26 * u + 2.4 * u);
+        const y0 = r.y + (r.h - (head.h + 4 * u + cardsH)) / 2;
+        head.draw(r.x, y0, {color: WHITE, from: 0.28, to: 0.8});
+        optionsArt(g, R(r.x, y0 + head.h + 4 * u, r.w, cardsH), c);
+      }
+    },
+  },
+  {
+    id: 'textures', group: 'Buying', name: 'Textures', kind: 'pulse',
+    fields: [
+      field('label', 'Label', 'Good to know'),
+      field('heading', 'Heading', 'Textures not included'),
+      field('body', 'Body', 'Individual texture maps aren’t part of any purchase.'),
+    ],
+    draw(g, c) { g.std(c, 0.46, r => mapsArt(g, r)); },
+  },
+  {
+    id: 'tint', group: 'Tips', name: 'Tint', kind: 'toggle',
+    fields: [
+      field('label', 'Label', 'Pro tip'),
+      field('heading', 'Heading', 'Tint any material'),
+      field('body', 'Body', 'Texture tab › Tint'),
+      field('level', 'Second tint', '35', 'Percent brightness of the tinted state.'),
+    ],
+    draw(g, c) { g.std(c, 0.46, r => tintArt(g, r, clamp((parseFloat(c.level) || 35) / 100, 0.05, 1))); },
+  },
+  {
+    id: 'shine', group: 'Tips', name: 'Shine', kind: 'toggle',
+    fields: [
+      field('label', 'Label', 'Pro tip'),
+      field('heading', 'Heading', 'Shinier or less metal'),
+      field('body', 'Body', 'Roughness and Metallic are in the texture tab too.'),
       field('rough', 'Slider 1', 'Roughness'),
       field('metal', 'Slider 2', 'Metallic'),
-      field('learn', 'Learn headline', 'Tutorials'),
-      field('learnSerif', 'Learn, script', 'on YouTube'),
     ],
-    frames: [
-      {hold: 1.0, beat: 0, note: 'tint', draw: (g, c) => g.stack({dark: true, word: c.title, serif: c.serif, levels: [0.2, 0.36, 0.55, 0.76, 1]})},
-      ...[[1.0, 0.4], [0.6, 0.4], [0.28, 0.4]].map(([lvl, hold], i) => ({hold, beat: 1, note: `tint ${Math.round(lvl * 100)}%`, draw: (g, c) => {
-        g.ground(true); g.chrome('Tint · ' + '#' + hex2(lvl).repeat(3));
-        const {u} = g, b = g.body;
-        const [ballR, txt] = g.wide ? splitCols(b, [0.5, 0.5], 4 * u) : splitRows(b, [0.6, 0.4], 4 * u);
-        const rad = Math.min(ballR.w, ballR.h) / 2 * 0.94;
-        g.ball(ballR.x + ballR.w / 2, ballR.y + ballR.h / 2, rad, {mode: 'tint', level: lvl});
-        const hex = g.text('#' + hex2(lvl).repeat(3), R(txt.x, 0, txt.w, txt.h * 0.42), {mode: 'uniform', maxLines: 1, stretch: g.wide ? 'semi-condensed' : 'condensed'});
-        const sw = g.chip(c.tintword + ' ' + Math.round(lvl * 100) + '%');
-        const meter = R(txt.x, txt.y + txt.h - 2.2 * u, txt.w, 2.2 * u);
-        hex.draw(txt.x, txt.y + txt.h - hex.h - 6 * u);
-        sw.draw(txt.x, txt.y + txt.h - hex.h - 9 * u - sw.h);
-        g.ctx.fillStyle = g.dim; g.ctx.fillRect(meter.x, meter.y, meter.w, meter.h);
-        g.ctx.fillStyle = WHITE; g.ctx.fillRect(meter.x, meter.y, meter.w * lvl, meter.h);
-      }})),
-      {hold: 2.2, beat: 2, note: 'texture tab', draw: (g, c) => g.statement({dark: false, title: c.where + ' › ' + c.tintword, serif: c.serif, art: r => g.texTab(r), artWeight: g.wide ? 0.44 : 0.5})},
-      {hold: 2.0, beat: 3, note: 'shine / metal', draw: (g, c) => {
-        g.ground(true); g.chrome('Pro tip');
-        const {u} = g, b = g.body;
-        const [txt, sl] = g.wide ? splitCols(b, [0.5, 0.5], 6 * u) : splitRows(b, [0.52, 0.48], 5 * u);
-        const t = g.text(c.shine, txt, {mode: 'uniform', lead: 0.12, maxLines: 4});
-        t.draw(txt.x, g.wide ? txt.y + (txt.h - t.h) / 2 : txt.y + txt.h - t.h);
-        const sh = 12.6 * u, gs = g.tall ? 12 * u : 7 * u;
-        const y0 = sl.y + (sl.h - (2 * sh + gs)) / 2;
-        g.slider(R(sl.x, y0, sl.w, sh), c.rough, 0.2);
-        g.slider(R(sl.x, y0 + sh + gs, sl.w, sh), c.metal, 0.0);
-      }},
-      {hold: 0.12, beat: 3, note: 'glitch', fx: {type: 'glitch', of: 5, seed: 5}},
-      {hold: 2.0, beat: 4, note: 'tutorials', draw: (g, c) => g.statement({dark: false, tag: 'Learn', title: c.learn, serif: c.learnSerif, art: r => g.play(R(r.x, r.y + r.h * 0.12, r.w, r.h * 0.76)), artWeight: g.wide ? 0.4 : 0.42})},
-    ],
+    draw(g, c) { g.std(c, g.wide ? 0.48 : 0.5, r => shineArt(g, r, c)); },
   },
   {
-    id: 'probes', name: 'Reflection probes', tag: 'Learn', beats: 5,
+    id: 'probes', group: 'Tips', name: 'Reflection probes', kind: 'toggle',
     fields: [
-      field('l1', 'Problem', 'Shiny materials reflect'),
-      field('l1s', 'Problem, script', 'the sky.'),
-      field('l2', 'Twist', 'Not your room.'),
-      field('l3', 'Fix', 'Add a reflection probe'),
+      field('label', 'Label', 'Learn'),
+      field('heading', 'Heading', 'Reflection probes'),
       field('s1', 'Step 1', 'Build › Create › Box'),
       field('s2', 'Step 2', 'Click Reflection Probe'),
-      field('s3', 'Step 3', 'Select it. Scale it up.'),
-      field('l4', 'Last tip', 'Dark inside? Add lights.'),
-      field('l4s', 'Last tip, script', 'just like real life :)'),
-      field('hint', 'Footnote', "Can't see it? Build › Options › Select Reflection Probes"),
+      field('s3', 'Step 3', 'Select the box'),
+      field('s4', 'Step 4', 'Scale it up'),
+      field('sky', 'Before', 'Reflects the sky'),
+      field('room', 'After', 'Reflects the room'),
     ],
-    frames: [
-      {hold: 1.6, beat: 0, note: 'reflects the sky', draw: (g, c) => g.statement({dark: true, title: c.l1, serif: c.l1s, art: r => { const s = Math.min(r.w, r.h) * 0.46; g.ball(r.x + r.w / 2, r.y + r.h / 2, s, {mode: 'sky'}); }})},
-      {hold: 1.4, beat: 1, note: 'not your room', draw: (g, c) => g.hero({dark: false, title: c.l2, mode: 'justify'})},
-      {hold: 0.12, beat: 2, note: 'glitch', fx: {type: 'glitch', of: 3, seed: 21}},
-      {hold: 1.8, beat: 2, note: 'reflection probe', draw: (g, c) => g.statement({dark: true, tag: 'The fix', title: c.l3, art: r => g.probe(r, {mode: 'room'}), artWeight: 0.46})},
-      ...[0, 1, 2].map(i => ({hold: 1.7, beat: 3, note: `step ${i + 1}`, draw: (g, c) => g.stepper({dark: false, tag: `Step ${i + 1} / 3`, title: 'How to', steps: [c.s1, c.s2, c.s3], active: i})})),
-      {hold: 2.2, beat: 4, note: 'add lights', draw: (g, c) => {
-        g.ground(true); g.chrome('Last tip');
-        const {u} = g, b = g.body;
-        const foot = g.para(c.hint, R(0, 0, g.wide ? b.w * 0.6 : b.w, g.tall ? 9 * u : 7 * u), {face: FACE.monoReg, max: 2.6 * u, color: g.soft});
-        const s = g.serif(c.l4s, R(0, 0, b.w, 10 * u), {max: g.tall ? 10 * u : 8 * u});
-        const t = g.text(c.l4, R(b.x, 0, b.w, b.h - foot.h - s.h - 8 * u), {mode: 'uniform', lead: 0.12, maxLines: 4});
-        t.draw(b.x, b.y);
-        s.draw(b.x, b.y + t.h + 3 * u);
-        foot.draw(b.x, b.y + b.h - foot.h);
-        const ft = b.y + t.h + s.h + 8 * u, fh = b.y + b.h - foot.h - 6 * u - ft;
-        if (fh > 18 * u) { const r = Math.min(fh, b.w) / 2; g.flare(g.wide ? b.x + b.w - r : b.x + b.w / 2, ft + fh / 2, r); }
-      }},
-    ],
+    draw(g, c) {
+      g.background(); g.panel();
+      const top = g.header(c.label);
+      const z = g.place(top, (w, h) => stepsPlan(g, w, h, c.heading, [c.s1, c.s2, c.s3, c.s4], null, 3), 0.44);
+      g.art(z.art, r => probeArt(g, r, c));
+      z.draw();
+    },
   },
   {
-    id: 'purchase', name: 'Purchase info', tag: 'Purchase info', beats: 4,
+    id: 'tutorials', group: 'Tips', name: 'Tutorials', kind: 'pulse',
     fields: [
-      field('q', 'Question', 'Bought it?'),
-      field('where', 'Lead-in', 'Find it in your'),
-      field('path', 'Folder', 'Materials folder'),
-      field('whereNote', 'Folder label', 'Individual materials'),
-      field('perms', 'Permissions headline', 'Per|mis|sions', 'A | marks where a long word may break.'),
-      field('cm', 'Option 1', 'Copy / Mod'),
-      field('cmNote', 'Option 1, detail', 'Use on objects you own.'),
-      field('fp', 'Option 2', 'Full perm'),
-      field('fpNote', 'Option 2, detail', 'Use on anything. Single-user license.'),
-      field('tex', 'Textures', 'Textures not included'),
-      field('texNote', 'Textures, script', 'texture maps aren’t part of any purchase'),
+      field('label', 'Label', 'Learn'),
+      field('heading', 'Heading', 'Video tutorials'),
+      field('body', 'Body', 'Find them on my YouTube channel.'),
     ],
-    frames: [
-      {hold: 1.2, beat: 0, note: 'bought it?', draw: (g, c) => g.hero({dark: true, title: c.q, mode: 'justify', kicker: 'Delivery', art: r => g.numeral('?', r)})},
-      {hold: 2.3, beat: 1, note: 'materials folder', draw: (g, c) => g.statement({dark: false, tag: 'Delivery', title: c.path, serif: c.where, serifFirst: true, art: r => g.folder(r, {label: c.whereNote}), artWeight: g.wide ? 0.34 : 0.4})},
-      {hold: 0.12, beat: 2, note: 'swipe', fx: {type: 'push', from: 1, to: 3, t: 0.5, dir: 'left'}},
-      {hold: 1.0, beat: 2, note: 'permissions', draw: (g, c) => g.hero({dark: true, tag: 'Permissions', title: c.perms, mode: 'justify', kicker: 'Two ways to buy'})},
-      {hold: 2.3, beat: 2, note: 'copy / mod', draw: (g, c) => g.cards({dark: true, tag: 'Permissions', title: c.perms, cards: [{title: c.cm, note: c.cmNote}, {title: c.fp, note: c.fpNote}], active: 0})},
-      {hold: 2.3, beat: 2, note: 'full perm', draw: (g, c) => g.cards({dark: true, tag: 'Permissions', title: c.perms, cards: [{title: c.cm, note: c.cmNote}, {title: c.fp, note: c.fpNote}], active: 1})},
-      {hold: 0.12, beat: 3, note: 'flash', fx: {type: 'invert', of: 7}},
-      {hold: 2.2, beat: 3, note: 'textures', draw: (g, c) => g.statement({dark: true, tag: 'Good to know', title: c.tex, serif: c.texNote, art: r => g.noTexture(R(r.x + r.w * 0.1, r.y + r.h * 0.1, r.w * 0.8, r.h * 0.8)), artWeight: g.wide ? 0.34 : 0.38})},
-    ],
+    draw(g, c) { g.std(c, 0.44, r => playArt(g, r)); },
   },
   {
-    id: 'welcome', name: 'Welcome', tag: 'Welcome', beats: 4,
+    id: 'welcome', group: 'Store', name: 'Welcome', kind: 'pulse',
     fields: [
-      field('hello', 'Headline', 'Wel|come', 'A | marks where a long word may break.'),
-      field('thanks', 'Script line', 'thank you for visiting'),
-      field('made', 'List label', 'Made with'),
-      field('tools', 'Four tools', 'Substance Sampler, Substance Designer, Substance Painter, Materialize', 'Comma separated. The first four are used.'),
-      field('pat', 'Patterns headline', 'Patterns'),
-      field('patNote', 'Patterns, script', 'hand-drawn by me, or from open-source and paid stock sites'),
+      field('label', 'Label', 'Welcome'),
+      field('heading', 'Heading', 'Thank you for visiting'),
+      field('body', 'Body', 'Materials made in Substance Sampler, Designer, Painter and Materialize.'),
     ],
-    frames: [
-      {hold: 1.4, beat: 0, note: 'welcome', draw: (g, c) => g.hero({dark: true, title: c.hello, mode: 'justify', art: r => {
-        const lh = Math.min(r.h * 0.78, r.w / 2.68);
-        g.logo(r.x + r.w / 2, r.y + (r.h - lh) / 2, lh, 'center');
-      }})},
-      {hold: 0.12, beat: 0, note: 'flash', fx: {type: 'invert', of: 0}},
-      {hold: 1.8, beat: 1, note: 'thank you', draw: (g, c) => {
-        g.ground(true); g.chrome();
-        const {u} = g, b = g.body;
-        const room = R(b.x, b.y, g.wide ? b.w * 0.82 : b.w, b.h - 12 * u);
-        const p = g.para(c.thanks, room, {max: g.tall ? 34 * u : 30 * u, lh: 0.98});
-        const y = b.y + b.h - p.h;
-        p.draw(b.x, y, 'left', room.w);
-        const sr = (g.tall ? 7 : 5.5) * u;
-        g.sparkle(b.x + b.w - sr, b.y + sr * 1.2, sr);
-        g.sparkle(b.x + b.w - sr * 3.2, b.y + sr * 3.4, sr * 0.55);
-      }},
-      ...[0, 1, 2, 3].map(i => ({hold: 0.6, beat: 2, note: `tool ${i + 1}`, draw: (g, c) => {
-        g.ground(true); g.chrome(`${c.made} · ${i + 1}/4`);
-        const {u} = g, b = g.body;
-        const chip = g.chip(c.made);
-        const tools = listOf(c.tools);
-        const parts = k => {
-          const name = tools[k % Math.max(1, tools.length)] || '';
-          const words = name.split(' ');
-          const small = words.length > 1 ? words[0] : '';
-          const sm = small ? g.serif(small, R(0, 0, b.w, 11 * u), {max: g.tall ? 11 * u : 9 * u}) : null;
-          const t = g.text(words.length > 1 ? words.slice(1).join(' ') : name, R(b.x, 0, b.w, b.h - chip.h - (sm ? sm.h + 3 * u : 0) - 5 * u), {mode: 'uniform', maxLines: 2});
-          return {t, sm, h: t.h + (sm ? sm.h + 3 * u : 0)};
-        };
-        const all = [0, 1, 2, 3].map(parts), me = all[i];
-        chip.draw(b.x, b.y);
-        const y = b.y + b.h - me.t.h;
-        me.t.draw(b.x, y);
-        if (me.sm) me.sm.draw(b.x, y - 3 * u - me.sm.h);
-        const freeTop = b.y + chip.h + 4 * u, tallest = Math.max(...all.map(a => a.h));
-        g.numeral(String(i + 1).padStart(2, '0'), R(b.x, freeTop, b.w, b.y + b.h - tallest - 5 * u - freeTop));
-      }})),
-      {hold: 2.2, beat: 3, note: 'patterns', draw: (g, c) => {
-        g.ground(false); g.chrome('Patterns');
-        const {u} = g, b = g.body;
-        const [txt, art] = g.wide ? splitCols(b, [0.6, 0.4], 5 * u) : splitRows(b, [0.6, 0.4], 4 * u);
-        const p = g.para(c.patNote, R(0, 0, txt.w, txt.h * 0.42), {max: g.tall ? 9 * u : 7 * u});
-        const t = g.text(c.pat, R(txt.x, 0, txt.w, txt.h - p.h - 3 * u), {mode: 'uniform', maxLines: 1});
-        t.draw(txt.x, txt.y);
-        p.draw(txt.x, txt.y + t.h + 3 * u);
-        const s = Math.min(art.w, art.h);
-        const ar = R(art.x + (art.w - s) * (g.wide ? 0.5 : 0), art.y + (art.h - s), s, s);
-        const q = splitCols(ar, [1, 1], 1.4 * u);
-        const qq = q.map(c2 => splitRows(c2, [1, 1], 1.4 * u)).flat();
-        ['pyramids', 'herringbone', 'dots', 'wood'].forEach((k, i) => { paintSwatch(g.ctx, qq[i], k, i + 9); g.ctx.strokeStyle = BLACK; g.ctx.lineWidth = 2; g.ctx.strokeRect(qq[i].x, qq[i].y, qq[i].w, qq[i].h); });
-      }},
+    draw(g, c) { g.std(c, g.wide ? 0.44 : 0.4, r => logoArt(g, r)); },
+  },
+  {
+    id: 'freebies', group: 'Store', name: 'Freebies', kind: 'pulse',
+    fields: [
+      field('label', 'Label', 'Freebie'),
+      field('heading', 'Heading', 'Free sample materials'),
+      field('body', 'Body', 'Plain glass, black tile, wood, metal and more.'),
+      field('items', 'Swatches', 'Glass, Tile, Wood, Metal', 'Comma separated, up to four.'),
+      field('cta', 'Button', 'Click for yours', 'Leave empty for no button.'),
     ],
+    draw(g, c) {
+      const {u} = g;
+      const z = g.std(c, 0.46, r => swatchArt(g, r, listOf(c.items).slice(0, 4)), {reserve: c.cta ? 9.4 * u : 0});
+      if (c.cta) {
+        const a = g.p(0.55, 1);
+        g.fade(a);
+        const b = buttonPill(g, c.cta, z.text.x, z.text.y + z.text.h - 6.6 * u + (1 - a) * 2 * u);
+        g.fade(a * (0.75 + 0.25 * g.wave));
+        g.cursor(b.x + b.w - 1.4 * u - g.wave * 0.6 * u, b.y + b.h - 1 * u - g.wave * 0.6 * u, 5.2 * u);
+        g.ctx.globalAlpha = 1;
+      }
+    },
+  },
+  {
+    id: 'patterns', group: 'Store', name: 'Patterns', kind: 'pulse',
+    fields: [
+      field('label', 'Label', 'Patterns'),
+      field('heading', 'Heading', 'Hand-drawn and sourced'),
+      field('body', 'Body', 'Drawn by me, or from open-source and paid stock sites.'),
+    ],
+    draw(g, c) { g.std(c, 0.44, r => patternArt(g, r)); },
   },
 ];
 
-/* ---------- effects built from other frames ---------- */
-function fxGlitch(dst, src, seed, u) {
-  const ctx = dst.getContext('2d'), W = dst.width, H = dst.height, rnd = rng(seed);
-  ctx.drawImage(src, 0, 0);
-  let y = 0;
-  while (y < H) {
-    const h = Math.max(4, Math.round((0.025 + rnd() * 0.11) * H));
-    const roll = rnd();
-    if (roll < 0.6) {
-      const off = Math.round((rnd() - 0.5) * 2 * 10 * u);
-      ctx.drawImage(src, 0, y, W, h, off, y, W, h);
+/* ---------- slide parts ---------- */
+// numbered steps under a heading; focus (0..n-1, fractional) slides a glass highlight between rows
+function stepsPlan(g, width, maxH, heading, items, focus, lastLit) {
+  const {ctx, u} = g;
+  const n = items.length;
+  const rowSize = (n > 2 ? (g.tall ? 3.9 : g.wide ? 4 : 3.3) : (g.tall ? 4.4 : g.wide ? 4.8 : 4.1)) * u;
+  const numW = (n > 2 ? 5.6 : 6.6) * u, rowGap = (n > 2 ? 0.6 : 2.2) * u, headGap = (n > 2 ? 2.8 : 3.6) * u;
+  const rows = items.map(t => g.block(t, R(0, 0, width - numW - 3 * u, rowSize * 3.2), {face: FACE.body, lh: 1.25, size: rowSize, maxLines: 2}));
+  const rowH = rows.map(b => Math.max(b.h + (n > 2 ? 1.8 : 2.6) * u, numW));
+  const listH = rowH.reduce((a, b) => a + b, 0) + rowGap * (n - 1);
+  const head = g.block(heading, R(0, 0, width, Math.max(6 * u, maxH - listH - headGap)), {face: FACE.head, lh: 1.1, min: 3.4 * u, max: g.headingSize() * (n > 2 ? 0.9 : 1), maxLines: 2});
+  const h = head.h + headGap + listH;
+  return {h, draw: (x, y0) => {
+    head.draw(x, y0, {color: WHITE, from: 0.28, to: 0.8});
+    let y = y0 + head.h + headGap;
+    const ys = [];
+    rows.forEach((b, i) => { ys.push(y); y += rowH[i] + rowGap; });
+    if (focus != null) {
+      const f = clamp(focus, 0, n - 1), i0 = Math.floor(f), i1 = Math.min(n - 1, i0 + 1), k = f - i0;
+      const hy = lerp(ys[i0], ys[i1], k), hh = lerp(rowH[i0], rowH[i1], k);
+      g.fade(g.p(0.5, 1));
+      g.glass(R(x - 1.6 * u, hy - 0.2 * u, width + 3.2 * u, hh + 0.4 * u), 2.2 * u, {alpha: ctx.globalAlpha, shadow: false, frost: false, fill: 'rgba(255,255,255,0.1)'});
+      ctx.globalAlpha = 1;
     }
-    if (roll > 0.88) {
-      ctx.globalCompositeOperation = 'difference'; ctx.fillStyle = WHITE; ctx.fillRect(0, y, W, h);
-      ctx.globalCompositeOperation = 'source-over';
-    }
-    y += h;
+    rows.forEach((b, i) => {
+      const lit = focus == null ? (lastLit != null && i === lastLit ? 1 : 0.86) : clamp(1 - Math.abs(focus - i), 0, 1);
+      const k = g.p(0.42 + i * 0.08, 0.92 + i * 0.04);
+      const yy = ys[i] + (1 - k) * 2 * u;
+      g.fade(k * lerp(0.42, 1, lit));
+      const cx = x + numW / 2 - 0.6 * u, cy = yy + rowH[i] / 2;
+      ctx.strokeStyle = WHITE; ctx.lineWidth = Math.max(1.2, 0.26 * u);
+      ctx.beginPath(); ctx.arc(cx, cy, numW * 0.38, 0, Math.PI * 2); ctx.stroke();
+      const ns = 2.6 * u, nm = measure(ctx, FACE.num, String(i + 1)), cap = measure(ctx, FACE.num, 'H').a * ns / 100;
+      applyFont(ctx, FACE.num, ns);
+      ctx.fillStyle = WHITE;
+      ctx.fillText(String(i + 1), cx - nm.w * ns / 200 + nm.l * ns / 100, cy + cap / 2);
+      ctx.globalAlpha = 1;
+      b.draw(x + numW + 2 * u, yy + (rowH[i] - b.h) / 2, {color: '#e6e6e2', alpha: k * lerp(0.42, 1, lit), dy: 0});
+    });
+  }};
+}
+function vendorArt(g, r, c) {
+  const {ctx, u} = g, t = g.t;
+  const n = 3, gap = 1.2 * u, pillRoom = 8 * u;
+  const s = Math.min((r.w - gap * (n - 1)) / n, (r.h - pillRoom - gap * (n - 1)) / n);
+  const gw = n * s + (n - 1) * gap;
+  const gx = r.x + (r.w - gw) / 2, gy = r.y + (r.h - pillRoom - gw) / 2;
+  const kinds = ['tiles', 'glass', 'wood', 'metal', 'pyramids', 'dots', 'herringbone', 'checker', 'stripes'];
+  let sel = null;
+  kinds.forEach((k, i) => {
+    const tr = R(gx + (i % n) * (s + gap), gy + Math.floor(i / n) * (s + gap), s, s);
+    if (i === 4) { sel = tr; return; }
+    g.afade(0.55);
+    g.tile(tr, k, i + 2);
+  });
+  g.afade(1);
+  const lift = 1.08, sx = sel.x + sel.w / 2, sy = sel.y + sel.h / 2;
+  const sr = R(sx - sel.w * lift / 2, sy - sel.h * lift / 2, sel.w * lift, sel.h * lift);
+  ctx.save();
+  ctx.shadowColor = 'rgba(0,0,0,0.6)'; ctx.shadowBlur = 3 * u; ctx.shadowOffsetY = 1 * u;
+  ctx.fillStyle = '#111'; ctx.beginPath(); ctx.roundRect(sr.x, sr.y, sr.w, sr.h, sr.w * 0.12); ctx.fill();
+  ctx.restore();
+  g.tile(sr, 'pyramids', 5, {cell: sr.w / 3});
+  ctx.strokeStyle = WHITE; ctx.lineWidth = Math.max(2, 0.5 * u);
+  ctx.beginPath(); ctx.roundRect(sr.x - 0.9 * u, sr.y - 0.9 * u, sr.w + 1.8 * u, sr.h + 1.8 * u, sr.w * 0.15); ctx.stroke();
+  // the second click: a ripple, a press, a tick
+  const tipX = sx + sel.w * 0.08, tipY = sy + sel.h * 0.06;
+  g.ring(tipX, tipY, lerp(0.15, 0.75, t) * s, Math.sin(Math.PI * t) * 0.9, Math.max(1.5, 0.4 * u));
+  g.badge(sr.x + sr.w - 0.4 * u, sr.y + 0.4 * u, 2.6 * u, ease.out(seg(t, 0.4, 1)));
+  g.cursor(tipX, tipY, s * 0.5 * (1 - 0.1 * Math.sin(Math.PI * t)));
+  // what happened, under the grid
+  const py = gy + gw + 2.6 * u;
+  g.afade(1 - seg(t, 0, 0.45));
+  g.pill(c.pill1, r.x + r.w / 2, py, {minX: r.x, maxX: r.x + r.w});
+  g.afade(seg(t, 0.55, 1));
+  g.pill(c.pill2, r.x + r.w / 2, py, {check: true, minX: r.x, maxX: r.x + r.w});
+  g.afade(1);
+}
+function arrowArt(g, r, dir) {
+  const {ctx, u} = g;
+  const d = Math.min(r.w, r.h) * 0.86, cx = r.x + r.w / 2, cy = r.y + r.h / 2;
+  g.ring(cx, cy, d / 2 * (1 + 0.16 * g.st.pacc), g.wave * 0.55, Math.max(1.2, 0.3 * u));
+  g.glass(R(cx - d / 2, cy - d / 2, d, d), d / 2, {alpha: ctx.globalAlpha, fill: 'rgba(255,255,255,0.08)'});
+  const ang = {down: 0, left: Math.PI / 2, up: Math.PI, right: -Math.PI / 2}[dir] || 0;
+  const nudge = g.wave * d * 0.08, L = d * 0.4, hw = d * 0.13;
+  ctx.save();
+  ctx.translate(cx, cy); ctx.rotate(ang); ctx.translate(0, nudge);
+  ctx.strokeStyle = WHITE; ctx.lineWidth = Math.max(2, d * 0.045); ctx.lineCap = 'round'; ctx.lineJoin = 'round';
+  ctx.beginPath(); ctx.moveTo(0, -L / 2); ctx.lineTo(0, L / 2); ctx.stroke();
+  ctx.beginPath(); ctx.moveTo(-hw, L / 2 - hw); ctx.lineTo(0, L / 2); ctx.lineTo(hw, L / 2 - hw); ctx.stroke();
+  ctx.restore();
+}
+function folderArt(g, r, name) {
+  const {ctx, u} = g, t = g.t;
+  const w = Math.min(r.w * 0.78, r.h * 0.92), h = w * 0.68, ts0 = w * 0.42;
+  const groupH = ts0 + 2.4 * u + h;
+  const x = r.x + (r.w - w) / 2, y = r.y + (r.h - groupH) / 2 + ts0 + 2.4 * u;
+  const tab = h * 0.16, rad = w * 0.06;
+  // back of the folder
+  g.afade(1);
+  ctx.fillStyle = 'rgba(255,255,255,0.14)';
+  ctx.beginPath();
+  ctx.moveTo(x + rad, y); ctx.lineTo(x + w * 0.36, y); ctx.lineTo(x + w * 0.43, y + tab); ctx.lineTo(x + w - rad, y + tab);
+  ctx.quadraticCurveTo(x + w, y + tab, x + w, y + tab + rad); ctx.lineTo(x + w, y + h - rad); ctx.quadraticCurveTo(x + w, y + h, x + w - rad, y + h);
+  ctx.lineTo(x + rad, y + h); ctx.quadraticCurveTo(x, y + h, x, y + h - rad); ctx.lineTo(x, y + rad); ctx.quadraticCurveTo(x, y, x + rad, y);
+  ctx.fill();
+  ctx.strokeStyle = 'rgba(255,255,255,0.4)'; ctx.lineWidth = Math.max(1.2, 0.25 * u); ctx.stroke();
+  // the material drops in
+  const ts = w * lerp(0.42, 0.34, t);
+  const tx = x + w / 2 - ts / 2, ty = lerp(y - ts0 - 2.4 * u, y + tab + h * 0.12, ease.inOut(t));
+  g.tile(R(tx, ty, ts, ts), 'pyramids', 6, {cell: ts / 3});
+  // front panel of the folder, frosted
+  const fy = y + h * 0.36;
+  g.glass(R(x, fy, w, h - h * 0.36), rad, {alpha: ctx.globalAlpha, fill: 'rgba(255,255,255,0.1)'});
+  const ls = Math.min(3.4 * u, w * 0.08);
+  g.label(name, x + w / 2, fy + (h - h * 0.36) / 2 - ls * 0.36, ls, 0.2, WHITE, 'center');
+  g.badge(x + w - 1.2 * u, fy + 1.2 * u, 2.8 * u, ease.out(seg(t, 0.7, 1)));
+}
+function optionsArt(g, r, c) {
+  const {ctx, u} = g, t = g.t;
+  const opts = [[c.opt1, c.opt1note], [c.opt2, c.opt2note]];
+  const gap = 2.4 * u, bh = Math.min((r.h - gap) / 2, (g.wide ? 30 : 26) * u);
+  const boxes = splitRows(R(r.x, r.y + (r.h - (2 * bh + gap)) / 2, r.w, 2 * bh + gap), [1, 1], gap);
+  boxes.forEach((b, i) => {
+    const lit = i === 0 ? 1 - t : t;
+    const k = g.p(0.4 + i * 0.1, 0.95 + i * 0.05);
+    g.fade(k);
+    g.glass(b, 2.8 * u, {alpha: ctx.globalAlpha, shadow: lit > 0.5, frost: false, fill: `rgba(255,255,255,${lerp(0.04, 0.16, lit)})`});
+    const pad = 3.4 * u, inner = R(b.x + pad, b.y + pad, b.w - 2 * pad, b.h - 2 * pad);
+    const title = g.block(opts[i][0], R(0, 0, inner.w - 7 * u, inner.h * 0.5), {face: FACE.head, lh: 1.05, min: 3 * u, max: (g.wide ? 7.4 : 6.6) * u, maxLines: 1});
+    const note = g.block(opts[i][1], R(0, 0, inner.w, inner.h - title.h - 1.6 * u), {face: FACE.body, lh: 1.3, size: (g.wide ? 3.9 : 3.5) * u, maxLines: 3});
+    const th = title.h + 1.6 * u + note.h, ty = inner.y + (inner.h - th) / 2;
+    title.draw(inner.x, ty, {color: WHITE, alpha: k * lerp(0.45, 1, lit), dy: 0});
+    note.draw(inner.x, ty + title.h + 1.6 * u, {color: '#dcdcd8', alpha: k * lerp(0.4, 1, lit), dy: 0});
+    // a radio dot that fills as the option is picked
+    const rx = inner.x + inner.w - 2.6 * u, ry = inner.y + 2.6 * u;
+    g.fade(k);
+    ctx.strokeStyle = WHITE; ctx.lineWidth = Math.max(1.2, 0.28 * u);
+    ctx.beginPath(); ctx.arc(rx, ry, 2.2 * u, 0, Math.PI * 2); ctx.stroke();
+    if (lit > 0.02) { ctx.fillStyle = WHITE; ctx.beginPath(); ctx.arc(rx, ry, 1.3 * u * ease.out(lit), 0, Math.PI * 2); ctx.fill(); }
+    ctx.globalAlpha = 1;
+  });
+}
+function mapsArt(g, r) {
+  const {ctx, u} = g;
+  const s = Math.min(r.w * 0.46, (r.h - 5 * u) * 0.78), cx = r.x + r.w / 2, cy = r.y + (r.h - 5 * u) / 2 + 0.4 * u;
+  const spread = 1 + 0.55 * g.wave;
+  const maps = [['Base', 'checker', -1], ['Normal', 'herringbone', 0], ['ORM', 'dots', 1]];
+  maps.forEach(([name, kind, k]) => {
+    ctx.save();
+    ctx.translate(cx + k * s * 0.32 * spread, cy + Math.abs(k) * s * 0.05);
+    ctx.rotate(k * 0.16 * spread);
+    const tr = R(-s / 2, -s / 2, s, s);
+    ctx.shadowColor = 'rgba(0,0,0,0.55)'; ctx.shadowBlur = 3 * u; ctx.shadowOffsetY = u;
+    ctx.fillStyle = '#111'; ctx.beginPath(); ctx.roundRect(tr.x, tr.y, tr.w, tr.h, s * 0.08); ctx.fill();
+    ctx.shadowColor = 'transparent';
+    g.tile(tr, kind, 7 + k, {rad: s * 0.08, cell: s / 4});
+    ctx.restore();
+  });
+  g.label(maps.map(m => m[0]).join('  ·  '), cx, cy + s * 0.62 + 1.2 * u, 2.2 * u, 0.2, '#cfcfca', 'center');
+  // a crossed circle over the stack
+  const rr = s * 0.24, bx = cx + s * 0.5, by = cy - s * 0.42;
+  ctx.save();
+  ctx.shadowColor = 'rgba(0,0,0,0.5)'; ctx.shadowBlur = 2 * u;
+  ctx.fillStyle = 'rgba(20,20,22,0.85)'; ctx.beginPath(); ctx.arc(bx, by, rr, 0, Math.PI * 2); ctx.fill();
+  ctx.restore();
+  ctx.strokeStyle = WHITE; ctx.lineWidth = Math.max(2, rr * 0.13);
+  ctx.beginPath(); ctx.arc(bx, by, rr * 0.7, 0, Math.PI * 2); ctx.stroke();
+  ctx.beginPath(); ctx.moveTo(bx - rr * 0.5, by + rr * 0.5); ctx.lineTo(bx + rr * 0.5, by - rr * 0.5); ctx.stroke();
+}
+function tintArt(g, r, level) {
+  const {ctx, u} = g, t = g.t;
+  const tint = lerp(1, level, t);
+  const rad = Math.min(r.h / 2 * 0.92, (r.w - 4 * u) / 2.8);
+  const cx = r.x + (r.w - (2.72 * rad + 3 * u)) / 2 + rad, cy = r.y + r.h / 2;
+  g.ball(cx, cy, rad, {tint, rough: 0.35, metal: 0.35});
+  // the colour swatch beside it, like the build tool's tint box
+  const sw = rad * 0.72, sx = cx + rad + 3 * u, sy = cy - sw * 0.75;
+  ctx.save();
+  ctx.shadowColor = 'rgba(0,0,0,0.5)'; ctx.shadowBlur = 2 * u;
+  ctx.fillStyle = gray(tint); ctx.beginPath(); ctx.roundRect(sx, sy, sw, sw, sw * 0.14); ctx.fill();
+  ctx.restore();
+  ctx.strokeStyle = 'rgba(255,255,255,0.6)'; ctx.lineWidth = Math.max(1.2, 0.25 * u);
+  ctx.beginPath(); ctx.roundRect(sx, sy, sw, sw, sw * 0.14); ctx.stroke();
+  g.label('Tint', sx, sy + sw + 2 * u, 2.3 * u, 0.22, '#d0d0cb');
+  g.label('#' + hex2(tint).repeat(3), sx, sy + sw + 5.6 * u, 2.3 * u, 0.06, WHITE);
+}
+function shineArt(g, r, c) {
+  const {ctx, u} = g, t = g.t;
+  const rough = lerp(0.75, 0.12, t), metal = lerp(1, 0.25, t);
+  const [ballR, sl] = g.tall ? splitRows(r, [0.62, 0.38], 2 * u) : splitCols(r, [0.48, 0.52], 3 * u);
+  const rad = Math.min(ballR.w, ballR.h) / 2 * 0.9;
+  g.ball(ballR.x + ballR.w / 2, ballR.y + ballR.h / 2, rad, {tint: 0.9, rough, metal, kind: 'smooth'});
+  const rows = [[c.rough, rough], [c.metal, metal]];
+  const rowH = 9 * u, top = sl.y + (sl.h - (rows.length * rowH + 2 * u)) / 2;
+  rows.forEach(([name, v], i) => {
+    const y = top + i * (rowH + 2 * u);
+    const ls = (g.wide ? 2.6 : 2.2) * u;
+    g.label(name, sl.x, y, ls, 0.18, '#d0d0cb');
+    g.label(v.toFixed(2), sl.x + sl.w, y, ls, 0.04, WHITE, 'right');
+    const ty = y + 5.4 * u, th = Math.max(2, 0.5 * u);
+    ctx.fillStyle = 'rgba(255,255,255,0.18)'; ctx.fillRect(sl.x, ty, sl.w, th);
+    ctx.fillStyle = 'rgba(255,255,255,0.85)'; ctx.fillRect(sl.x, ty, sl.w * v, th);
+    ctx.save();
+    ctx.shadowColor = 'rgba(0,0,0,0.5)'; ctx.shadowBlur = 1.5 * u;
+    ctx.fillStyle = WHITE; ctx.beginPath(); ctx.arc(sl.x + sl.w * v, ty + th / 2, 1.8 * u, 0, Math.PI * 2); ctx.fill();
+    ctx.restore();
+  });
+}
+function probeArt(g, r, c) {
+  const {u} = g, t = g.t, e = ease.inOut(t);
+  const side = r.w > r.h * 1.7;
+  const area = side ? R(r.x, r.y, r.w * 0.5, r.h) : R(r.x, r.y, r.w, r.h - 8 * u);
+  const base = Math.min(area.w / 3.2, area.h / 3.6);
+  const cx = area.x + area.w / 2, cy = area.y + area.h / 2;
+  g.ball(cx, cy + base * 0.18, base * 0.62, {rough: 0.12, metal: 1, tint: 0.9, room: ease.inOut(seg(t, 0.35, 1)), kind: 'smooth'});
+  const s = lerp(base * 0.32, base * 0.85, e);
+  g.cube(lerp(cx + base * 1.15, cx, e), lerp(cy + base * 0.75, cy, e), s, {handles: t > 0.02 && t < 0.98});
+  const px = side ? r.x + r.w * 0.75 : r.x + r.w / 2, py = side ? r.y + r.h / 2 - 3 * u : r.y + r.h - 6.8 * u;
+  g.afade(1 - seg(t, 0, 0.5));
+  g.pill(c.sky, px, py, {minX: r.x, maxX: r.x + r.w});
+  g.afade(seg(t, 0.5, 1));
+  g.pill(c.room, px, py, {check: true, minX: r.x, maxX: r.x + r.w});
+  g.afade(1);
+}
+function playArt(g, r) {
+  const {ctx, u} = g;
+  const d = Math.min(r.w, r.h) * 0.84, cx = r.x + r.w / 2, cy = r.y + r.h / 2;
+  g.ring(cx, cy, d / 2 * (1 + 0.2 * g.st.pacc), g.wave * 0.6, Math.max(1.2, 0.3 * u));
+  g.glass(R(cx - d / 2, cy - d / 2, d, d), d / 2, {alpha: ctx.globalAlpha, fill: 'rgba(255,255,255,0.09)'});
+  const k = d * 0.17 * (1 + 0.06 * g.wave);
+  ctx.fillStyle = WHITE;
+  ctx.beginPath();
+  ctx.moveTo(cx - k * 0.7, cy - k); ctx.lineTo(cx + k * 1.05, cy); ctx.lineTo(cx - k * 0.7, cy + k); ctx.closePath();
+  ctx.lineJoin = 'round'; ctx.lineWidth = k * 0.25; ctx.strokeStyle = WHITE; ctx.fill(); ctx.stroke();
+}
+function logoArt(g, r) {
+  const {ctx, u} = g;
+  const h = Math.min(r.h * 0.62, r.w / 2.9), cx = r.x + r.w / 2, cy = r.y + r.h / 2;
+  const a0 = ctx.globalAlpha;
+  ctx.globalAlpha = a0 * 0.8;
+  const lr = g.logo(cx, cy - h / 2, h, 'center');
+  ctx.globalAlpha = a0;
+  // the glint runs across the logo itself
+  const pos = g.glintPos();
+  if (pos > -0.3 && pos < 1.3) {
+    const layer = makeCanvas(Math.ceil(lr.w), Math.ceil(lr.h)), lc = layer.getContext('2d');
+    lc.drawImage(ASSETS.logoWhite, 0, 0, layer.width, layer.height);
+    lc.globalCompositeOperation = 'source-in';
+    const gx = layer.width * pos, bw = layer.width * 0.18;
+    const gr = lc.createLinearGradient(gx - bw, 0, gx + bw, 0);
+    gr.addColorStop(0, 'rgba(255,255,255,0)'); gr.addColorStop(0.5, 'rgba(255,255,255,1)'); gr.addColorStop(1, 'rgba(255,255,255,0)');
+    lc.fillStyle = gr; lc.fillRect(0, 0, layer.width, layer.height);
+    ctx.drawImage(layer, lr.x, lr.y);
   }
+  const tw = k => 0.55 + 0.45 * Math.sin(Math.PI * clamp(g.st.pacc * 1.4 - k, 0, 1));
+  g.sparkle(lr.x + lr.w * 0.96, lr.y + lr.h * 0.08, 2.6 * u * tw(0));
+  g.sparkle(lr.x + lr.w * 0.06, lr.y + lr.h * 0.96, 1.7 * u * tw(0.3));
 }
-function fxInvert(dst, src) {
-  const ctx = dst.getContext('2d');
-  ctx.drawImage(src, 0, 0);
-  ctx.globalCompositeOperation = 'difference'; ctx.fillStyle = WHITE; ctx.fillRect(0, 0, dst.width, dst.height);
-  ctx.globalCompositeOperation = 'source-over';
+function swatchArt(g, r, items) {
+  const {ctx, u} = g;
+  const n = Math.max(1, items.length), cols = g.tall || n < 4 ? Math.min(n, 2) : n, rows = Math.ceil(n / cols);
+  const gap = 2 * u, capH = 4.4 * u;
+  const s = Math.min((r.w - gap * (cols - 1)) / cols, (r.h - rows * capH - gap * (rows - 1)) / rows);
+  const gw = cols * s + (cols - 1) * gap, gh = rows * (s + capH) + (rows - 1) * gap;
+  const x0 = r.x + (r.w - gw) / 2, y0 = r.y + (r.h - gh) / 2;
+  items.forEach((name, i) => {
+    const lift = Math.sin(Math.PI * seg(g.st.pacc, i * 0.14, i * 0.14 + 0.5)) * 1.6 * u;
+    const x = x0 + (i % cols) * (s + gap), y = y0 + Math.floor(i / cols) * (s + capH + gap) - lift;
+    ctx.save();
+    ctx.shadowColor = 'rgba(0,0,0,0.55)'; ctx.shadowBlur = 2 * u + lift; ctx.shadowOffsetY = 0.8 * u + lift * 0.5;
+    ctx.fillStyle = '#111'; ctx.beginPath(); ctx.roundRect(x, y, s, s, s * 0.12); ctx.fill();
+    ctx.restore();
+    g.tile(R(x, y, s, s), swatchFor(name, i), i + 11);
+    g.label(name, x + s / 2, y + s + 1.6 * u + lift, 2.1 * u, 0.16, '#dcdcd8', 'center');
+  });
 }
-function fxPush(dst, from, to, t, dir) {
-  const ctx = dst.getContext('2d'), W = dst.width, H = dst.height;
-  if (dir === 'left') { ctx.drawImage(from, -Math.round(W * t), 0); ctx.drawImage(to, Math.round(W * (1 - t)), 0); }
-  else { ctx.drawImage(from, 0, -Math.round(H * t)); ctx.drawImage(to, 0, Math.round(H * (1 - t))); }
+function patternArt(g, r) {
+  const {ctx, u} = g;
+  const kinds = ['pyramids', 'herringbone', 'dots', 'wood'];
+  const gap = 1.6 * u, s = Math.min((r.w - gap) / 2, (r.h - gap) / 2);
+  const x0 = r.x + (r.w - (2 * s + gap)) / 2, y0 = r.y + (r.h - (2 * s + gap)) / 2;
+  kinds.forEach((k, i) => {
+    const tr = R(x0 + (i % 2) * (s + gap), y0 + Math.floor(i / 2) * (s + gap), s, s);
+    g.tile(tr, k, i + 9);
+    const k2 = Math.sin(Math.PI * seg(g.st.pacc, i * 0.12, i * 0.12 + 0.55));
+    if (k2 > 0.01) {
+      ctx.save();
+      ctx.beginPath(); ctx.roundRect(tr.x, tr.y, tr.w, tr.h, s * 0.12); ctx.clip();
+      g.glintBand(tr, lerp(-0.4, 1.4, seg(g.st.pacc, i * 0.12, i * 0.12 + 0.55)), 0.35 * k2);
+      ctx.restore();
+    }
+  });
+}
+function buttonPill(g, text, x, y) {
+  const {ctx, u} = g, size = 3 * u;
+  const m = measure(ctx, FACE.label, text, 0.12), cap = measure(ctx, FACE.label, 'H', 0.12).a * size / 100;
+  const w = m.w * size / 100 + 13 * u, h = cap + 4 * u;
+  ctx.save();
+  ctx.shadowColor = 'rgba(0,0,0,0.5)'; ctx.shadowBlur = 2.4 * u; ctx.shadowOffsetY = 0.8 * u;
+  ctx.fillStyle = WHITE; ctx.beginPath(); ctx.roundRect(x, y, w, h, h / 2); ctx.fill();
+  ctx.restore();
+  applyFont(ctx, FACE.label, size, 0.12);
+  ctx.fillStyle = '#111';
+  ctx.fillText(text.toUpperCase(), x + 4.5 * u + m.l * size / 100, y + h / 2 + cap / 2);
+  return R(x, y, w, h);
 }
 
-/* ---------- rendering ---------- */
-function makeCanvas(w, h) { const c = document.createElement('canvas'); c.width = w; c.height = h; return c; }
-function copyOf(sign, overrides = {}) {
+/* ---------- frames, timeline, sheets ---------- */
+// Frame k on the sheet: entrance progress and accent progress.
+function frameState(k, kind) {
+  if (k <= 8) return {pin: k / 8, pacc: 0};
+  const j = k - 8;
+  return kind === 'toggle' ? {pin: 1, pacc: j / 7} : {pin: 1, pacc: (8 - j) / 8};
+}
+function copyOf(item, overrides = {}) {
   const c = {};
-  sign.fields.forEach(f => { c[f.key] = overrides[f.key] ?? f.value; });
+  item.fields.forEach(f => { c[f.key] = overrides[f.key] ?? f.value; });
   return c;
 }
-function renderFrames(sign, fmt, copy) {
-  const out = [];
-  sign.frames.forEach((f, i) => {
-    if (f.fx) return;
-    const c = makeCanvas(fmt.w, fmt.h);
-    const g = new G(c, fmt, {beat: f.beat, beats: sign.beats, tag: sign.tag});
-    f.draw(g, copy);
-    g.guard();
-    out[i] = c;
-  });
-  sign.frames.forEach((f, i) => {
-    if (!f.fx) return;
-    const c = makeCanvas(fmt.w, fmt.h);
-    const g = new G(c, fmt, {beat: f.beat, beats: sign.beats, tag: sign.tag});
-    if (f.fx.type === 'glitch') fxGlitch(c, out[f.fx.of], f.fx.seed, g.u);
-    else if (f.fx.type === 'invert') fxInvert(c, out[f.fx.of]);
-    else if (f.fx.type === 'push') fxPush(c, out[f.fx.from], out[f.fx.to], f.fx.t, f.fx.dir);
-    g.guard();
-    out[i] = c;
-  });
-  return out;
+function wordsIn(c) { return Object.values(c).join(' ').split(/\s+/).filter(Boolean).length; }
+function defaultHolds(slide, c) {
+  const read = clamp(1.4 + 0.2 * wordsIn(c), 2.6, 5.5);
+  return slide.kind === 'toggle'
+    ? {read: +(read * 0.75).toFixed(1), alt: +(read * 0.75).toFixed(1), after: 0.8, rest: 0.6}
+    : {read: +read.toFixed(1), alt: 0, after: 1.2, rest: 0.6};
 }
-function composeSheet(frames, fmt) {
-  const sheet = makeCanvas(fmt.w * fmt.cols, fmt.h * fmt.rows);
-  const ctx = sheet.getContext('2d');
-  frames.forEach((f, i) => ctx.drawImage(f, (i % fmt.cols) * fmt.w, Math.floor(i / fmt.cols) * fmt.h));
-  return sheet;
+// The loop in display order: [frame, seconds]. The script groups it into runs.
+function timelineOf(slide, holds) {
+  const t = [];
+  for (let k = 1; k <= 7; k++) t.push([k, IN_STEP, 'in']);
+  t.push([8, holds.read, 'hold: message']);
+  if (slide.kind === 'toggle') {
+    for (let k = 9; k <= 14; k++) t.push([k, ACC_STEP, 'to second state']);
+    t.push([15, holds.alt, 'hold: second state']);
+    for (let k = 14; k >= 9; k--) t.push([k, ACC_STEP, 'back']);
+  } else {
+    for (let k = 15; k >= 9; k--) t.push([k, ACC_STEP, 'glint']);
+  }
+  t.push([8, holds.after, 'hold']);
+  for (let k = 7; k >= 1; k--) t.push([k, IN_STEP, 'out']);
+  t.push([0, holds.rest, 'pause']);
+  return t;
 }
-
-/* ---------- timing ---------- */
-const QUICK = 0.5;   // frames shorter than this are cuts; longer ones are holds
-// Group the timeline into llSetTextureAnim runs. Equal-length frames share a run;
-// a run of cuts may land on a longer hold, because a run without LOOP stays on its
-// last frame. Mirrors build() in the LSL player.
-function runsOf(holds) {
+// Mirror of build() in the LSL player: runs of consecutive frames (up or down) with one
+// step time; a run may land on a longer hold, because a run without LOOP stays on its last frame.
+function runsOf(tl) {
   const runs = [];
   let a = 0;
-  while (a < holds.length) {
-    const step = Math.max(0.05, holds[a]);
+  while (a < tl.length) {
+    const first = tl[a][0], step = Math.max(0.04, tl[a][1]);
+    let dir = 0;
+    if (a + 1 < tl.length) { const f2 = tl[a + 1][0]; dir = f2 === first + 1 ? 1 : f2 === first - 1 ? -1 : 0; }
     let total = step, b = a;
-    while (b + 1 < holds.length) {
-      const next = holds[b + 1];
-      if (next === holds[a]) { b++; total += next; continue; }
+    while (dir && b + 1 < tl.length && tl[b + 1][0] === tl[b][0] + dir) {
+      const next = tl[b + 1][1];
+      if (next === tl[a][1]) { b++; total += next; continue; }
       if (next > step && next >= QUICK) { b++; total += next; }
       break;
     }
-    runs.push({first: a, count: b - a + 1, rate: 1 / step, seconds: total});
+    const last = tl[b][0];
+    runs.push({low: Math.min(first, last), count: b - a + 1, rate: 1 / step, seconds: total, reverse: dir < 0});
     a = b + 1;
   }
   return runs;
 }
+function renderFrames(slide, shape, copy) {
+  const W = shape.tx * TILE, H = shape.ty * TILE, out = [];
+  for (let k = 0; k < FRAMES; k++) {
+    const c = makeCanvas(W, H);
+    const g = new G(c, frameState(k, slide.kind));
+    g.background();
+    slide.draw(g, copy);
+    out.push(c);
+  }
+  return out;
+}
+// one 2048 x 2048 sheet per tile, frames left to right, top to bottom
+function sheetsOf(frames, shape) {
+  const sheets = [];
+  for (let ty = 0; ty < shape.ty; ty++) for (let tx = 0; tx < shape.tx; tx++) {
+    const s = makeCanvas(TILE * GRID, TILE * GRID), ctx = s.getContext('2d');
+    frames.forEach((f, i) => ctx.drawImage(f, tx * TILE, ty * TILE, TILE, TILE, (i % GRID) * TILE, Math.floor(i / GRID) * TILE, TILE, TILE));
+    sheets.push(s);
+  }
+  return sheets;
+}
 
 /* ---------- checks ---------- */
 const isPow2 = n => n > 0 && (n & (n - 1)) === 0;
-function frameStats(canvas) {
-  const {width: w, height: h} = canvas;
-  const d = canvas.getContext('2d').getImageData(0, 0, w, h).data;
-  let sum = 0, lo = 255, hi = 0, hash = 2166136261;
-  for (let i = 0; i < d.length; i += 4) {
-    const v = d[i];
-    sum += v; if (v < lo) lo = v; if (v > hi) hi = v;
-    hash = Math.imul(hash ^ v, 16777619);
+function cellStats(sheet) {
+  const ctx = sheet.getContext('2d'), out = [];
+  for (let i = 0; i < FRAMES; i++) {
+    const d = ctx.getImageData((i % GRID) * TILE, Math.floor(i / GRID) * TILE, TILE, TILE).data;
+    let sum = 0, lo = 255, hi = 0, hash = 2166136261;
+    for (let j = 0; j < d.length; j += 4) {
+      const v = d[j];
+      sum += v; if (v < lo) lo = v; if (v > hi) hi = v;
+      hash = Math.imul(hash ^ v, 16777619);
+    }
+    out.push({mean: sum / (TILE * TILE * 255), lo, hi, hash: hash >>> 0});
   }
-  return {mean: sum / (w * h * 255), lo, hi, hash: hash >>> 0};
+  return out;
 }
-function runChecks(frames, fmt, holds) {
-  const sw = fmt.w * fmt.cols, sh = fmt.h * fmt.rows;
-  const stats = frames.map(frameStats);
-  const hashes = new Set(stats.map(s => s.hash));
-  const blank = stats.filter(s => s.hi - s.lo < 64).length;
-  // big luminance changes inside any 1 s window, counted around the loop
+function runChecks(sheets, frames, tl) {
+  const list = [];
+  const sw = sheets[0].width, sh = sheets[0].height;
+  list.push({ok: sheets.every(s => isPow2(s.width) && isPow2(s.height) && s.width <= 2048 && s.height <= 2048), text: `${sheets.length === 1 ? 'Sheet' : sheets.length + ' sheets,'} ${sw} × ${sh}: powers of two, within 2048`});
+  list.push({ok: sw % GRID === 0 && sh % GRID === 0 && sw / GRID === TILE, text: `${GRID} × ${GRID} grid divides it exactly: ${TILE} × ${TILE} frames`});
+  let blank = 0, dup = 0;
+  sheets.forEach(s => {
+    const st = cellStats(s);
+    blank += st.filter(x => x.hi - x.lo < 8).length;
+    dup += FRAMES - new Set(st.map(x => x.hash)).size;
+  });
+  list.push({ok: blank === 0, text: blank ? `${blank} blank cell(s)` : `All ${FRAMES} cells used on every sheet`});
+  list.push({ok: dup === 0 || sheets.length > 1, text: dup ? `${dup} repeated cell(s), where only the other tile moves` : 'Every cell is a different frame'});
+  // light/dark flips within any 1 s of the loop
+  const means = frames.map(f => { const d = f.getContext('2d').getImageData(0, 0, f.width, f.height).data; let s = 0; for (let j = 0; j < d.length; j += 16) s += d[j]; return s / (d.length / 16) / 255; });
   const times = [];
   let t = 0;
-  holds.forEach(h => { times.push(t); t += h; });
-  const loop = t, flips = [];
-  for (let i = 0; i < frames.length; i++) {
-    const j = (i + 1) % frames.length;
-    if (Math.abs(stats[j].mean - stats[i].mean) > 0.25) flips.push(j === 0 ? loop : times[j]);
+  tl.forEach(([, s]) => { times.push(t); t += s; });
+  const flips = [];
+  for (let i = 0; i < tl.length; i++) {
+    const j = (i + 1) % tl.length;
+    if (Math.abs(means[tl[j][0]] - means[tl[i][0]]) > 0.25) flips.push(j === 0 ? t : times[j]);
   }
-  let maxFlips = 0;
-  for (const f of flips) {
-    const n = flips.filter(g => (g - f + loop) % loop < 1).length;
-    maxFlips = Math.max(maxFlips, n);
-  }
-  return [
-    {ok: isPow2(sw) && isPow2(sh) && sw <= 2048 && sh <= 2048, text: `Sheet ${sw} × ${sh}: powers of two, within 2048`},
-    {ok: sw % fmt.cols === 0 && sh % fmt.rows === 0, text: `${fmt.cols} × ${fmt.rows} grid divides it exactly: ${fmt.w} × ${fmt.h} cells`},
-    {ok: frames.length === fmt.cols * fmt.rows && blank === 0, text: `All ${fmt.cols * fmt.rows} cells used, none blank`},
-    {ok: hashes.size === frames.length, text: hashes.size === frames.length ? 'Every frame is unique' : `${frames.length - hashes.size} duplicate frame(s)`},
-    {ok: maxFlips <= 3, text: `Flash-safe: at most ${maxFlips} light/dark flip${maxFlips === 1 ? '' : 's'} in any second`},
-  ];
+  let mx = 0;
+  for (const f of flips) mx = Math.max(mx, flips.filter(g => (g - f + t) % t < 1).length);
+  list.push({ok: mx <= 3, text: mx ? `Flash-safe: at most ${mx} light/dark flips in any second` : 'Flash-safe: no light/dark flips'});
+  return list;
 }
 
 /* ---------- encoders ---------- */
@@ -1557,20 +1505,46 @@ class Bytes {
 }
 const luma = (d, i) => (d[i] * 77 + d[i + 1] * 150 + d[i + 2] * 29 + 128) >> 8;
 
-// Animated GIF, 256-level gray palette, per-frame delays, loops forever.
+// Animated GIF, 256-level gray palette, per-frame delays, loops forever. Repeats of the
+// same frame are merged into one longer delay, and each frame stores only the rectangle
+// that changed since the one before.
 function encodeGIF(frames, holds) {
   const w = frames[0].width, h = frames[0].height, out = new Bytes(w * h);
   out.str('GIF89a'); out.u16(w); out.u16(h);
   out.u8(0xF7); out.u8(0); out.u8(0);
   for (let i = 0; i < 256; i++) { out.u8(i); out.u8(i); out.u8(i); }
   out.u8(0x21); out.u8(0xFF); out.u8(11); out.str('NETSCAPE2.0'); out.u8(3); out.u8(1); out.u16(0); out.u8(0);
+  const cache = new Map();
+  const lumaOf = cv => {
+    if (!cache.has(cv)) {
+      const d = cv.getContext('2d').getImageData(0, 0, w, h).data, px = new Uint8Array(w * h);
+      for (let i = 0, j = 0; j < px.length; i += 4, j++) px[j] = luma(d, i);
+      cache.set(cv, px);
+    }
+    return cache.get(cv);
+  };
+  const list = [];
   frames.forEach((cv, k) => {
-    const d = cv.getContext('2d').getImageData(0, 0, w, h).data;
-    const px = new Uint8Array(w * h);
-    for (let i = 0, j = 0; j < px.length; i += 4, j++) px[j] = luma(d, i);
-    out.u8(0x21); out.u8(0xF9); out.u8(4); out.u8(0x04); out.u16(Math.max(2, Math.round(holds[k] * 100))); out.u8(0); out.u8(0);
-    out.u8(0x2C); out.u16(0); out.u16(0); out.u16(w); out.u16(h); out.u8(0);
-    lzw(out, px, 8);
+    const px = lumaOf(cv), last = list[list.length - 1];
+    if (last && (last.px === px)) last.delay += holds[k];
+    else list.push({px, delay: holds[k]});
+  });
+  list.forEach((f, i) => {
+    let x0 = 0, y0 = 0, x1 = w - 1, y1 = h - 1;
+    if (i > 0) {
+      const a = list[i - 1].px, b = f.px;
+      x0 = w; y0 = h; x1 = -1; y1 = -1;
+      for (let y = 0; y < h; y++) {
+        const row = y * w;
+        for (let x = 0; x < w; x++) if (a[row + x] !== b[row + x]) { if (x < x0) x0 = x; if (x > x1) x1 = x; if (y < y0) y0 = y; y1 = y; }
+      }
+      if (x1 < 0) { x0 = 0; y0 = 0; x1 = 0; y1 = 0; }
+    }
+    const ww = x1 - x0 + 1, hh = y1 - y0 + 1, sub = new Uint8Array(ww * hh);
+    for (let y = 0; y < hh; y++) sub.set(f.px.subarray((y0 + y) * w + x0, (y0 + y) * w + x0 + ww), y * ww);
+    out.u8(0x21); out.u8(0xF9); out.u8(4); out.u8(0x04); out.u16(Math.max(2, Math.round(f.delay * 100))); out.u8(0); out.u8(0);
+    out.u8(0x2C); out.u16(x0); out.u16(y0); out.u16(ww); out.u16(hh); out.u8(0);
+    lzw(out, sub, 8);
   });
   out.u8(0x3B);
   return out.out();
@@ -1660,38 +1634,65 @@ async function encodePNG(canvas, alpha = false) {
   return out.out();
 }
 
+
 /* ---------- LSL ---------- */
 const fmtSec = s => (Math.round(s * 100) / 100).toFixed(2);
-function sheetName(sign, fmt) { return `artsy-${sign.id}-${fmt.id}-${fmt.cols}x${fmt.rows}`; }
-function lslPlayer(sign, fmt, holds) {
-  const name = sheetName(sign, fmt);
-  const runs = runsOf(holds);
-  const total = holds.reduce((a, b) => a + b, 0);
-  const rows = holds.map((h, i) => `    ${i}, ${fmtSec(h)}${i < holds.length - 1 ? ',' : ' '}   // ${sign.frames[i].note}`).join('\n');
-  return `// artsy kinetic sign player
-// Sign:  ${sign.name}, ${fmt.name.toLowerCase()} ${fmt.ratio}
-// Sheet: ${name}
-//        ${fmt.w * fmt.cols} x ${fmt.h * fmt.rows} px, ${fmt.cols} x ${fmt.rows} grid, ${fmt.cols * fmt.rows} frames of ${fmt.w} x ${fmt.h}
+function baseName(slide, shape) { return `artsy-${slide.id}-${shape.id}`; }
+function sheetNames(slide, shape) {
+  const b = baseName(slide, shape);
+  return shape.tiles.map(t => t ? `${b}-${t}` : b);
+}
+function lslPlayer(slide, shape, tl) {
+  const runs = runsOf(tl);
+  const total = tl.reduce((a, x) => a + x[1], 0);
+  const names = sheetNames(slide, shape);
+  const rows = tl.map(([k, s, note], i) => `    ${String(k).padStart(2)}, ${fmtSec(s)}${i < tl.length - 1 ? ',' : ' '}   // ${note}`).join('\n');
+  const tiles = shape.tiles.length > 1
+    ? `// This is a ${shape.name.toLowerCase()} slide made of two 1 m square tiles:
+//   1. Make two flat boxes the same size, edge to edge, and link them.
+//   2. Name both "tile" (Build > General > Name).
+//   3. Put ${names[0]} on the ${shape.tiles[0]} tile and ${names[1]} on the ${shape.tiles[1]} one.
+//   4. Drop this script into the linked object. Both tiles play in step.`
+    : `// Put the sheet on the display face and drop this script into the same prim.`;
+  return `// artsy slide player
+// Slide: ${slide.name}, ${shape.name.toLowerCase()} ${shape.ratio}
+// Sheet${names.length > 1 ? 's' : ''}: ${names.join(', ')}
+//        each 2048 x 2048, 4 x 4 grid, 16 frames of 512 x 512
 // Loop:  ${fmtSec(total)} s in ${runs.length} runs
 //
-// 1. Put the spritesheet on the display face: Full Bright on, Glow 0, Alpha mode None.
-//    Repeats and offsets don't matter; the animation sets them.
-// 2. Drop this script into the same prim. It starts on its own.
+${tiles}
+// Face settings: Full Bright on, Glow 0, Alpha mode None. Repeats and offsets don't
+// matter; the animation sets them.
 //
-// Holds are timed here instead of repeating frames in the sheet. That is what keeps
-// the sheet at ${fmt.cols * fmt.rows} frames. To change timing, edit TIMELINE: frame, seconds on screen.
+// The pauses are timed here, not drawn as repeated frames, and the exit plays the
+// entrance backwards. That's how a whole slide fits in 16 frames. Edit TIMELINE to
+// change the timing: frame, seconds on screen.
 
 integer FACE = ALL_SIDES;   // set your display face number if other faces have their own textures
-integer COLS = ${fmt.cols};
-integer ROWS = ${fmt.rows};
-float   QUICK = 0.5;        // frames shorter than this are cuts, played inside one run
+integer COLS = 4;
+integer ROWS = 4;
+float   QUICK = 0.5;        // frames shorter than this are motion, played inside one run
 
 list TIMELINE = [
 ${rows}
 ];
 
-list runs;      // first frame, frame count, frames per second, seconds
+list tiles;     // link numbers that show the slide
+list runs;      // lowest frame, frame count, frames per second, seconds, backwards
 integer run;
+
+findTiles()
+{
+    tiles = [];
+    integer n = llGetNumberOfPrims();
+    if (n > 1)
+    {
+        integer i;
+        for (i = 1; i <= n; ++i)
+            if (llToLower(llGetLinkName(i)) == "tile") tiles += i;
+    }
+    if (llGetListLength(tiles) == 0) tiles = [LINK_THIS];
+}
 
 build()
 {
@@ -1702,16 +1703,23 @@ build()
     {
         integer first = llList2Integer(TIMELINE, a * 2);
         float step = llList2Float(TIMELINE, a * 2 + 1);
-        if (step < 0.05) step = 0.05;
+        if (step < 0.04) step = 0.04;
+        integer dir = 0;
+        if (a + 1 < n)
+        {
+            integer f2 = llList2Integer(TIMELINE, (a + 1) * 2);
+            if (f2 == first + 1) dir = 1;
+            else if (f2 == first - 1) dir = -1;
+        }
         float total = step;
         integer b = a;
-        integer more = TRUE;
+        integer more = (dir != 0);
         while (more)
         {
             more = FALSE;
             if (b + 1 < n)
             {
-                if (llList2Integer(TIMELINE, (b + 1) * 2) == first + b + 1 - a)
+                if (llList2Integer(TIMELINE, (b + 1) * 2) == llList2Integer(TIMELINE, b * 2) + dir)
                 {
                     float next = llList2Float(TIMELINE, (b + 1) * 2 + 1);
                     if (next == llList2Float(TIMELINE, a * 2 + 1))
@@ -1722,14 +1730,17 @@ build()
                     }
                     else if (next > step && next >= QUICK)
                     {
-                        // a run of cuts lands on a longer hold; the viewer stays on it
+                        // a run lands on a longer hold; the viewer stays on it
                         ++b;
                         total += next;
                     }
                 }
             }
         }
-        runs += [first, b - a + 1, 1.0 / step, total];
+        integer last = llList2Integer(TIMELINE, b * 2);
+        integer low = first;
+        if (last < low) low = last;
+        runs += [low, b - a + 1, 1.0 / step, total, dir < 0];
         a = b + 1;
     }
 }
@@ -1737,9 +1748,14 @@ build()
 play()
 {
     // No LOOP flag: the viewer plays the run once and stays on its last frame.
-    // A late timer only stretches a hold; it never shows the wrong frame.
-    llSetTextureAnim(ANIM_ON, FACE, COLS, ROWS,
-        llList2Integer(runs, run), llList2Integer(runs, run + 1), llList2Float(runs, run + 2));
+    // A late timer only stretches a hold; it never shows a wrong frame.
+    integer mode = ANIM_ON;
+    if (llList2Integer(runs, run + 4)) mode = mode | REVERSE;
+    integer i;
+    integer n = llGetListLength(tiles);
+    for (i = 0; i < n; ++i)
+        llSetLinkTextureAnim(llList2Integer(tiles, i), mode, FACE, COLS, ROWS,
+            llList2Integer(runs, run), llList2Integer(runs, run + 1), llList2Float(runs, run + 2));
     llSetTimerEvent(llList2Float(runs, run + 3));
 }
 
@@ -1747,23 +1763,22 @@ default
 {
     state_entry()
     {
+        findTiles();
         build();
         run = 0;
-        if (llGetListLength(runs) == 4)
-        {
-            // one even run: let the viewer loop it, no timer needed
-            llSetTimerEvent(0.0);
-            llSetTextureAnim(ANIM_ON | LOOP, FACE, COLS, ROWS,
-                llList2Integer(runs, 0), llList2Integer(runs, 1), llList2Float(runs, 2));
-        }
-        else play();
+        play();
     }
 
     timer()
     {
-        run += 4;
+        run += 5;
         if (run >= llGetListLength(runs)) run = 0;
         play();
+    }
+
+    changed(integer change)
+    {
+        if (change & CHANGED_LINK) llResetScript();
     }
 
     on_rez(integer start_param)
@@ -1777,71 +1792,71 @@ default
 /* ---------- zero-frame motion: ticker and badge ---------- */
 const EXTRAS = [
   {
-    id: 'ticker', name: 'Ticker strip', kind: 'ticker', size: [2048, 256],
-    fields: [field('items', 'Ticker lines', 'Redelivery: click twice / Free sample materials / Tint any material / Full perm or copy-mod / Tutorials on YouTube', 'Separate lines with /')],
-    seconds: 24,
+    id: 'ticker', group: 'Zero-frame motion', name: 'Ticker strip', kind: 'ticker', size: [2048, 256], seconds: 26,
+    fields: [field('items', 'Ticker lines', 'Redelivery: click the material twice / Free sample materials / Tint any material in the texture tab / Copy-Mod or Full Perm / Tutorials on YouTube', 'Separate lines with /')],
   },
   {
-    id: 'badge', name: 'Spinning badge', kind: 'badge', size: [512, 512],
+    id: 'badge', group: 'Zero-frame motion', name: 'Spinning badge', kind: 'badge', size: [512, 512], seconds: 16,
     fields: [field('ring', 'Ring text', 'Free samples'), field('times', 'Repeats', '3', null, ['2', '3', '4'])],
-    seconds: 14,
   },
 ];
 function renderTicker(copy) {
   const W = 2048, H = 256, c = makeCanvas(W, H), ctx = c.getContext('2d');
-  ctx.fillStyle = BLACK; ctx.fillRect(0, 0, W, H);
+  const g0 = ctx.createLinearGradient(0, 0, 0, H);
+  g0.addColorStop(0, '#18181a'); g0.addColorStop(1, '#0a0a0b');
+  ctx.fillStyle = g0; ctx.fillRect(0, 0, W, H);
+  ctx.fillStyle = 'rgba(255,255,255,0.22)'; ctx.fillRect(0, 34, W, 2); ctx.fillRect(0, H - 36, W, 2);
   const items = copy.items.split('/').map(s => s.trim().toUpperCase()).filter(Boolean);
-  const face = FACE.display, st = 'semi-expanded';
-  const rule = 6, inset = 26;
-  ctx.fillStyle = WHITE; ctx.fillRect(0, inset, W, rule); ctx.fillRect(0, H - inset - rule, W, rule);
   if (!items.length) return c;
-  const cap = measure(ctx, face, st, 'H').a;
-  let S = 104 * 100 / cap;       // cap height 104 px
-  const sp = S * 0.62;          // room on each side of a sparkle
-  const natural = items.reduce((a, t) => a + measure(ctx, face, st, t).w * S / 100 + 2 * sp, 0);
+  const face = FACE.label, track = 0.16;
+  const cap = measure(ctx, face, 'H', track).a;
+  let S = 62 * 100 / cap;
+  const sp = S * 1.1;
+  const natural = items.reduce((a, t) => a + measure(ctx, face, t, track).w * S / 100 + 2 * sp, 0);
   let reps = Math.max(1, Math.round(W / natural)), scale = 1, extra = 0;
-  if (natural > W) { scale = W / natural; reps = 1; }
-  else extra = (W - reps * natural) / (reps * items.length);   // spread the remainder into the gaps so the strip closes at exactly 2048
+  if (natural > W) { scale = W / natural; reps = 1; } else extra = (W - reps * natural) / (reps * items.length);
   S *= scale;
   const capPx = cap * S / 100, base = H / 2 + capPx / 2, gap = sp * scale + extra / 2;
-  const g = new G(c, {w: W, h: H}, {beat: 0, beats: 1, tag: ''});
-  // lay out once, then paint at -W, 0 and +W so anything crossing an edge wraps onto the other
+  const g = new G(makeCanvas(8, 8), {pin: 1, pacc: 0});
+  g.ctx = ctx;
   const parts = [];
   let x = 0;
-  for (let r = 0; r < reps; r++) items.forEach((t, i) => {
-    const m = measure(ctx, face, st, t), w = m.w * S / 100;
-    x += gap;
-    parts.push({t, m, x, w, inv: i % 2 === 1});
-    x += w + gap;
-    parts.push({spark: x});
+  for (let r = 0; r < reps; r++) items.forEach(t => {
+    const m = measure(ctx, face, t, track), w = m.w * S / 100;
+    x += gap; parts.push({t, m, x}); x += w + gap; parts.push({spark: x});
   });
   for (const off of [-W, 0, W]) for (const p of parts) {
-    if (p.spark !== undefined) { g.sparkle(p.spark + off, H / 2, 22 * scale, WHITE); continue; }
-    if (p.inv) { ctx.fillStyle = WHITE; ctx.fillRect(p.x + off - 18 * scale, base - capPx - 16 * scale, p.w + 36 * scale, capPx + 32 * scale); }
-    applyFont(ctx, face, S, st);
-    ctx.fillStyle = p.inv ? BLACK : WHITE;
+    if (p.spark !== undefined) { ctx.globalAlpha = 0.7; g.sparkle(p.spark + off, H / 2, 13 * scale); ctx.globalAlpha = 1; continue; }
+    applyFont(ctx, face, S, track);
+    ctx.fillStyle = WHITE;
     ctx.fillText(p.t, p.x + off + p.m.l * S / 100, base);
   }
   return c;
 }
 function renderBadge(copy) {
   const S = 512, c = makeCanvas(S, S), ctx = c.getContext('2d');
-  const g = new G(c, {w: S, h: S}, {beat: 0, beats: 1, tag: ''});
+  const g = new G(makeCanvas(8, 8), {pin: 1, pacc: 0});
+  g.ctx = ctx;
   const cx = S / 2, cy = S / 2, R0 = 252;
-  ctx.fillStyle = BLACK; ctx.beginPath(); ctx.arc(cx, cy, R0, 0, Math.PI * 2); ctx.fill();
-  ctx.strokeStyle = WHITE; ctx.lineWidth = 5;
-  ctx.beginPath(); ctx.arc(cx, cy, R0 - 14, 0, Math.PI * 2); ctx.stroke();
+  const bg = ctx.createLinearGradient(0, 0, S, S);
+  bg.addColorStop(0, '#2a2a2d'); bg.addColorStop(0.5, '#141416'); bg.addColorStop(1, '#0b0b0c');
+  ctx.fillStyle = bg; ctx.beginPath(); ctx.arc(cx, cy, R0, 0, Math.PI * 2); ctx.fill();
+  const sheen = ctx.createLinearGradient(cx - R0, cy - R0, cx + R0 * 0.2, cy + R0);
+  sheen.addColorStop(0, 'rgba(255,255,255,0.16)'); sheen.addColorStop(1, 'rgba(255,255,255,0)');
+  ctx.fillStyle = sheen; ctx.beginPath(); ctx.arc(cx, cy, R0, 0, Math.PI * 2); ctx.fill();
+  ctx.strokeStyle = 'rgba(255,255,255,0.5)'; ctx.lineWidth = 3;
+  ctx.beginPath(); ctx.arc(cx, cy, R0 - 2, 0, Math.PI * 2); ctx.stroke();
+  ctx.strokeStyle = 'rgba(255,255,255,0.28)'; ctx.lineWidth = 2;
   ctx.beginPath(); ctx.arc(cx, cy, 150, 0, Math.PI * 2); ctx.stroke();
   const text = copy.ring.toUpperCase(), times = clamp(parseInt(copy.times, 10) || 3, 1, 6);
-  const face = FACE.mono, size = 46, rText = 194;
+  const face = FACE.label, size = 40, rText = 196;
   const chars = [...text];
-  const adv = chars.map(ch => measure(ctx, face, 'normal', ch).adv * size / 100);
-  const spark = 46;
+  const adv = chars.map(ch => measure(ctx, face, ch, 0).adv * size / 100);
+  const spark = 52;
   const one = adv.reduce((a, b) => a + b, 0) + spark;
-  const k = (2 * Math.PI * rText) / (one * times);      // stretch the spacing so the ring closes exactly
+  const k = (2 * Math.PI * rText) / (one * times);
   let ang = -Math.PI / 2;
-  applyFont(ctx, face, size);
-  if (HAS_SPACING) ctx.letterSpacing = '0px';
+  applyFont(ctx, face, size, 0);
   ctx.fillStyle = WHITE;
   for (let r = 0; r < times; r++) {
     chars.forEach((ch, i) => {
@@ -1855,16 +1870,16 @@ function renderBadge(copy) {
       ang += a;
     });
     const a = spark * k / rText;
-    g.sparkle(cx + Math.cos(ang + a / 2) * rText, cy + Math.sin(ang + a / 2) * rText, 15, WHITE);
+    g.sparkle(cx + Math.cos(ang + a / 2) * rText, cy + Math.sin(ang + a / 2) * rText, 12);
     ang += a;
   }
-  g.sparkle(cx, cy, 92, WHITE, 0.14);
+  g.sparkle(cx, cy, 70, 0.1);
   return c;
 }
 function lslTicker(win, seconds) {
   return `// artsy ticker: one texture, smooth scroll, no frames
 // Texture: artsy-ticker-2048x256 (8:1). The text repeats seamlessly at the texture edge.
-// Put it on the strip's display face: Full Bright on, Glow 0, Alpha mode None.
+// Face settings: Full Bright on, Glow 0, Alpha mode None.
 
 integer FACE    = ALL_SIDES;  // set your display face number if other faces have their own textures
 integer WINDOWS = ${win};        // how much of the texture shows at once:
@@ -1911,56 +1926,73 @@ default
 }
 `;
 }
-function setupNotes(sign, fmt, holds) {
-  const sw = fmt.w * fmt.cols, sh = fmt.h * fmt.rows, total = holds.reduce((a, b) => a + b, 0);
-  return `${sign.name.toUpperCase()}, ${fmt.name.toUpperCase()} ${fmt.ratio}
+function setupNotes(slide, shape, tl) {
+  const names = sheetNames(slide, shape), total = tl.reduce((a, x) => a + x[1], 0);
+  return `${slide.name.toUpperCase()}, ${shape.name.toUpperCase()} ${shape.ratio}
 
 Files
-  ${sheetName(sign, fmt)}.png   spritesheet to upload (${sw} x ${sh}, 24-bit, no alpha)
-  ${sheetName(sign, fmt)}.lsl   player script
-  ${sheetName(sign, fmt)}.gif   preview with real timing (not for upload)
+${names.map(n => `  ${n}.png   spritesheet to upload (2048 x 2048, 24-bit, no alpha)`).join('\n')}
+  ${baseName(slide, shape)}.lsl   player script
+  ${baseName(slide, shape)}.gif   preview with the real timing (not for upload)
 
-Sheet
-  ${fmt.cols} columns x ${fmt.rows} rows, ${fmt.cols * fmt.rows} frames of ${fmt.w} x ${fmt.h}, read left to right, top to bottom.
-  Every cell is used. No empty rows or columns.
+Each sheet: 4 x 4 grid, 16 frames of 512 x 512, read left to right, top to bottom.
+Every cell is used. No empty rows or columns.
 
 In Second Life
-  1. Upload the PNG.
-  2. Rez a box and size its display face ${fmt.ratio} (for example ${fmt.prim}).
-  3. Apply the texture to that face. Full Bright on, Glow 0, Alpha mode None.
+  1. Upload the PNG${names.length > 1 ? 's' : ''}.
+  2. ${names.length > 1 ? `Make two 1 x 1 m flat boxes, edge to edge, link them and name both "tile". Put each sheet on its tile (${shape.tiles.join(' / ')}).` : 'Make a flat box and size its display face 1:1 (for example 1 x 1 m).'}
+  3. Full Bright on, Glow 0, Alpha mode None.
   4. Drop the script in. Loop: ${fmtSec(total)} s.
-
-Using a plain GIF player instead? llSetTextureAnim(ANIM_ON | LOOP, ALL_SIDES, ${fmt.cols}, ${fmt.rows}, 0, ${fmt.cols * fmt.rows}, 1.0)
-works, but every frame gets the same time. The player script keeps the quick cuts quick and the holds readable.
 `;
 }
 
-/* ---------- headless API (used by tools/render-signs.mjs) ---------- */
+/* ---------- headless API (tools/render-signs.js) ---------- */
 function b64(bytes) {
   let s = '';
   for (let i = 0; i < bytes.length; i += 0x8000) s += String.fromCharCode.apply(null, bytes.subarray(i, i + 0x8000));
   return btoa(s);
 }
-const READY = (async () => { await Promise.all([loadFonts(), loadAssets()]); return fontsOk; })();
+// a smaller copy for light previews (the same canvas object for the same frame, so repeats still merge)
+const SCALED = new WeakMap();
+function scaled(cv, k) {
+  if (k === 1) return cv;
+  if (!SCALED.has(cv)) {
+    const c = makeCanvas(Math.round(cv.width * k), Math.round(cv.height * k)), ctx = c.getContext('2d');
+    ctx.imageSmoothingQuality = 'high';
+    ctx.drawImage(cv, 0, 0, c.width, c.height);
+    SCALED.set(cv, c);
+  }
+  return SCALED.get(cv);
+}
+const READY = (async () => { await Promise.all([loadFonts(), loadAssets()]); return FONT_STATE.poppins; })();
+function buildSlide(slide, shape, copy, holds) {
+  const frames = renderFrames(slide, shape, copy);
+  const tl = timelineOf(slide, holds);
+  return {frames, tl, sheets: sheetsOf(frames, shape)};
+}
 window.SignStudio = {
   ready: READY,
-  signs: SIGNS.map(s => s.id),
-  formats: Object.keys(FORMATS),
-  async build(id, fmtId) {
+  slides: SLIDES.map(s => s.id),
+  shapes: Object.keys(SHAPES),
+  fonts: () => ({...FONT_STATE}),
+  async build(id, shapeId, gifScale = 1) {
     await READY;
-    const sign = SIGNS.find(s => s.id === id), fmt = FORMATS[fmtId];
-    const frames = renderFrames(sign, fmt, copyOf(sign));
-    const holds = sign.frames.map(f => f.hold);
-    const sheet = composeSheet(frames, fmt);
+    const slide = SLIDES.find(s => s.id === id), shape = SHAPES[shapeId], copy = copyOf(slide);
+    const holds = defaultHolds(slide, copy);
+    const {frames, tl, sheets} = buildSlide(slide, shape, copy, holds);
+    const names = sheetNames(slide, shape);
+    const sheetPngs = [];
+    for (let i = 0; i < sheets.length; i++) sheetPngs.push({name: names[i], png: b64(await encodePNG(sheets[i]))});
     return {
-      name: sheetName(sign, fmt),
-      png: b64(await encodePNG(sheet)),
-      gif: b64(encodeGIF(frames, holds)),
-      lsl: lslPlayer(sign, fmt, holds),
-      notes: setupNotes(sign, fmt, holds),
-      checks: runChecks(frames, fmt, holds),
-      sheet: [sheet.width, sheet.height], grid: [fmt.cols, fmt.rows], cell: [fmt.w, fmt.h],
-      holds, runs: runsOf(holds).length, fontsOk,
+      base: baseName(slide, shape),
+      sheets: sheetPngs,
+      gif: b64(encodeGIF(tl.map(([k]) => scaled(frames[k], gifScale)), tl.map(([, s]) => s))),
+      lsl: lslPlayer(slide, shape, tl),
+      checks: runChecks(sheets, frames, tl),
+      runs: runsOf(tl).length,
+      loop: tl.reduce((a, x) => a + x[1], 0),
+      timeline: tl.map(([k, s]) => [k, s]),
+      fonts: {...FONT_STATE},
     };
   },
   async extras() {
@@ -1971,23 +2003,29 @@ window.SignStudio = {
       badge: {png: b64(await encodePNG(renderBadge(copyOf(b)), true)), lsl: lslBadge(b.seconds)},
     };
   },
-  // every frame of every sign in one image, for review
-  async contact(fmtId) {
+  // every slide's held frame (8) and second state (15) for review
+  async contact(shapeId, frames = [8, 15]) {
     await READY;
-    const fmt = FORMATS[fmtId], sc = 0.5, pad = 8;
-    const fw = fmt.w * sc, fh = fmt.h * sc;
-    const c = makeCanvas(Math.round(8 * (fw + pad) + pad), Math.round(SIGNS.length * (fh + pad) + pad));
+    const shape = SHAPES[shapeId], W = shape.tx * TILE, H = shape.ty * TILE, sc = 0.5, pad = 8;
+    const fw = W * sc, fh = H * sc, cols = frames.length;
+    const c = makeCanvas(Math.round(cols * (fw + pad) + pad), Math.round(SLIDES.length * (fh + pad) + pad));
     const ctx = c.getContext('2d');
-    ctx.fillStyle = '#7a7a7a'; ctx.fillRect(0, 0, c.width, c.height);
-    SIGNS.forEach((s, j) => renderFrames(s, fmt, copyOf(s)).forEach((f, i) => ctx.drawImage(f, pad + i * (fw + pad), pad + j * (fh + pad), fw, fh)));
+    ctx.fillStyle = '#6f6f6f'; ctx.fillRect(0, 0, c.width, c.height);
+    SLIDES.forEach((s, j) => {
+      const fr = renderFrames(s, shape, copyOf(s));
+      frames.forEach((k, i) => ctx.drawImage(fr[k], pad + i * (fw + pad), pad + j * (fh + pad), fw, fh));
+    });
     return c.toDataURL('image/png');
   },
-  async frame(id, fmtId, i, scale = 1) {
+  async strip(id, shapeId, scale = 0.5) {
     await READY;
-    const sign = SIGNS.find(s => s.id === id), fmt = FORMATS[fmtId];
-    const f = renderFrames(sign, fmt, copyOf(sign))[i];
-    const c = makeCanvas(f.width * scale, f.height * scale);
-    c.getContext('2d').drawImage(f, 0, 0, c.width, c.height);
+    const slide = SLIDES.find(s => s.id === id), shape = SHAPES[shapeId];
+    const fr = renderFrames(slide, shape, copyOf(slide));
+    const W = shape.tx * TILE * scale, H = shape.ty * TILE * scale, pad = 6;
+    const c = makeCanvas(Math.round(8 * (W + pad) + pad), Math.round(2 * (H + pad) + pad));
+    const ctx = c.getContext('2d');
+    ctx.fillStyle = '#6f6f6f'; ctx.fillRect(0, 0, c.width, c.height);
+    fr.forEach((f, i) => ctx.drawImage(f, pad + (i % 8) * (W + pad), pad + Math.floor(i / 8) * (H + pad), W, H));
     return c.toDataURL('image/png');
   },
 };
@@ -1996,20 +2034,17 @@ window.SignStudio = {
    Studio UI
    ========================================================================== */
 const $ = id => document.getElementById(id);
-const STORE = 'artsy-sign-studio-v1';
-const state = {sel: 'redelivery', fmt: 'portrait', win: 2, copy: {}, holds: {}, seconds: {}, playing: true};
+const STORE = 'artsy-sign-studio-v2';
+const state = {sel: 'redelivery', shape: 'square', win: 2, copy: {}, holds: {}, seconds: {}, playing: true};
 try { Object.assign(state, JSON.parse(localStorage.getItem(STORE) || '{}')); } catch (e) { /* storage blocked */ }
 if (matchMedia('(prefers-reduced-motion: reduce)').matches) state.playing = false;
-const save = () => { try { localStorage.setItem(STORE, JSON.stringify({sel: state.sel, fmt: state.fmt, win: state.win, copy: state.copy, holds: state.holds, seconds: state.seconds})); } catch (e) { /* ignore */ } };
+const save = () => { try { localStorage.setItem(STORE, JSON.stringify({sel: state.sel, shape: state.shape, win: state.win, copy: state.copy, holds: state.holds, seconds: state.seconds})); } catch (e) { /* ignore */ } };
 
-let current = null;   // {kind, frames, holds, sheet, ...}
-let clock = 0, lastTs = 0, shownFrame = -1;
-
-function itemById(id) { return SIGNS.find(s => s.id === id) || EXTRAS.find(e => e.id === id); }
-function holdsFor(sign) {
-  const saved = state.holds[sign.id];
-  return sign.frames.map((f, i) => (saved && saved[i] > 0) ? saved[i] : f.hold);
-}
+let current = null;
+let clock = 0, lastTs = 0, shownIdx = -1;
+const allItems = () => [...SLIDES, ...EXTRAS];
+const itemById = id => allItems().find(s => s.id === id);
+function holdsFor(slide, copy) { return {...defaultHolds(slide, copy), ...(state.holds[slide.id] || {})}; }
 function toast(msg) {
   const t = $('toast');
   t.textContent = msg; t.hidden = false;
@@ -2017,32 +2052,27 @@ function toast(msg) {
 }
 
 function buildNav() {
-  const mk = (list, items, isExtra) => {
-    list.innerHTML = '';
-    items.forEach((s, i) => {
+  const nav = $('nav');
+  nav.innerHTML = '';
+  const groups = [...new Set(allItems().map(s => s.group))];
+  groups.forEach(gname => {
+    const h = document.createElement('div'); h.className = 'navh'; h.textContent = gname;
+    const ol = document.createElement('ol');
+    allItems().filter(s => s.group === gname).forEach(s => {
       const li = document.createElement('li');
       const b = document.createElement('button');
       b.type = 'button'; b.dataset.id = s.id;
-      const sub = isExtra ? (s.kind === 'ticker' ? 'Smooth scroll · 0 frames' : 'Smooth spin · 0 frames') : navMeta(s);
-      b.innerHTML = `<span class="k">${isExtra ? '+' : String(i + 1).padStart(2, '0')}</span><strong></strong><small></small>`;
-      b.querySelector('strong').textContent = s.name;
-      b.querySelector('small').textContent = sub;
+      const strong = document.createElement('strong'); strong.textContent = s.name;
+      const small = document.createElement('small');
+      small.textContent = s.kind === 'ticker' ? 'Smooth scroll, 0 frames' : s.kind === 'badge' ? 'Smooth spin, 0 frames' : (s.kind === 'toggle' ? 'Two states' : 'One message') + ', 16 frames';
+      b.append(strong, small);
       b.addEventListener('click', () => { state.sel = s.id; save(); rebuild(); });
-      li.append(b); list.append(li);
+      li.append(b); ol.append(li);
     });
-  };
-  mk($('signList'), SIGNS, false);
-  mk($('extraList'), EXTRAS, true);
+    nav.append(h, ol);
+  });
 }
-function navMeta(sign) { return `8 frames · ${fmtSec(holdsFor(sign).reduce((a, c) => a + c, 0))} s`; }
-// update text in place: rebuilding the list here would swallow a click that blurs a hold field
-function updateNavMeta(sign) {
-  const b = document.querySelector(`nav.signs button[data-id="${sign.id}"] small`);
-  if (b) b.textContent = navMeta(sign);
-}
-function markNav() {
-  document.querySelectorAll('nav.signs button').forEach(b => b.setAttribute('aria-current', String(b.dataset.id === state.sel)));
-}
+function markNav() { document.querySelectorAll('nav.signs button').forEach(b => b.setAttribute('aria-current', String(b.dataset.id === state.sel))); }
 
 function buildCopyForm(item) {
   const form = $('copyForm');
@@ -2062,7 +2092,7 @@ function buildCopyForm(item) {
     input.addEventListener('input', () => {
       state.copy[item.id] = {...(state.copy[item.id] || {}), [f.key]: input.value};
       save();
-      clearTimeout(buildCopyForm.t); buildCopyForm.t = setTimeout(() => rebuild(false), 220);
+      clearTimeout(buildCopyForm.t); buildCopyForm.t = setTimeout(() => rebuild(false), 260);
     });
     label.append(input);
     if (f.hint) { const em = document.createElement('em'); em.textContent = f.hint; label.append(em); }
@@ -2070,30 +2100,70 @@ function buildCopyForm(item) {
   });
 }
 
-function drawSheetPreview(sheet, cols, rows) {
-  const cv = $('sheet'), box = cv.parentElement;
-  const maxW = Math.max(200, Math.min(312, box.clientWidth - 22));
-  const sc = maxW / sheet.width;
-  cv.width = Math.round(sheet.width * sc); cv.height = Math.round(sheet.height * sc);
-  const ctx = cv.getContext('2d');
-  ctx.imageSmoothingQuality = 'high';
-  ctx.drawImage(sheet, 0, 0, cv.width, cv.height);
-  if (!cols) return;
-  const cw = cv.width / cols, ch = cv.height / rows;
-  ctx.save();
-  ctx.strokeStyle = 'rgba(255,255,255,.85)'; ctx.lineWidth = 1; ctx.setLineDash([4, 3]);
-  for (let i = 1; i < cols; i++) { ctx.beginPath(); ctx.moveTo(Math.round(i * cw) + 0.5, 0); ctx.lineTo(Math.round(i * cw) + 0.5, cv.height); ctx.stroke(); }
-  for (let j = 1; j < rows; j++) { ctx.beginPath(); ctx.moveTo(0, Math.round(j * ch) + 0.5); ctx.lineTo(cv.width, Math.round(j * ch) + 0.5); ctx.stroke(); }
-  ctx.setLineDash([]);
-  ctx.font = '700 10px "Space Mono", monospace';
-  for (let j = 0; j < rows; j++) for (let i = 0; i < cols; i++) {
-    const t = String(j * cols + i);
-    ctx.fillStyle = '#fff'; ctx.fillRect(i * cw + 3, j * ch + 3, 14, 13);
-    ctx.fillStyle = '#000'; ctx.fillText(t, i * cw + 6, j * ch + 13);
-  }
-  ctx.restore();
+function buildTiming() {
+  const box = $('timing');
+  box.innerHTML = '';
+  const s = current.slide;
+  const h = holdsFor(s, current.copy);
+  const fields = [['read', s.kind === 'toggle' ? 'First state' : 'Message'], ...(s.kind === 'toggle' ? [['alt', 'Second state']] : []), ['after', 'Before exit'], ['rest', 'Pause']];
+  fields.forEach(([key, name]) => {
+    const lab = document.createElement('label'); lab.className = 'field';
+    const span = document.createElement('span'); span.textContent = name + ' (s)';
+    const inp = document.createElement('input');
+    inp.type = 'number'; inp.min = '0.5'; inp.max = '20'; inp.step = '0.1'; inp.value = h[key];
+    inp.id = `hold-${s.id}-${key}`;
+    inp.addEventListener('change', () => {
+      const v = clamp(parseFloat(inp.value) || h[key], 0.5, 20);
+      inp.value = v;
+      state.holds[s.id] = {...(state.holds[s.id] || {}), [key]: v};
+      save(); retime();
+    });
+    lab.append(span, inp); box.append(lab);
+  });
 }
-
+function buildFrames() {
+  const ol = $('frames');
+  ol.innerHTML = '';
+  const names = k => k === 0 ? 'pause' : k < 8 ? 'in' : k === 8 ? 'hold' : current.slide.kind === 'toggle' ? (k === 15 ? 'state 2' : 'to 2') : 'glint';
+  current.frames.forEach((f, k) => {
+    const li = document.createElement('li');
+    const b = document.createElement('button');
+    b.type = 'button'; b.title = `Frame ${k}: ${names(k)}`;
+    const tc = makeCanvas(Math.round(64 * f.width / f.height), 64);
+    tc.getContext('2d').drawImage(f, 0, 0, tc.width, tc.height);
+    b.append(tc);
+    b.addEventListener('click', () => {
+      state.playing = false; setPlayLabel();
+      const i = current.tl.findIndex(x => x[0] === k);
+      clock = current.starts[i] + 0.0001; shownIdx = -1; draw();
+    });
+    const sm = document.createElement('small'); sm.textContent = `${k} · ${names(k)}`;
+    li.append(b, sm); ol.append(li);
+  });
+}
+function drawSheets(sheets, grid) {
+  const box = $('sheetbox');
+  box.innerHTML = '';
+  const names = current.kind === 'slide' ? sheetNames(current.slide, current.shape) : [current.kind === 'ticker' ? 'artsy-ticker-2048x256' : 'artsy-badge-512'];
+  const each = Math.min(300, (box.clientWidth || 310) - 22) / (sheets.length > 1 ? 2.1 : 1);
+  sheets.forEach((s, i) => {
+    const fig = document.createElement('figure');
+    const cv = makeCanvas(Math.round(each), Math.round(each * s.height / s.width));
+    const ctx = cv.getContext('2d');
+    ctx.imageSmoothingQuality = 'high';
+    ctx.drawImage(s, 0, 0, cv.width, cv.height);
+    if (grid) {
+      const cw = cv.width / GRID, ch = cv.height / GRID;
+      ctx.strokeStyle = 'rgba(255,255,255,.7)'; ctx.lineWidth = 1; ctx.setLineDash([3, 3]);
+      for (let k = 1; k < GRID; k++) {
+        ctx.beginPath(); ctx.moveTo(Math.round(k * cw) + 0.5, 0); ctx.lineTo(Math.round(k * cw) + 0.5, cv.height); ctx.stroke();
+        ctx.beginPath(); ctx.moveTo(0, Math.round(k * ch) + 0.5); ctx.lineTo(cv.width, Math.round(k * ch) + 0.5); ctx.stroke();
+      }
+    }
+    const cap = document.createElement('figcaption'); cap.textContent = names[i] || '';
+    fig.append(cv, cap); box.append(fig);
+  });
+}
 function setSpec(rows) {
   const dl = $('spec');
   dl.innerHTML = '';
@@ -2104,130 +2174,114 @@ function setChecks(list) {
   ul.innerHTML = '';
   list.forEach(c => { const li = document.createElement('li'); li.textContent = c.text; if (!c.ok) li.className = 'bad'; ul.append(li); });
 }
-
-function buildTimeline() {
-  const ol = $('timeline');
-  ol.innerHTML = '';
-  current.frames.forEach((f, i) => {
-    const li = document.createElement('li');
-    const b = document.createElement('button');
-    b.type = 'button'; b.className = 'thumb'; b.title = `Frame ${i}: ${current.sign.frames[i].note}`;
-    const tc = makeCanvas(Math.round(76 * f.width / f.height), 76);
-    tc.getContext('2d').drawImage(f, 0, 0, tc.width, tc.height);
-    const n = document.createElement('span'); n.textContent = i;
-    b.append(tc, n);
-    b.addEventListener('click', () => { state.playing = false; setPlayLabel(); clock = current.starts[i] + 0.001; draw(); });
-    const lab = document.createElement('label');
-    const inp = document.createElement('input');
-    inp.type = 'number'; inp.min = '0.05'; inp.max = '20'; inp.step = '0.05'; inp.value = fmtSec(current.holds[i]);
-    inp.id = `hold-${current.sign.id}-${i}`;
-    inp.setAttribute('aria-label', `Frame ${i} hold, seconds`);
-    inp.addEventListener('change', () => {
-      const v = clamp(parseFloat(inp.value) || current.sign.frames[i].hold, 0.05, 20);
-      inp.value = fmtSec(v);
-      const hs = holdsFor(current.sign); hs[i] = v;
-      state.holds[current.sign.id] = hs; save();
-      retime();
-    });
-    lab.append(inp, document.createTextNode('s'));
-    li.append(b, lab);
-    ol.append(li);
-  });
+function fontStatus() {
+  $('fontPoppins').textContent = FONT_STATE.poppins ? 'Loaded' : 'Not loaded (offline?)';
+  $('fontPoppins').className = FONT_STATE.poppins ? '' : 'warn';
+  const msg = {
+    installed: 'Installed on this computer. Using it.',
+    system: 'Using the system Avenir (same design).',
+    files: `Using your font file${FONT_STATE.files === 1 ? '' : 's'}.`,
+    'stand-in': 'Not on this computer. Showing Nunito Sans until you add it.',
+  }[FONT_STATE.avenir];
+  $('fontAvenir').textContent = msg;
+  $('fontAvenir').className = FONT_STATE.avenir === 'stand-in' ? 'warn' : '';
 }
 
 function retime() {
-  const s = current.sign;
-  current.holds = holdsFor(s);
+  const s = current.slide;
+  current.holds = holdsFor(s, current.copy);
+  current.tl = timelineOf(s, current.holds);
   current.starts = [];
   let t = 0;
-  current.holds.forEach(h => { current.starts.push(t); t += h; });
+  current.tl.forEach(([, d]) => { current.starts.push(t); t += d; });
   current.total = t;
-  current.checks = runChecks(current.frames, current.fmt, current.holds);
-  const runs = runsOf(current.holds);
-  const fmt = current.fmt;
+  const runs = runsOf(current.tl);
   setSpec([
-    ['Sheet', `${fmt.w * fmt.cols} × ${fmt.h * fmt.rows} px`],
-    ['Grid', `${fmt.cols} columns × ${fmt.rows} rows`],
-    ['Frame', `${fmt.w} × ${fmt.h} px`],
-    ['Frames', `${fmt.cols * fmt.rows}, every cell used`],
+    ['Sheets', `${current.sheets.length} × (2048 × 2048)`],
+    ['Grid', '4 × 4, frames read left to right'],
+    ['Frame', '512 × 512 px, 512 px per metre on a 1 m tile'],
+    ['Prim', current.shape.prim],
     ['Loop', `${fmtSec(t)} s, ${runs.length} script runs`],
-    ['Prim face', `${fmt.ratio}, e.g. ${fmt.prim}`],
   ]);
-  setChecks(current.checks);
-  updateNavMeta(s);
+  setChecks(runChecks(current.sheets, current.frames, current.tl));
 }
 
 function rebuild(full = true) {
-  const item = itemById(state.sel) || SIGNS[0];
+  const item = itemById(state.sel) || SLIDES[0];
   state.sel = item.id;
-  const isSign = !item.kind;
-  $('fmtSeg').hidden = !isSign;
+  const isSlide = !['ticker', 'badge'].includes(item.kind);
+  $('shapeSeg').hidden = !isSlide;
   $('winSeg').hidden = item.kind !== 'ticker';
-  $('timeline').hidden = !isSign;
-  $('extraCtl').hidden = isSign;
-  $('exGif').hidden = !isSign;
+  $('frames').hidden = !isSlide;
+  $('exGif').hidden = !isSlide;
   if (full) buildCopyForm(item);
   const copy = copyOf(item, state.copy[item.id]);
-  if (isSign) {
-    const fmt = FORMATS[state.fmt] || FORMATS.portrait;
-    const frames = renderFrames(item, fmt, copy);
-    current = {kind: 'sign', sign: item, fmt, frames, sheet: composeSheet(frames, fmt)};
-    $('sheetTitle').textContent = 'Spritesheet';
+  if (isSlide) {
+    const shape = SHAPES[state.shape] || SHAPES.square;
+    const frames = renderFrames(item, shape, copy);
+    current = {kind: 'slide', slide: item, shape, copy, frames, sheets: sheetsOf(frames, shape)};
+    $('sheetTitle').textContent = current.sheets.length > 1 ? 'Spritesheets' : 'Spritesheet';
     retime();
-    buildTimeline();
-    drawSheetPreview(current.sheet, fmt.cols, fmt.rows);
-    $('stageHint').textContent = 'Click a frame to stop on it. Hold times feed the GIF and the script.';
+    buildTiming();
+    buildFrames();
+    drawSheets(current.sheets, true);
+    $('stageHint').textContent = 'Click a frame below to stop on it.';
   } else {
     const tex = item.kind === 'ticker' ? renderTicker(copy) : renderBadge(copy);
     const seconds = state.seconds[item.id] || item.seconds;
-    current = {kind: item.kind, sign: item, tex, seconds};
+    current = {kind: item.kind, slide: item, copy, tex, seconds};
     $('sheetTitle').textContent = 'Texture';
-    $('speedLabel').textContent = item.kind === 'ticker' ? 'Seconds per pass' : 'Seconds per turn';
-    $('speed').value = seconds;
-    drawSheetPreview(tex, 0, 0);
-    const win = item.kind === 'ticker' ? state.win : 0;
+    drawSheets([tex], false);
+    const box = $('timing');
+    box.innerHTML = '';
+    const lab = document.createElement('label'); lab.className = 'field';
+    const span = document.createElement('span'); span.textContent = item.kind === 'ticker' ? 'Seconds per pass' : 'Seconds per turn';
+    const inp = document.createElement('input'); inp.type = 'number'; inp.min = '2'; inp.max = '120'; inp.step = '1'; inp.value = seconds; inp.id = `speed-${item.id}`;
+    inp.addEventListener('change', () => { state.seconds[item.id] = clamp(parseFloat(inp.value) || item.seconds, 2, 120); save(); rebuild(false); });
+    lab.append(span, inp); box.append(lab);
+    const win = state.win;
     setSpec(item.kind === 'ticker'
-      ? [['Texture', '2048 × 256 px, 8:1'], ['Frames', 'none: one texture'], ['Motion', 'SMOOTH scroll, seamless wrap'], ['Showing', `${8 / win}:1 of the strip at a time`], ['Pass', `${fmtSec(seconds)} s`]]
-      : [['Texture', '512 × 512 px, transparent corners'], ['Frames', 'none: one texture'], ['Motion', 'SMOOTH rotate'], ['Turn', `${fmtSec(seconds)} s`], ['Prim face', '1:1, e.g. 0.5 × 0.5 m']]);
+      ? [['Texture', '2048 × 256 px, 8:1'], ['Frames', 'none, one texture'], ['Motion', 'smooth scroll, seamless wrap'], ['Showing', `${8 / win}:1 of the strip at a time`], ['Pass', `${fmtSec(seconds)} s`]]
+      : [['Texture', '512 × 512 px, transparent corners'], ['Frames', 'none, one texture'], ['Motion', 'smooth rotation'], ['Turn', `${fmtSec(seconds)} s`], ['Prim', '1:1, e.g. 0.5 × 0.5 m']]);
     setChecks([
       {ok: true, text: `Power-of-two texture, ${item.size[0]} × ${item.size[1]}`},
-      {ok: true, text: item.kind === 'ticker' ? 'Text spacing closes exactly at 2048 px: no seam' : 'Ring text spacing closes exactly: no seam'},
-      {ok: true, text: 'Motion runs in the viewer at full frame rate'},
+      {ok: true, text: item.kind === 'ticker' ? 'Spacing closes exactly at 2048 px: no seam' : 'Ring spacing closes exactly: no seam'},
+      {ok: true, text: 'The viewer animates it at full frame rate'},
     ]);
     $('stageHint').textContent = item.kind === 'ticker' ? 'Scrolls in the viewer, so it stays smooth at any length.' : 'Rotates in the viewer. Use alpha masking on the face.';
   }
   sizeLive();
   markNav();
-  shownFrame = -1;
+  fontStatus();
+  shownIdx = -1;
   draw();
 }
-
 function sizeLive() {
   const cv = $('live');
-  if (current.kind === 'sign') { cv.width = current.fmt.w; cv.height = current.fmt.h; }
+  if (current.kind === 'slide') { cv.width = current.shape.tx * TILE; cv.height = current.shape.ty * TILE; }
   else if (current.kind === 'ticker') { cv.width = 2048 / state.win; cv.height = 256; }
   else { cv.width = 512; cv.height = 512; }
 }
-
 function draw() {
   const cv = $('live'), ctx = cv.getContext('2d');
-  if (current.kind === 'sign') {
+  if (current.kind === 'slide') {
     const t = ((clock % current.total) + current.total) % current.total;
     let i = current.starts.length - 1;
     while (i > 0 && current.starts[i] > t) i--;
-    if (i !== shownFrame) {
-      ctx.drawImage(current.frames[i], 0, 0);
-      shownFrame = i;
-      document.querySelectorAll('#timeline li').forEach((li, k) => li.classList.toggle('on', k === i));
+    if (i !== shownIdx) {
+      const k = current.tl[i][0];
+      ctx.drawImage(current.frames[k], 0, 0);
+      shownIdx = i;
+      document.querySelectorAll('#frames li').forEach((li, j) => li.classList.toggle('on', j === k));
     }
-    $('clock').textContent = `${t.toFixed(1)} / ${current.total.toFixed(1)} s · frame ${i}`;
+    $('clock').textContent = `${t.toFixed(1)} / ${current.total.toFixed(1)} s`;
   } else if (current.kind === 'ticker') {
     const p = ((clock / current.seconds) % 1) * 2048;
     ctx.drawImage(current.tex, -p, 0);
     ctx.drawImage(current.tex, 2048 - p, 0);
     $('clock').textContent = `${(clock % current.seconds).toFixed(1)} / ${fmtSec(current.seconds)} s`;
   } else {
-    ctx.fillStyle = '#1a1a1a'; ctx.fillRect(0, 0, 512, 512);
+    ctx.fillStyle = '#1a1a1c'; ctx.fillRect(0, 0, 512, 512);
     ctx.save(); ctx.translate(256, 256); ctx.rotate((clock / current.seconds) * Math.PI * 2); ctx.drawImage(current.tex, -256, -256); ctx.restore();
     $('clock').textContent = `${(clock % current.seconds).toFixed(1)} / ${fmtSec(current.seconds)} s`;
   }
@@ -2263,41 +2317,39 @@ async function saveFile(name, data, mime) {
   }
 }
 function scriptText() {
-  if (current.kind === 'sign') return lslPlayer(current.sign, current.fmt, current.holds);
+  if (current.kind === 'slide') return lslPlayer(current.slide, current.shape, current.tl);
   if (current.kind === 'ticker') return lslTicker(state.win, current.seconds);
   return lslBadge(current.seconds);
 }
-function baseName() {
-  if (current.kind === 'sign') return sheetName(current.sign, current.fmt);
+function fileBase() {
+  if (current.kind === 'slide') return baseName(current.slide, current.shape);
   return current.kind === 'ticker' ? 'artsy-ticker-2048x256' : 'artsy-badge-512';
 }
-async function busy(btn, fn) {
-  btn.disabled = true;
-  try { await fn(); } finally { btn.disabled = false; }
-}
+async function busy(btn, fn) { btn.disabled = true; try { await fn(); } finally { btn.disabled = false; } }
 
 function wire() {
-  document.querySelectorAll('input[name=fmt]').forEach(r => {
-    r.checked = r.value === state.fmt;
-    r.addEventListener('change', () => { state.fmt = r.value; save(); rebuild(false); });
+  document.querySelectorAll('input[name=shape]').forEach(r => {
+    r.checked = r.value === state.shape;
+    r.addEventListener('change', () => { state.shape = r.value; save(); rebuild(false); });
   });
   document.querySelectorAll('input[name=win]').forEach(r => {
     r.checked = Number(r.value) === state.win;
     r.addEventListener('change', () => { state.win = Number(r.value); save(); rebuild(false); });
   });
   $('play').addEventListener('click', () => { state.playing = !state.playing; setPlayLabel(); });
-  $('speed').addEventListener('change', () => {
-    const v = clamp(parseFloat($('speed').value) || current.sign.seconds, 2, 120);
-    state.seconds[current.sign.id] = v; save(); rebuild(false);
-  });
   $('exPng').addEventListener('click', e => busy(e.currentTarget, async () => {
-    const tex = current.kind === 'sign' ? current.sheet : current.tex;
-    await saveFile(baseName() + '.png', await encodePNG(tex, current.kind === 'badge'), 'image/png');
+    if (current.kind !== 'slide') { await saveFile(fileBase() + '.png', await encodePNG(current.tex, current.kind === 'badge'), 'image/png'); return; }
+    const names = sheetNames(current.slide, current.shape);
+    if (current.sheets.length === 1) { await saveFile(names[0] + '.png', await encodePNG(current.sheets[0]), 'image/png'); return; }
+    if (typeof JSZip === 'undefined') { await saveFile(names[0] + '.png', await encodePNG(current.sheets[0]), 'image/png'); toast('Saved the first sheet. Use Everything (.zip) for both.'); return; }
+    const zip = new JSZip();
+    for (let i = 0; i < names.length; i++) zip.file(names[i] + '.png', await encodePNG(current.sheets[i]));
+    await saveFile(fileBase() + '-sheets.zip', await zip.generateAsync({type: 'blob'}), 'application/zip');
   }));
   $('exGif').addEventListener('click', e => busy(e.currentTarget, async () => {
-    await saveFile(baseName() + '.gif', encodeGIF(current.frames, current.holds), 'image/gif');
+    await saveFile(fileBase() + '.gif', encodeGIF(current.tl.map(([k]) => current.frames[k]), current.tl.map(([, s]) => s)), 'image/gif');
   }));
-  $('exLsl').addEventListener('click', e => busy(e.currentTarget, () => saveFile(baseName() + '.lsl', scriptText(), 'text/plain')));
+  $('exLsl').addEventListener('click', e => busy(e.currentTarget, () => saveFile(fileBase() + '.lsl', scriptText(), 'text/plain')));
   $('exCopy').addEventListener('click', () => {
     const text = scriptText();
     navigator.clipboard.writeText(text).then(() => toast('Script copied'), () => {
@@ -2307,31 +2359,58 @@ function wire() {
     });
   });
   $('exZip').addEventListener('click', e => busy(e.currentTarget, async () => {
-    if (typeof JSZip === 'undefined') { toast('The zip library did not load. Save files one at a time.'); return; }
-    const zip = new JSZip(), base = baseName();
-    if (current.kind === 'sign') {
-      zip.file(base + '.png', await encodePNG(current.sheet));
-      zip.file(base + '.gif', encodeGIF(current.frames, current.holds));
+    if (typeof JSZip === 'undefined') { toast('The zip library did not load. Save the files one at a time.'); return; }
+    const zip = new JSZip(), base = fileBase();
+    if (current.kind === 'slide') {
+      const names = sheetNames(current.slide, current.shape);
+      for (let i = 0; i < names.length; i++) zip.file(names[i] + '.png', await encodePNG(current.sheets[i]));
+      zip.file(base + '.gif', encodeGIF(current.tl.map(([k]) => current.frames[k]), current.tl.map(([, s]) => s)));
       zip.file(base + '.lsl', scriptText());
-      zip.file('README.txt', setupNotes(current.sign, current.fmt, current.holds));
+      zip.file('README.txt', setupNotes(current.slide, current.shape, current.tl));
     } else {
       zip.file(base + '.png', await encodePNG(current.tex, current.kind === 'badge'));
       zip.file(base + '.lsl', scriptText());
     }
     await saveFile(base + '.zip', await zip.generateAsync({type: 'blob'}), 'application/zip');
   }));
+  $('exAll').addEventListener('click', e => busy(e.currentTarget, async () => {
+    if (typeof JSZip === 'undefined') { toast('The zip library did not load. Save slides one at a time.'); return; }
+    const shape = SHAPES[state.shape] || SHAPES.square, zip = new JSZip();
+    for (let i = 0; i < SLIDES.length; i++) {
+      const slide = SLIDES[i], copy = copyOf(slide, state.copy[slide.id]);
+      toast(`Rendering ${i + 1} of ${SLIDES.length}: ${slide.name}`);
+      await new Promise(r => setTimeout(r, 30));
+      const {frames, tl, sheets} = buildSlide(slide, shape, copy, holdsFor(slide, copy));
+      const names = sheetNames(slide, shape), dir = zip.folder(slide.id);
+      for (let k = 0; k < names.length; k++) dir.file(names[k] + '.png', await encodePNG(sheets[k]));
+      dir.file(baseName(slide, shape) + '.gif', encodeGIF(tl.map(([f]) => frames[f]), tl.map(([, d]) => d)));
+      dir.file(baseName(slide, shape) + '.lsl', lslPlayer(slide, shape, tl));
+      dir.file('README.txt', setupNotes(slide, shape, tl));
+    }
+    toast('Packing the zip…');
+    await saveFile(`artsy-slides-${shape.id}.zip`, await zip.generateAsync({type: 'blob'}), 'application/zip');
+    toast(`Exported ${SLIDES.length} slides, ${shape.name.toLowerCase()}`);
+  }));
   $('resetCopy').addEventListener('click', () => {
     delete state.copy[state.sel]; delete state.holds[state.sel]; delete state.seconds[state.sel];
     save(); rebuild(); toast('Copy and timing reset');
   });
+  $('fontFiles').addEventListener('change', async e => {
+    const files = [...e.target.files];
+    e.target.value = '';
+    if (!files.length) return;
+    const n = await addFontFiles(files);
+    toast(n ? `Added ${n} font file${n === 1 ? '' : 's'}` : 'Those files could not be read as fonts');
+    rebuild(false);
+  });
   let rt;
-  addEventListener('resize', () => { clearTimeout(rt); rt = setTimeout(() => { if (current) drawSheetPreview(current.kind === 'sign' ? current.sheet : current.tex, current.kind === 'sign' ? current.fmt.cols : 0, current.kind === 'sign' ? current.fmt.rows : 0); }, 150); });
+  addEventListener('resize', () => { clearTimeout(rt); rt = setTimeout(() => { if (current) drawSheets(current.kind === 'slide' ? current.sheets : [current.tex], current.kind === 'slide'); }, 150); });
 }
 
 (async function start() {
   $('brandLogo').src = LOGO_PNG;
-  const ok = await READY;
-  if (!ok) toast('Fonts did not load, so previews use fallbacks. Exports need the real fonts.');
+  await READY;
+  if (!FONT_STATE.poppins) toast('Poppins did not load, so previews use a fallback.');
   buildNav();
   wire();
   setPlayLabel();
