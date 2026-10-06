@@ -1,0 +1,2343 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Artsy Sign Studio</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,100..900&family=Instrument+Serif:ital@0;1&family=Space+Mono:wght@400;700&display=block">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+<style>
+/* Layout: sign list | the sign on a dark wall with its timeline | spritesheet, checks, exports and copy */
+:root{
+  --void:#000000;
+  --panel:#0b0b0b;
+  --raise:#161616;
+  --line:#272727;
+  --line-2:#3c3c3c;
+  --ink:#f4f4f2;
+  --ink-2:#ababa7;
+  --ink-3:#75756f;
+  --ok:#c6f0d0;
+  --warn:#ffc47d;
+  --wall:#121212;
+  --display:"Archivo","Arial Narrow",system-ui,sans-serif;
+  --mono:"Space Mono",ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+  --serif:"Instrument Serif",Georgia,"Times New Roman",serif;
+  color-scheme:dark;
+}
+*{box-sizing:border-box}
+[hidden]{display:none!important}
+html,body{height:100%}
+body{margin:0;background:var(--void);color:var(--ink);font:14px/1.45 var(--display)}
+button,input,select{font:inherit;color:inherit}
+.app{display:grid;grid-template-columns:232px minmax(0,1fr) 344px;grid-template-rows:auto minmax(0,1fr);height:100%;min-height:0}
+.top{grid-column:1/-1;display:flex;align-items:center;gap:12px 20px;padding:12px 16px;border-bottom:1px solid var(--line);flex-wrap:wrap}
+.brand{display:flex;align-items:center;gap:14px;margin-right:auto}
+.brand img{height:30px;width:auto;display:block}
+.brand b{font:700 11px/1 var(--mono);letter-spacing:.18em;text-transform:uppercase;color:var(--ink-2);padding-left:14px;border-left:1px solid var(--line-2)}
+.seg{display:inline-flex;border:1px solid var(--line-2);flex-wrap:wrap}
+.seg input{position:absolute;opacity:0;pointer-events:none}
+.seg label{padding:9px 12px;font:700 11px/1 var(--mono);letter-spacing:.1em;text-transform:uppercase;color:var(--ink-2);cursor:pointer;border-left:1px solid var(--line-2);display:flex;gap:7px;align-items:baseline;white-space:nowrap}
+.seg label:first-of-type{border-left:0}
+.seg label small{font-weight:400;color:var(--ink-3);letter-spacing:.04em}
+.seg input:checked+label{background:var(--ink);color:var(--void)}
+.seg input:checked+label small{color:#444}
+.seg input:focus-visible+label{outline:2px solid var(--ink);outline-offset:2px}
+.seg label:hover{color:var(--ink)}
+
+nav.signs{border-right:1px solid var(--line);overflow:auto;padding:16px 0 24px;min-height:0}
+.navh{font:700 10.5px/1 var(--mono);letter-spacing:.16em;text-transform:uppercase;color:var(--ink-3);padding:0 16px 10px}
+.navh:not(:first-child){padding-top:18px}
+.signs ol{list-style:none;margin:0;padding:0}
+.signs li button{all:unset;box-sizing:border-box;display:grid;grid-template-columns:28px 1fr;gap:2px 8px;width:100%;padding:10px 16px;cursor:pointer;border-left:3px solid transparent}
+.signs li button:hover{background:var(--raise)}
+.signs li button:focus-visible{outline:2px solid var(--ink);outline-offset:-2px}
+.signs li button[aria-current="true"]{background:var(--ink);color:var(--void);border-left-color:var(--ink)}
+.signs li button[aria-current="true"] .k,.signs li button[aria-current="true"] small{color:#444}
+.signs .k{font:700 11px/1.5 var(--mono);color:var(--ink-3);grid-row:span 2}
+.signs strong{font:800 15px/1.2 var(--display);font-stretch:112.5%;text-transform:uppercase;letter-spacing:.01em}
+.signs small{font:400 11px/1.3 var(--mono);color:var(--ink-3)}
+
+main.stage{display:flex;flex-direction:column;min-width:0;min-height:0;overflow:auto}
+.wall{flex:1 0 auto;display:grid;place-items:center;padding:28px 16px;min-height:340px;background:radial-gradient(120% 90% at 50% 40%,#1b1b1b 0%,var(--wall) 55%,#070707 100%)}
+.wall canvas{display:block;max-width:100%;max-height:min(60vh,720px);width:auto;height:auto;box-shadow:0 0 0 1px #2a2a2a,0 30px 80px -30px rgba(0,0,0,.9)}
+.transport{display:flex;align-items:center;gap:14px;padding:12px 16px;border-top:1px solid var(--line);flex-wrap:wrap}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;padding:9px 13px;border:1px solid var(--line-2);background:transparent;cursor:pointer;font:700 11px/1 var(--mono);letter-spacing:.1em;text-transform:uppercase;white-space:nowrap}
+.btn:hover{border-color:var(--ink)}
+.btn:focus-visible{outline:2px solid var(--ink);outline-offset:2px}
+.btn.solid{background:var(--ink);color:var(--void);border-color:var(--ink)}
+.btn.solid:hover{background:#fff}
+.btn[disabled]{opacity:.4;cursor:not-allowed}
+.clock{font:400 12px/1 var(--mono);color:var(--ink-2);font-variant-numeric:tabular-nums}
+.hint{font:400 12px/1.5 var(--mono);color:var(--ink-3)}
+.timeline{list-style:none;margin:0;padding:4px 16px 18px;display:flex;gap:10px;overflow-x:auto}
+.timeline li{display:flex;flex-direction:column;gap:6px;align-items:center;flex:none}
+.timeline .thumb{all:unset;box-sizing:border-box;cursor:pointer;display:block;position:relative;outline:1px solid var(--line-2)}
+.timeline .thumb canvas{display:block;height:76px;width:auto}
+.timeline .thumb span{position:absolute;left:0;top:0;font:700 10px/1 var(--mono);background:var(--ink);color:var(--void);padding:3px 4px}
+.timeline .thumb:focus-visible{outline:2px solid var(--ink);outline-offset:2px}
+.timeline li.on .thumb{outline:2px solid var(--ink);outline-offset:2px}
+.timeline label{display:flex;align-items:center;gap:3px;font:400 11px/1 var(--mono);color:var(--ink-3)}
+.timeline input[type=number]{width:58px;background:var(--raise);border:1px solid var(--line-2);padding:4px 5px;font:400 11px/1 var(--mono);color:var(--ink);font-variant-numeric:tabular-nums}
+.extras{padding:4px 16px 18px;display:flex;gap:18px;flex-wrap:wrap;align-items:flex-end}
+.field{display:flex;flex-direction:column;gap:6px}
+.field>span{font:700 10.5px/1 var(--mono);letter-spacing:.14em;text-transform:uppercase;color:var(--ink-3)}
+.field input[type=number]{width:90px}
+input[type=text],input[type=number],select,textarea{background:var(--raise);border:1px solid var(--line-2);padding:8px 9px;font:400 13px/1.3 var(--display);color:var(--ink);border-radius:0;width:100%}
+input:focus-visible,select:focus-visible,textarea:focus-visible{outline:2px solid var(--ink);outline-offset:0}
+
+aside.side{border-left:1px solid var(--line);overflow:auto;min-height:0;padding:16px 16px 28px;display:flex;flex-direction:column;gap:22px}
+aside h2{margin:0;font:700 10.5px/1 var(--mono);letter-spacing:.16em;text-transform:uppercase;color:var(--ink-3)}
+section.p{display:flex;flex-direction:column;gap:12px;min-width:0}
+.sheetbox{background:var(--wall);border:1px solid var(--line);padding:10px;display:grid;place-items:center}
+.sheetbox canvas{display:block;max-width:100%;height:auto}
+dl.spec{margin:0;display:grid;grid-template-columns:auto 1fr;gap:6px 14px;font:400 12px/1.35 var(--mono);font-variant-numeric:tabular-nums}
+dl.spec dt{color:var(--ink-3)}
+dl.spec dd{margin:0;color:var(--ink);min-width:0}
+ul.checks{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:6px;font:400 12px/1.35 var(--mono)}
+ul.checks li{display:grid;grid-template-columns:18px 1fr;gap:6px}
+ul.checks li::before{content:"✓";color:var(--ok);font-weight:700}
+ul.checks li.bad::before{content:"!";color:var(--warn)}
+ul.checks li.bad{color:var(--warn)}
+.exports{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.exports .wide{grid-column:1/-1}
+form.copy{display:flex;flex-direction:column;gap:12px}
+form.copy label{display:flex;flex-direction:column;gap:5px;font:700 10.5px/1.2 var(--mono);letter-spacing:.1em;text-transform:uppercase;color:var(--ink-3)}
+form.copy label em{font:400 11px/1.35 var(--mono);letter-spacing:0;text-transform:none;font-style:normal;color:var(--ink-3)}
+.toast{position:fixed;left:50%;bottom:calc(18px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);background:var(--ink);color:var(--void);font:700 12px/1.3 var(--mono);padding:10px 14px;max-width:calc(100% - 32px);z-index:5}
+.loading{font:400 12px/1.5 var(--mono);color:var(--ink-3)}
+
+@media (max-width:1100px){
+  .app{grid-template-columns:200px minmax(0,1fr);grid-template-rows:auto auto auto}
+  aside.side{grid-column:1/-1;border-left:0;border-top:1px solid var(--line);display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:24px}
+  .app{height:auto}
+}
+@media (max-width:720px){
+  .app{grid-template-columns:minmax(0,1fr)}
+  nav.signs{border-right:0;border-bottom:1px solid var(--line);padding:12px 0}
+  .signs ol{display:flex;overflow-x:auto}
+  .signs li button{width:auto;min-width:150px;border-left:0;border-bottom:3px solid transparent}
+  .navh{display:none}
+  .wall{min-height:300px;padding:20px 16px}
+}
+@media (prefers-reduced-motion:reduce){*{scroll-behavior:auto}}
+</style>
+</head>
+<body>
+<div class="app">
+  <header class="top">
+    <div class="brand"><img id="brandLogo" alt="artsy"><b>Sign Studio</b></div>
+    <div class="seg" id="fmtSeg" role="radiogroup" aria-label="Sign format">
+      <input type="radio" name="fmt" id="fmt-portrait" value="portrait" checked><label for="fmt-portrait">Portrait <small>1:2</small></label>
+      <input type="radio" name="fmt" id="fmt-landscape" value="landscape"><label for="fmt-landscape">Landscape <small>2:1</small></label>
+      <input type="radio" name="fmt" id="fmt-square" value="square"><label for="fmt-square">Square <small>1:1</small></label>
+    </div>
+    <div class="seg" id="winSeg" role="radiogroup" aria-label="Ticker strip shape" hidden>
+      <input type="radio" name="win" id="win-1" value="1"><label for="win-1">Strip <small>8:1</small></label>
+      <input type="radio" name="win" id="win-2" value="2" checked><label for="win-2">Strip <small>4:1</small></label>
+      <input type="radio" name="win" id="win-4" value="4"><label for="win-4">Panel <small>2:1</small></label>
+    </div>
+  </header>
+
+  <nav class="signs" aria-label="Signs">
+    <div class="navh">Kinetic signs</div>
+    <ol id="signList"></ol>
+    <div class="navh">Zero-frame motion</div>
+    <ol id="extraList"></ol>
+  </nav>
+
+  <main class="stage">
+    <div class="wall"><canvas id="live" width="512" height="1024" aria-label="Animated sign preview"></canvas></div>
+    <div class="transport">
+      <button class="btn solid" id="play" type="button">Pause</button>
+      <output class="clock" id="clock">0.0 / 0.0 s</output>
+      <span class="hint" id="stageHint"></span>
+    </div>
+    <ol class="timeline" id="timeline" aria-label="Frames and hold times"></ol>
+    <div class="extras" id="extraCtl" hidden>
+      <label class="field"><span id="speedLabel">Seconds per pass</span><input type="number" id="speed" min="2" max="120" step="1" value="20"></label>
+    </div>
+  </main>
+
+  <aside class="side">
+    <section class="p">
+      <h2 id="sheetTitle">Spritesheet</h2>
+      <div class="sheetbox"><canvas id="sheet" width="300" height="300" aria-label="Spritesheet with grid"></canvas></div>
+      <dl class="spec" id="spec"></dl>
+      <ul class="checks" id="checks"></ul>
+      <div class="exports">
+        <button class="btn solid" type="button" id="exPng">Sheet PNG</button>
+        <button class="btn" type="button" id="exGif">Preview GIF</button>
+        <button class="btn" type="button" id="exLsl">LSL script</button>
+        <button class="btn" type="button" id="exCopy">Copy script</button>
+        <button class="btn wide" type="button" id="exZip">Everything (.zip)</button>
+      </div>
+    </section>
+    <section class="p">
+      <h2>Copy</h2>
+      <form class="copy" id="copyForm" autocomplete="off"></form>
+      <button class="btn" type="button" id="resetCopy">Reset copy and timing</button>
+    </section>
+  </aside>
+</div>
+<div class="toast" id="toast" role="status" hidden></div>
+
+<script>const LOGO_PNG = 'data:image/png;base64,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';</script>
+<script>
+'use strict';
+/* ==========================================================================
+   artsy Sign Studio
+   Kinetic signs for Second Life, rendered to even spritesheets.
+   - Every sign is 8 frames. Every format fills its grid exactly:
+       portrait  512x1024 cells, 4x2 grid, 2048x2048 sheet
+       landscape 1024x512 cells, 2x4 grid, 2048x2048 sheet
+       square    512x512 cells,  4x2 grid, 2048x1024 sheet
+     That is 512 px per metre at the suggested prim sizes, with no empty cells.
+   - Hold times live in the LSL script, not in repeated frames.
+   ========================================================================== */
+
+const FORMATS = {
+  portrait:  {id: 'portrait',  name: 'Portrait',  ratio: '1:2', w: 512,  h: 1024, cols: 4, rows: 2, prim: '1 × 2 m'},
+  landscape: {id: 'landscape', name: 'Landscape', ratio: '2:1', w: 1024, h: 512,  cols: 2, rows: 4, prim: '2 × 1 m'},
+  square:    {id: 'square',    name: 'Square',    ratio: '1:1', w: 512,  h: 512,  cols: 4, rows: 2, prim: '1 × 1 m'},
+};
+const BLACK = '#000000', WHITE = '#ffffff';
+
+/* ---------- small utilities ---------- */
+const R = (x, y, w, h) => ({x, y, w, h});
+const clamp = (v, a, b) => Math.max(a, Math.min(b, v));
+function rng(seed) {
+  let s = seed >>> 0;
+  return () => {
+    s = (s + 0x6D2B79F5) >>> 0;
+    let t = s;
+    t = Math.imul(t ^ (t >>> 15), t | 1);
+    t ^= t + Math.imul(t ^ (t >>> 7), t | 61);
+    return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+  };
+}
+function splitRows(r, weights, gap = 0) {
+  const tot = weights.reduce((a, b) => a + b, 0), avail = r.h - gap * (weights.length - 1);
+  let y = r.y;
+  return weights.map(w => { const h = avail * w / tot; const o = R(r.x, y, r.w, h); y += h + gap; return o; });
+}
+function splitCols(r, weights, gap = 0) {
+  const tot = weights.reduce((a, b) => a + b, 0), avail = r.w - gap * (weights.length - 1);
+  let x = r.x;
+  return weights.map(w => { const ww = avail * w / tot; const o = R(x, r.y, ww, r.h); x += ww + gap; return o; });
+}
+const gray = v => { const k = Math.round(clamp(v, 0, 1) * 255); return `rgb(${k},${k},${k})`; };
+const hex2 = v => Math.round(clamp(v, 0, 1) * 255).toString(16).padStart(2, '0').toUpperCase();
+
+/* ---------- type ---------- */
+const STRETCH = [
+  ['extra-condensed', 62.5], ['condensed', 75], ['semi-condensed', 87.5],
+  ['normal', 100], ['semi-expanded', 112.5], ['expanded', 125],
+];
+const FACE = {
+  display: {family: 'Archivo', fallback: '"Arial Narrow", Arial, sans-serif', weight: 900, style: 'normal', track: -0.012},
+  bold:    {family: 'Archivo', fallback: 'Arial, sans-serif', weight: 800, style: 'normal', track: 0},
+  mono:    {family: 'Space Mono', fallback: 'ui-monospace, Menlo, monospace', weight: 700, style: 'normal', track: 0.08},
+  monoReg: {family: 'Space Mono', fallback: 'ui-monospace, Menlo, monospace', weight: 400, style: 'normal', track: 0.04},
+  serif:   {family: 'Instrument Serif', fallback: 'Georgia, serif', weight: 400, style: 'italic', track: -0.01},
+};
+const HAS_SPACING = 'letterSpacing' in CanvasRenderingContext2D.prototype;
+function applyFont(ctx, face, size, stretch = 'normal') {
+  ctx.font = `${face.style} ${face.weight} ${size}px "${face.family}", ${face.fallback}`;
+  ctx.fontStretch = stretch;
+  if (HAS_SPACING) ctx.letterSpacing = (face.track * size).toFixed(2) + 'px';
+  ctx.textAlign = 'left';
+  ctx.textBaseline = 'alphabetic';
+}
+const MEASURES = new Map();
+// Ink metrics at 100 px. l/r: ink left/right of the pen position, a/d: ink above/below the baseline.
+function measure(ctx, face, stretch, text) {
+  const key = `${face.family}|${face.weight}|${face.style}|${stretch}|${face.track}|${text}`;
+  let m = MEASURES.get(key);
+  if (!m) {
+    applyFont(ctx, face, 100, stretch);
+    const t = ctx.measureText(text);
+    m = {l: t.actualBoundingBoxLeft, r: t.actualBoundingBoxRight, a: t.actualBoundingBoxAscent, d: t.actualBoundingBoxDescent, adv: t.width};
+    m.w = m.l + m.r;
+    MEASURES.set(key, m);
+  }
+  return m;
+}
+
+// "RE|DE|LIV|ERY": spaces and | are optional line breaks (| joins without a space), a newline forces one.
+function tokenize(text) {
+  const out = [];
+  let cur = '';
+  for (const ch of text) {
+    if (ch === ' ' || ch === '|' || ch === '\n') {
+      if (cur) { out.push({t: cur, join: ch === '|' ? '' : ch}); cur = ''; }
+      else if (ch === '\n' && out.length) out[out.length - 1].join = '\n';
+    } else cur += ch;
+  }
+  if (cur) out.push({t: cur, join: null});
+  if (out.length) out[out.length - 1].join = null;
+  return out;
+}
+function partitions(tokens, maxLines) {
+  const soft = [];
+  for (let i = 0; i < tokens.length - 1; i++) if (tokens[i].join !== '\n') soft.push(i);
+  const res = [];
+  const count = 1 << Math.min(soft.length, 10);
+  for (let mask = 0; mask < count; mask++) {
+    const brk = new Set();
+    soft.forEach((b, j) => { if (mask >> j & 1) brk.add(b); });
+    const lines = [];
+    let cur = '', midword = 0;
+    tokens.forEach((tk, i) => {
+      cur += tk.t;
+      if (i === tokens.length - 1) { lines.push(cur); return; }
+      if (tk.join === '\n' || brk.has(i)) { lines.push(cur); cur = ''; if (tk.join === '') midword++; }
+      else cur += tk.join;
+    });
+    if (lines.length <= maxLines) res.push({lines, midword});
+  }
+  return res;
+}
+
+/* Fit display type into a box. The width axis is part of the fit: a narrow box
+   gets condensed Archivo, a wide one gets expanded, so the same copy reads as a
+   designed block in every format.
+   mode 'uniform': one size for every line. mode 'justify': each line fills the width. */
+function fitDisplay(ctx, text, box, o = {}) {
+  const face = o.face || FACE.display;
+  const mode = o.mode || 'uniform';
+  const lead = o.lead ?? 0.2;
+  const src = text.toUpperCase();
+  const parts = partitions(tokenize(src), o.maxLines || 5);
+  const lo = o.minStretch ?? 62.5, hi = o.maxStretch ?? 125;
+  const stretches = o.stretch ? STRETCH.filter(s => s[0] === o.stretch) : STRETCH.filter(s => s[1] >= lo && s[1] <= hi);
+  const maxS = o.maxSize || Infinity;
+  let best = null;
+  for (const [st, pct] of stretches) {
+    const cap = measure(ctx, face, st, 'H').a;
+    for (const p of parts) {
+      const ms = p.lines.map(t => measure(ctx, face, st, t));
+      const n = ms.length;
+      let sizes;
+      if (mode === 'justify') {
+        sizes = ms.map(m => Math.min(maxS, box.w * 100 / m.w));
+        let total = 0;
+        sizes.forEach((s, i) => { total += cap * s / 100; if (i < n - 1) total += lead * cap * Math.min(s, sizes[i + 1]) / 100; });
+        if (total > box.h) { const k = box.h / total; sizes = sizes.map(s => s * k); }
+      } else {
+        const s = Math.min(maxS, ...ms.map(m => box.w * 100 / m.w), box.h * 100 / (cap * (n + lead * (n - 1))));
+        sizes = ms.map(() => s);
+      }
+      let area = 0, h = 0, wMax = 0;
+      sizes.forEach((s, i) => {
+        const lw = ms[i].w * s / 100, lh = cap * s / 100;
+        area += lw * lh; h += lh; wMax = Math.max(wMax, lw);
+        if (i < n - 1) h += lead * cap * Math.min(s, sizes[i + 1]) / 100;
+      });
+      const minS = Math.min(...sizes);
+      let score = mode === 'justify'
+        ? (area / (box.w * box.h)) * Math.pow(minS / Math.max(...sizes), 0.25)
+        : minS * (1 + 0.25 * wMax / box.w);
+      score *= Math.pow(o.breakCost ?? 0.8, p.midword) * Math.pow(o.lineCost ?? 0.985, n - 1);
+      if (!best || score > best.score) {
+        best = {score, face, stretch: st, pct, cap, lead, w: wMax, h,
+          lines: p.lines.map((t, i) => ({t, S: sizes[i], m: ms[i]}))};
+      }
+    }
+  }
+  return best;
+}
+// style.colors: one colour per line. style.outline(i): stroke that line instead of filling it.
+// style.letters(k, n): one colour per letter (single-line gradients).
+function drawDisplay(ctx, lay, x, y, align, cw, color, style = {}) {
+  let top = y;
+  lay.lines.forEach((ln, i) => {
+    const capH = lay.cap * ln.S / 100, w = ln.m.w * ln.S / 100;
+    const xx = align === 'right' ? x + cw - w : align === 'center' ? x + (cw - w) / 2 : x;
+    const col = style.colors ? style.colors[i] : color;
+    const pen = xx + ln.m.l * ln.S / 100, base = top + capH;
+    applyFont(ctx, lay.face, ln.S, lay.stretch);
+    if (style.outline && style.outline(i)) {
+      ctx.strokeStyle = col; ctx.lineWidth = Math.max(2, ln.S * 0.024); ctx.lineJoin = 'miter'; ctx.miterLimit = 3;
+      ctx.strokeText(ln.t, pen, base);
+    } else if (style.letters) {
+      const chars = [...ln.t];
+      chars.forEach((ch, k) => {
+        ctx.fillStyle = style.letters(k, chars.length);
+        ctx.fillText(ch, pen + ctx.measureText(chars.slice(0, k).join('')).width, base);
+      });
+    } else {
+      ctx.fillStyle = col;
+      ctx.fillText(ln.t, pen, base);
+    }
+    if (i < lay.lines.length - 1) top += capH + lay.lead * lay.cap * Math.min(ln.S, lay.lines[i + 1].S) / 100;
+  });
+}
+function wrapWords(ctx, face, words, size, maxW) {
+  const lines = [];
+  let cur = '';
+  for (const w of words) {
+    const t = cur ? cur + ' ' + w : w;
+    if (cur && measure(ctx, face, 'normal', t).w * size / 100 > maxW) { lines.push(cur); cur = w; }
+    else cur = t;
+  }
+  if (cur) lines.push(cur);
+  return lines;
+}
+
+/* ---------- material swatches (procedural, black and white) ---------- */
+const SWATCHES = ['pyramids', 'tiles', 'glass', 'wood', 'metal', 'dots', 'herringbone', 'checker', 'stripes'];
+function swatchFor(name, i) {
+  const n = name.toLowerCase();
+  if (n.includes('glass')) return 'glass';
+  if (n.includes('tile')) return 'tiles';
+  if (n.includes('wood')) return 'wood';
+  if (n.includes('metal') || n.includes('chrome') || n.includes('steel')) return 'metal';
+  return SWATCHES[(i + 5) % SWATCHES.length];
+}
+function paintSwatch(ctx, r, kind, seed = 1, cell) {
+  ctx.save();
+  ctx.beginPath(); ctx.rect(r.x, r.y, r.w, r.h); ctx.clip();
+  const rnd = rng(seed * 7919 + kind.length);
+  const big = Math.max(r.w, r.h);
+  if (kind === 'pyramids') {
+    const s = cell || big / 4;
+    for (let y = r.y; y < r.y + r.h; y += s) for (let x = r.x; x < r.x + r.w; x += s) {
+      const cx = x + s / 2, cy = y + s / 2;
+      const tri = (ax, ay, bx, by, c) => { ctx.fillStyle = c; ctx.beginPath(); ctx.moveTo(ax, ay); ctx.lineTo(bx, by); ctx.lineTo(cx, cy); ctx.closePath(); ctx.fill(); };
+      tri(x, y, x + s, y, '#efefef');
+      tri(x + s, y, x + s, y + s, '#5c5c5c');
+      tri(x + s, y + s, x, y + s, '#1a1a1a');
+      tri(x, y + s, x, y, '#b4b4b4');
+      const g = ctx.createLinearGradient(x, y, x + s, y + s);
+      g.addColorStop(0, 'rgba(255,255,255,.18)'); g.addColorStop(1, 'rgba(0,0,0,.18)');
+      ctx.fillStyle = g; ctx.fillRect(x, y, s, s);
+    }
+  } else if (kind === 'tiles') {
+    const s = cell || big / 3, gr = Math.max(2, s * 0.035);
+    ctx.fillStyle = '#5a5a5a'; ctx.fillRect(r.x, r.y, r.w, r.h);
+    for (let y = r.y; y < r.y + r.h; y += s) for (let x = r.x; x < r.x + r.w; x += s) {
+      const g = ctx.createLinearGradient(x, y, x + s, y + s);
+      const v = 0.05 + rnd() * 0.05;
+      g.addColorStop(0, gray(v + 0.12)); g.addColorStop(0.5, gray(v)); g.addColorStop(1, gray(v * 0.4));
+      ctx.fillStyle = g; ctx.fillRect(x + gr / 2, y + gr / 2, s - gr, s - gr);
+      ctx.fillStyle = 'rgba(255,255,255,.10)';
+      ctx.beginPath(); ctx.moveTo(x + gr, y + gr); ctx.lineTo(x + s * 0.55, y + gr); ctx.lineTo(x + gr, y + s * 0.55); ctx.fill();
+    }
+  } else if (kind === 'glass') {
+    const g = ctx.createLinearGradient(r.x, r.y, r.x + r.w * 0.3, r.y + r.h);
+    g.addColorStop(0, '#6b6b6b'); g.addColorStop(0.55, '#262626'); g.addColorStop(1, '#3a3a3a');
+    ctx.fillStyle = g; ctx.fillRect(r.x, r.y, r.w, r.h);
+    const bands = [[0.12, 0.10, .42], [0.30, 0.04, .30], [0.58, 0.16, .20], [0.80, 0.03, .38]];
+    for (const [p, w, a] of bands) {
+      ctx.fillStyle = `rgba(255,255,255,${a})`;
+      const x0 = r.x + p * (r.w + r.h) - r.h;
+      ctx.beginPath(); ctx.moveTo(x0, r.y + r.h); ctx.lineTo(x0 + r.h, r.y); ctx.lineTo(x0 + r.h + w * big, r.y); ctx.lineTo(x0 + w * big, r.y + r.h); ctx.fill();
+    }
+    ctx.strokeStyle = 'rgba(255,255,255,.55)'; ctx.lineWidth = Math.max(1.5, big * 0.006);
+    ctx.strokeRect(r.x + big * 0.03, r.y + big * 0.03, r.w - big * 0.06, r.h - big * 0.06);
+  } else if (kind === 'wood') {
+    ctx.fillStyle = '#2c2c2c'; ctx.fillRect(r.x, r.y, r.w, r.h);
+    const n = Math.round(r.h / (big * 0.035)) + 2;
+    for (let i = -1; i < n; i++) {
+      const y0 = r.y + i * r.h / n;
+      ctx.strokeStyle = gray(0.32 + rnd() * 0.32); ctx.lineWidth = Math.max(1.5, big * (0.004 + rnd() * 0.01));
+      ctx.beginPath();
+      const ph = rnd() * 6.28, amp = big * (0.008 + rnd() * 0.02), fq = 1.5 + rnd() * 2.5;
+      for (let x = r.x - 2; x <= r.x + r.w + 2; x += 4) {
+        const k = (x - r.x) / r.w;
+        const y = y0 + Math.sin(k * fq * 6.28 + ph) * amp + Math.sin(k * 23 + ph * 2) * amp * 0.25;
+        x === r.x - 2 ? ctx.moveTo(x, y) : ctx.lineTo(x, y);
+      }
+      ctx.stroke();
+    }
+  } else if (kind === 'metal') {
+    const g = ctx.createLinearGradient(r.x, r.y, r.x + r.w, r.y + r.h);
+    g.addColorStop(0, '#4d4d4d'); g.addColorStop(0.35, '#dedede'); g.addColorStop(0.55, '#7a7a7a'); g.addColorStop(0.8, '#c8c8c8'); g.addColorStop(1, '#555555');
+    ctx.fillStyle = g; ctx.fillRect(r.x, r.y, r.w, r.h);
+    const step = Math.max(2, big / 220);
+    for (let y = r.y; y < r.y + r.h; y += step) {
+      ctx.fillStyle = rnd() < 0.5 ? `rgba(255,255,255,${0.05 + rnd() * 0.12})` : `rgba(0,0,0,${0.05 + rnd() * 0.14})`;
+      ctx.fillRect(r.x, y, r.w, Math.max(1, step * 0.5));
+    }
+  } else if (kind === 'dots') {
+    ctx.fillStyle = '#e9e9e9'; ctx.fillRect(r.x, r.y, r.w, r.h);
+    const s = cell || big / 7;
+    ctx.fillStyle = '#111';
+    for (let y = r.y + s / 2, row = 0; y < r.y + r.h + s; y += s, row++) for (let x = r.x + (row % 2 ? s : s / 2); x < r.x + r.w + s; x += s) {
+      ctx.beginPath(); ctx.arc(x, y, s * 0.3, 0, 6.2832); ctx.fill();
+    }
+  } else if (kind === 'herringbone') {
+    ctx.fillStyle = '#1b1b1b'; ctx.fillRect(r.x, r.y, r.w, r.h);
+    const s = cell || big / 6;
+    ctx.lineWidth = Math.max(1.5, s * 0.06); ctx.strokeStyle = '#8a8a8a';
+    for (let x = r.x - s; x < r.x + r.w + s; x += s) for (let y = r.y - s; y < r.y + r.h + s; y += s) {
+      ctx.beginPath(); ctx.moveTo(x, y + s / 2); ctx.lineTo(x + s / 2, y); ctx.lineTo(x + s, y + s / 2); ctx.stroke();
+    }
+  } else if (kind === 'checker') {
+    const s = cell || big / 6;
+    for (let y = r.y, i = 0; y < r.y + r.h; y += s, i++) for (let x = r.x, j = 0; x < r.x + r.w; x += s, j++) {
+      ctx.fillStyle = (i + j) % 2 ? '#141414' : '#cfcfcf'; ctx.fillRect(x, y, s, s);
+    }
+  } else {
+    const s = cell || big / 10;
+    ctx.fillStyle = '#d4d4d4'; ctx.fillRect(r.x, r.y, r.w, r.h);
+    ctx.fillStyle = '#181818';
+    for (let x = r.x - r.h; x < r.x + r.w; x += s) { ctx.beginPath(); ctx.moveTo(x, r.y + r.h); ctx.lineTo(x + r.h, r.y); ctx.lineTo(x + r.h + s / 2, r.y); ctx.lineTo(x + s / 2, r.y + r.h); ctx.fill(); }
+  }
+  ctx.restore();
+}
+
+/* ---------- assets ---------- */
+const ASSETS = {logoWhite: null, logoBlack: null};
+async function loadAssets() {
+  const img = new Image();
+  img.src = LOGO_PNG;
+  await img.decode();
+  const white = document.createElement('canvas');
+  white.width = img.naturalWidth; white.height = img.naturalHeight;
+  white.getContext('2d').drawImage(img, 0, 0);
+  const black = document.createElement('canvas');
+  black.width = white.width; black.height = white.height;
+  const b = black.getContext('2d');
+  b.drawImage(img, 0, 0);
+  b.globalCompositeOperation = 'source-in';
+  b.fillStyle = BLACK; b.fillRect(0, 0, black.width, black.height);
+  ASSETS.logoWhite = white; ASSETS.logoBlack = black;
+}
+const FONT_FACES = ['900 100px "Archivo"', '800 100px "Archivo"', 'italic 400 100px "Instrument Serif"', '700 100px "Space Mono"', '400 100px "Space Mono"'];
+let fontsOk = false;
+async function loadFonts() {
+  try {
+    await Promise.all(FONT_FACES.map(f => document.fonts.load(f, 'AaBbHh0123?&›')));
+    await document.fonts.ready;
+  } catch (e) { /* fall through to the check */ }
+  fontsOk = FONT_FACES.every(f => document.fonts.check(f, 'H'));
+  MEASURES.clear();
+}
+
+/* ==========================================================================
+   Frame graphics: one instance per frame. Holds the responsive layout grid
+   and the components every sign is built from.
+   ========================================================================== */
+class G {
+  constructor(canvas, fmt, meta) {
+    this.c = canvas;
+    this.ctx = canvas.getContext('2d');
+    this.fmt = fmt;
+    this.meta = meta;
+    this.W = canvas.width; this.H = canvas.height;
+    const u = this.u = Math.min(this.W, this.H) / 100;
+    this.o = this.W > this.H ? 'landscape' : this.W < this.H ? 'portrait' : 'square';
+    this.dark = true;
+    this.m = Math.round(6 * u);
+    this.edge = Math.max(4, Math.round(1.2 * u));
+    this.prog = R(this.m, Math.round(3.8 * u), this.W - 2 * this.m, Math.max(3, Math.round(0.8 * u)));
+    this.head = R(this.m, Math.round(7.4 * u), this.W - 2 * this.m, Math.round(5.6 * u));
+    this.ruleY = Math.round(15.4 * u);
+    const top = Math.round(20 * u);
+    this.body = R(this.m, top, this.W - 2 * this.m, this.H - top - this.m);
+  }
+  get fg() { return this.dark ? WHITE : BLACK; }
+  get bg() { return this.dark ? BLACK : WHITE; }
+  get dim() { return this.dark ? '#474747' : '#c2c2c2'; }
+  get soft() { return this.dark ? '#9a9a9a' : '#5e5e5e'; }
+  get wide() { return this.o === 'landscape'; }
+  get tall() { return this.o === 'portrait'; }
+  // side by side when there is width for it, stacked otherwise
+  split(r, weights, gap, wide = this.wide) { return wide ? splitCols(r, weights, gap) : splitRows(r, weights, gap); }
+
+  ground(dark) {
+    this.dark = dark;
+    const {ctx, W, H, edge} = this;
+    ctx.fillStyle = BLACK; ctx.fillRect(0, 0, W, H);
+    if (!dark) { ctx.fillStyle = WHITE; ctx.fillRect(edge, edge, W - 2 * edge, H - 2 * edge); }
+  }
+  // A black rim on every frame. Mipmaps blend neighbouring cells of the sheet at a
+  // distance; a shared black rim makes that blend invisible.
+  guard() {
+    const {ctx, W, H, edge} = this;
+    ctx.save();
+    ctx.globalCompositeOperation = 'source-over';
+    ctx.fillStyle = BLACK;
+    ctx.fillRect(0, 0, W, edge); ctx.fillRect(0, H - edge, W, edge);
+    ctx.fillRect(0, 0, edge, H); ctx.fillRect(W - edge, 0, edge, H);
+    ctx.restore();
+  }
+  chrome(tag) {
+    const {ctx, u, prog, head} = this;
+    const n = this.meta.beats, k = this.meta.beat, gap = Math.round(0.9 * u);
+    const sw = (prog.w - gap * (n - 1)) / n;
+    for (let i = 0; i < n; i++) {
+      ctx.fillStyle = i <= k ? this.fg : this.dim;
+      const x0 = Math.round(prog.x + i * (sw + gap)), x1 = Math.round(prog.x + i * (sw + gap) + sw);
+      ctx.fillRect(x0, prog.y, x1 - x0, prog.h);
+    }
+    this.logo(head.x, head.y, head.h, 'left');
+    this.mono(tag || this.meta.tag, head.x + head.w, head.y + head.h * 0.56, {size: 2.6 * u, align: 'right', valign: 'middle'});
+    ctx.fillStyle = this.fg;
+    ctx.fillRect(this.m, this.ruleY, this.W - 2 * this.m, Math.max(2, Math.round(0.35 * u)));
+  }
+  logo(x, y, h, align = 'left', dark = this.dark) {
+    const img = dark ? ASSETS.logoWhite : ASSETS.logoBlack;
+    const w = h * img.width / img.height;
+    const xx = align === 'left' ? x : align === 'right' ? x - w : x - w / 2;
+    this.ctx.drawImage(img, xx, y, w, h);
+    return R(xx, y, w, h);
+  }
+
+  /* -- text components -- */
+  mono(text, x, y, o = {}) {
+    const {ctx, u} = this;
+    const face = o.bold === false ? FACE.monoReg : FACE.mono;
+    const size = o.size || 2.8 * u;
+    const t = String(text).toUpperCase();
+    const m = measure(ctx, face, 'normal', t), cap = measure(ctx, face, 'normal', 'H').a * size / 100;
+    const w = m.w * size / 100;
+    const xx = o.align === 'right' ? x - w : o.align === 'center' ? x - w / 2 : x;
+    const base = o.valign === 'middle' ? y + cap / 2 : o.valign === 'top' ? y + cap : y;
+    applyFont(ctx, face, size);
+    ctx.fillStyle = o.color || this.fg;
+    ctx.fillText(t, xx + m.l * size / 100, base);
+    return R(xx, base - cap, w, cap);
+  }
+  chip(text, o = {}) {
+    const {u} = this;
+    const face = FACE.mono, size = o.size || 3.1 * u;
+    const t = String(text).toUpperCase();
+    const m = measure(this.ctx, face, 'normal', t), cap = measure(this.ctx, face, 'normal', 'H').a;
+    const tw = m.w * size / 100, th = cap * size / 100;
+    const px = size * 0.6, py = size * 0.5;
+    const w = tw + 2 * px, h = th + 2 * py;
+    return {w, h, draw: (x, y) => {
+      const ctx = this.ctx;
+      if (o.outline) {
+        const lw = Math.max(2, 0.35 * u);
+        ctx.strokeStyle = this.fg; ctx.lineWidth = lw;
+        ctx.strokeRect(x + lw / 2, y + lw / 2, w - lw, h - lw);
+        ctx.fillStyle = this.fg;
+      } else {
+        ctx.fillStyle = this.fg; ctx.fillRect(x, y, w, h);
+        ctx.fillStyle = this.bg;
+      }
+      applyFont(ctx, face, size);
+      ctx.fillText(t, x + px + m.l * size / 100, y + py + th);
+    }};
+  }
+  text(text, box, o = {}) {
+    const lay = fitDisplay(this.ctx, text, box, o);
+    return {w: lay.w, h: lay.h, lay, draw: (x, y, align = o.align || 'left', cw = box.w) => drawDisplay(this.ctx, lay, x, y, align, cw, o.color || this.fg, o)};
+  }
+  serif(text, box, o = {}) {
+    const face = FACE.serif;
+    const m = measure(this.ctx, face, 'normal', text);
+    let S = Math.min(box.w * 100 / m.w, box.h * 100 / (m.a + m.d));
+    if (o.max) S = Math.min(S, o.max);
+    const w = m.w * S / 100, h = (m.a + m.d) * S / 100;
+    return {w, h, S, draw: (x, y, align = o.align || 'left', cw = box.w) => {
+      const xx = align === 'right' ? x + cw - w : align === 'center' ? x + (cw - w) / 2 : x;
+      applyFont(this.ctx, face, S);
+      this.ctx.fillStyle = o.color || this.fg;
+      this.ctx.fillText(text, xx + m.l * S / 100, y + m.a * S / 100);
+    }};
+  }
+  // wrapped serif paragraph, largest size that fits the box (capped by o.max)
+  para(text, box, o = {}) {
+    const face = o.face || FACE.serif, ctx = this.ctx;
+    const words = String(text).split(/\s+/).filter(Boolean);
+    const asc = measure(ctx, face, 'normal', 'Hdlk').a / 100, desc = measure(ctx, face, 'normal', 'gjpy').d / 100;
+    const lh = o.lh || 1.06;
+    const fits = S => {
+      const lines = wrapWords(ctx, face, words, S, box.w);
+      const h = (asc + desc) * S + (lines.length - 1) * lh * S;
+      return h <= box.h ? {lines, h} : null;
+    };
+    let lo = o.min || 6, hi = Math.min(o.max || box.h, box.h), got = fits(lo) || {lines: wrapWords(ctx, face, words, lo, box.w), h: box.h};
+    let S = lo;
+    for (let i = 0; i < 18; i++) { const mid = (lo + hi) / 2; const f = fits(mid); if (f) { lo = mid; got = f; S = mid; } else hi = mid; }
+    const widths = got.lines.map(l => measure(ctx, face, 'normal', l).w * S / 100);
+    return {w: Math.max(...widths), h: got.h, S, draw: (x, y, align = o.align || 'left', cw = box.w) => {
+      applyFont(ctx, face, S);
+      ctx.fillStyle = o.color || this.fg;
+      got.lines.forEach((l, i) => {
+        const m = measure(ctx, face, 'normal', l), w = m.w * S / 100;
+        const xx = align === 'right' ? x + cw - w : align === 'center' ? x + (cw - w) / 2 : x;
+        applyFont(ctx, face, S);
+        ctx.fillText(l, xx + m.l * S / 100, y + asc * S + i * lh * S);
+      });
+    }};
+  }
+  // a website button with a hard offset shadow
+  button(text, box, o = {}) {
+    const {ctx, u} = this;
+    const sh = Math.round(1.1 * u), padX = 3.2 * u, iconW = 5.5 * u;
+    const lay = fitDisplay(ctx, text, R(0, 0, box.w - 2 * padX - iconW - sh, o.textH || 4.2 * u), {face: FACE.bold, maxLines: 1, minStretch: 87.5, maxStretch: 125, lead: 0});
+    const h = lay.h + 2 * 2.4 * u, w = Math.min(box.w, lay.w + 2 * padX + iconW + sh);
+    return {w, h: h + sh, draw: (x, y) => {
+      const lw = Math.max(2, 0.4 * u);
+      ctx.strokeStyle = this.fg; ctx.lineWidth = lw;
+      ctx.strokeRect(x + sh + lw / 2, y + sh + lw / 2, w - sh - lw, h - lw);
+      ctx.fillStyle = this.fg; ctx.fillRect(x, y, w - sh, h);
+      drawDisplay(ctx, lay, x + padX, y + 2.4 * u, 'left', 0, this.bg);
+      const ar = R(x + w - sh - padX - iconW * 0.7, y + h / 2 - 1.8 * u, iconW * 0.7, 3.6 * u);
+      this.arrow(ar, 'right', {color: this.bg, lw: Math.max(2, 0.75 * u)});
+    }};
+  }
+  // a solid status bar: icon then words, knocked out of the foreground colour
+  status(text, box, icon) {
+    const {ctx, u} = this;
+    const pad = 2.2 * u, ic = box.h - 2 * pad;
+    const lay = fitDisplay(ctx, text, R(0, 0, box.w - 3 * pad - ic, box.h - 2 * pad), {maxLines: 1, minStretch: 75});
+    const h = lay.h + 2 * pad;
+    return {w: box.w, h, draw: (x, y) => {
+      ctx.fillStyle = this.fg; ctx.fillRect(x, y, box.w, h);
+      const ir = R(x + pad, y + pad, lay.h, lay.h);
+      if (icon === 'check') this.check(ir, {color: this.bg});
+      else this.arrow(ir, 'right', {color: this.bg});
+      drawDisplay(ctx, lay, x + 2 * pad + lay.h, y + pad, 'left', 0, this.bg);
+    }};
+  }
+
+  /* -- icons -- */
+  arrow(r, dir = 'down', o = {}) {
+    const ctx = this.ctx, vertical = dir === 'down' || dir === 'up';
+    const len = vertical ? r.h : r.w, wide = vertical ? r.w : r.h;
+    const lw = o.lw || Math.max(2, Math.min(wide, len) * 0.16);
+    const head = Math.min(wide / 2 - lw * 0.75, len * 0.45);
+    ctx.save();
+    ctx.translate(r.x + r.w / 2, r.y + r.h / 2);
+    ctx.rotate({down: 0, left: Math.PI / 2, up: Math.PI, right: -Math.PI / 2}[dir] || 0);
+    ctx.strokeStyle = o.color || this.fg; ctx.lineWidth = lw; ctx.lineCap = 'butt'; ctx.lineJoin = 'miter'; ctx.miterLimit = 4;
+    const tip = len / 2 - lw * 0.72;
+    ctx.beginPath(); ctx.moveTo(0, -len / 2); ctx.lineTo(0, tip - lw * 0.3); ctx.stroke();
+    ctx.beginPath(); ctx.moveTo(-head, tip - head); ctx.lineTo(0, tip); ctx.lineTo(head, tip - head); ctx.stroke();
+    ctx.restore();
+  }
+  check(r, o = {}) {
+    const ctx = this.ctx, s = Math.min(r.w, r.h), cx = r.x + r.w / 2, cy = r.y + r.h / 2;
+    ctx.save();
+    ctx.strokeStyle = o.color || this.fg; ctx.lineWidth = o.lw || s * 0.17; ctx.lineCap = 'square'; ctx.lineJoin = 'miter';
+    ctx.beginPath();
+    ctx.moveTo(cx - s * 0.36, cy + s * 0.02); ctx.lineTo(cx - s * 0.1, cy + s * 0.28); ctx.lineTo(cx + s * 0.38, cy - s * 0.26);
+    ctx.stroke();
+    ctx.restore();
+  }
+  sparkle(cx, cy, r, color = this.fg, waist = 0.16) {
+    const ctx = this.ctx, k = r * waist;
+    ctx.fillStyle = color;
+    ctx.beginPath();
+    ctx.moveTo(cx, cy - r);
+    ctx.quadraticCurveTo(cx + k, cy - k, cx + r, cy);
+    ctx.quadraticCurveTo(cx + k, cy + k, cx, cy + r);
+    ctx.quadraticCurveTo(cx - k, cy + k, cx - r, cy);
+    ctx.quadraticCurveTo(cx - k, cy - k, cx, cy - r);
+    ctx.fill();
+  }
+  // the system pointer, tip at (x, y)
+  cursor(x, y, s) {
+    const ctx = this.ctx, k = s / 18.5;
+    const P = [[0, 0], [0, 16], [4, 12.4], [6.9, 18.5], [9.7, 17.3], [6.8, 11.3], [12.1, 11.3]];
+    ctx.save();
+    ctx.beginPath();
+    P.forEach(([px, py], i) => i ? ctx.lineTo(x + px * k, y + py * k) : ctx.moveTo(x + px * k, y + py * k));
+    ctx.closePath();
+    ctx.lineJoin = 'round'; ctx.lineWidth = Math.max(2, 1.5 * k);
+    ctx.fillStyle = WHITE; ctx.strokeStyle = BLACK;
+    ctx.fill(); ctx.stroke();
+    ctx.restore();
+  }
+  burst(x, y, r1, r2, color = this.fg) {
+    const ctx = this.ctx, lw = Math.max(2, (r2 - r1) * 0.26);
+    ctx.save();
+    ctx.lineCap = 'butt';
+    for (const [c, w] of [[color === WHITE ? BLACK : WHITE, lw * 2.2], [color, lw]]) {
+      ctx.strokeStyle = c; ctx.lineWidth = w;
+      for (const deg of [-95, -137, -180]) {
+        const a = deg * Math.PI / 180;
+        ctx.beginPath(); ctx.moveTo(x + Math.cos(a) * r1, y + Math.sin(a) * r1); ctx.lineTo(x + Math.cos(a) * r2, y + Math.sin(a) * r2); ctx.stroke();
+      }
+    }
+    ctx.restore();
+  }
+  play(r, o = {}) {
+    const ctx = this.ctx, h = Math.min(r.h, r.w / 1.42), w = h * 1.42;
+    const x = r.x + (r.w - w) / 2, y = r.y + (r.h - h) / 2, rad = h * 0.24;
+    ctx.fillStyle = o.color || this.fg;
+    ctx.beginPath(); ctx.roundRect(x, y, w, h, rad); ctx.fill();
+    ctx.fillStyle = o.knock || this.bg;
+    const cx = x + w / 2, cy = y + h / 2, t = h * 0.21;
+    ctx.beginPath(); ctx.moveTo(cx - t * 0.8, cy - t); ctx.lineTo(cx + t * 1.15, cy); ctx.lineTo(cx - t * 0.8, cy + t); ctx.closePath(); ctx.fill();
+  }
+  folder(r, o = {}) {
+    const ctx = this.ctx;
+    const w = Math.min(r.w, r.h * 1.3), h = w / 1.3, x = r.x + (r.w - w) / 2, y = r.y + (r.h - h) / 2;
+    const lw = o.lw || Math.max(2, w * 0.05), tab = h * 0.16;
+    ctx.save();
+    ctx.lineWidth = lw; ctx.lineJoin = 'miter'; ctx.strokeStyle = o.color || this.fg;
+    ctx.beginPath();
+    ctx.moveTo(x + lw / 2, y + tab + lw / 2);
+    ctx.lineTo(x + lw / 2, y + lw / 2); ctx.lineTo(x + w * 0.36, y + lw / 2); ctx.lineTo(x + w * 0.44, y + tab + lw / 2);
+    ctx.lineTo(x + w - lw / 2, y + tab + lw / 2); ctx.lineTo(x + w - lw / 2, y + h - lw / 2); ctx.lineTo(x + lw / 2, y + h - lw / 2); ctx.closePath();
+    ctx.stroke();
+    ctx.restore();
+    if (o.label) {
+      const inner = R(x + w * 0.12, y + tab + h * 0.2, w * 0.76, h * 0.5);
+      const t = this.text(o.label, inner, {mode: 'uniform', maxLines: 2, lead: 0.16, minStretch: 87.5, maxSize: h * 0.2});
+      t.draw(inner.x, inner.y + (inner.h - t.h) / 2, 'center', inner.w);
+    }
+    return R(x, y, w, h);
+  }
+  // a material ball: 'sky' reflects a sky gradient, 'room' reflects windows, 'tint' is a swatch under a tint
+  ball(cx, cy, r, o = {}) {
+    const ctx = this.ctx;
+    ctx.save();
+    ctx.beginPath(); ctx.arc(cx, cy, r, 0, Math.PI * 2); ctx.clip();
+    if (o.mode === 'room') {
+      ctx.fillStyle = '#1d1d1d'; ctx.fillRect(cx - r, cy - r, 2 * r, 2 * r);
+      ctx.fillStyle = '#3a3a3a'; ctx.fillRect(cx - r, cy + r * 0.18, 2 * r, r);
+      for (let i = 0; i < 3; i++) {
+        const wx = cx - r * 0.78 + i * r * 0.5, wy = cy - r * 0.62;
+        ctx.fillStyle = i === 1 ? '#f2f2f2' : '#bdbdbd';
+        ctx.beginPath(); ctx.ellipse(wx + r * 0.16, wy + r * 0.32, r * 0.13, r * 0.33, -0.2 + i * 0.18, 0, Math.PI * 2); ctx.fill();
+      }
+      ctx.strokeStyle = '#6a6a6a'; ctx.lineWidth = Math.max(1.5, r * 0.02);
+      for (let i = -2; i <= 2; i++) { ctx.beginPath(); ctx.moveTo(cx + i * r * 0.36, cy + r * 0.18); ctx.lineTo(cx + i * r * 0.9, cy + r); ctx.stroke(); }
+    } else if (o.mode === 'tint') {
+      paintSwatch(ctx, R(cx - r, cy - r, 2 * r, 2 * r), 'pyramids', 3, r * 0.5);
+      ctx.globalCompositeOperation = 'multiply';
+      ctx.fillStyle = gray(o.level ?? 1);
+      ctx.fillRect(cx - r, cy - r, 2 * r, 2 * r);
+      ctx.globalCompositeOperation = 'source-over';
+    } else {
+      const g = ctx.createLinearGradient(0, cy - r, 0, cy + r);
+      g.addColorStop(0, '#fafafa'); g.addColorStop(0.47, '#9a9a9a'); g.addColorStop(0.5, '#2a2a2a'); g.addColorStop(1, '#0c0c0c');
+      ctx.fillStyle = g; ctx.fillRect(cx - r, cy - r, 2 * r, 2 * r);
+    }
+    const sh = ctx.createRadialGradient(cx - r * 0.35, cy - r * 0.4, r * 0.1, cx, cy, r);
+    sh.addColorStop(0, 'rgba(255,255,255,0.10)'); sh.addColorStop(0.65, 'rgba(0,0,0,0.05)'); sh.addColorStop(1, 'rgba(0,0,0,0.6)');
+    ctx.fillStyle = sh; ctx.fillRect(cx - r, cy - r, 2 * r, 2 * r);
+    ctx.fillStyle = 'rgba(255,255,255,0.92)';
+    ctx.beginPath(); ctx.ellipse(cx - r * 0.38, cy - r * 0.44, r * 0.13, r * 0.08, -0.6, 0, Math.PI * 2); ctx.fill();
+    ctx.restore();
+    ctx.strokeStyle = this.fg; ctx.lineWidth = Math.max(2, r * 0.025);
+    ctx.beginPath(); ctx.arc(cx, cy, r, 0, Math.PI * 2); ctx.stroke();
+  }
+  // wireframe probe box (isometric) around a ball
+  probe(r, o = {}) {
+    const ctx = this.ctx;
+    const s = Math.min(r.w / 3.464, r.h / 4) * (o.scale || 0.92);
+    const cx = r.x + r.w / 2, cy = r.y + r.h / 2;
+    const P = (x, y, z) => [cx + (x - z) * s * 0.866, cy + (x + z) * s * 0.5 - y * s];
+    if (o.ball !== false) this.ball(cx, cy + s * 0.15, s * 0.55, {mode: o.mode || 'room'});
+    const lw = Math.max(2, s * 0.035);
+    ctx.save();
+    ctx.strokeStyle = this.fg; ctx.lineWidth = lw;
+    const V = [-1, 1];
+    for (const a of V) for (const b of V) {
+      const edges = [[[-1, a, b], [1, a, b]], [[a, -1, b], [a, 1, b]], [[a, b, -1], [a, b, 1]]];
+      for (const [p, q] of edges) {
+        const hidden = (p[0] === -1 && p[1] === -1 && p[2] === -1);
+        ctx.setLineDash(hidden ? [lw * 2.2, lw * 1.8] : []);
+        ctx.globalAlpha = hidden ? 0.55 : 1;
+        const [x1, y1] = P(...p), [x2, y2] = P(...q);
+        ctx.beginPath(); ctx.moveTo(x1, y1); ctx.lineTo(x2, y2); ctx.stroke();
+      }
+    }
+    ctx.setLineDash([]); ctx.globalAlpha = 1;
+    if (o.handles) {
+      const hs = Math.max(6, s * 0.12);
+      ctx.fillStyle = this.fg;
+      for (const a of V) for (const b of V) for (const c of V) {
+        if (a === -1 && b === -1 && c === -1) continue;
+        const [x, y] = P(a, b, c); ctx.fillRect(x - hs / 2, y - hs / 2, hs, hs);
+      }
+    }
+    ctx.restore();
+    return {s, cx, cy, P};
+  }
+  // the wall vendor: a grid of materials with hover text, one tile picked
+  vendor(r, o = {}) {
+    const {ctx, u} = this;
+    const capH = 2.5 * u, gap = 1.3 * u;
+    const top = r.y + capH * 2 + gap * 2.2;
+    const area = R(r.x, top, r.w, r.y + r.h - top);
+    const asp = area.w / area.h;
+    const cols = asp > 1.25 ? 3 : 2, rows = asp > 1.25 ? 2 : asp < 0.8 ? 3 : 2;
+    const ts = Math.min((area.w - gap * (cols - 1)) / cols, (area.h - gap * (rows - 1)) / rows);
+    const gw = cols * ts + (cols - 1) * gap, gh = rows * ts + (rows - 1) * gap;
+    const gx = area.x + (area.w - gw) / 2, gy = area.y;
+    this.mono(o.cap1 || '[ARTSY] CHROME PATTERN 0', gx + gw / 2, r.y, {size: capH, align: 'center', valign: 'top', bold: true});
+    this.mono(o.cap2 || '', gx + gw / 2, r.y + capH + gap * 0.9, {size: capH, align: 'center', valign: 'top', bold: false, color: this.soft});
+    let k = 0, sel = null;
+    for (let j = 0; j < rows; j++) for (let i = 0; i < cols; i++) {
+      const tr = R(gx + i * (ts + gap), gy + j * (ts + gap), ts, ts);
+      paintSwatch(ctx, tr, k === 0 ? 'pyramids' : SWATCHES[k % SWATCHES.length], k + 1, k === 0 ? ts / 3 : undefined);
+      if (k === 0) sel = tr;
+      k++;
+    }
+    const lw = Math.max(3, 0.9 * u), pad = 0.9 * u;
+    ctx.strokeStyle = this.fg; ctx.lineWidth = lw;
+    ctx.strokeRect(sel.x - pad - lw / 2, sel.y - pad - lw / 2, sel.w + 2 * pad + lw, sel.h + 2 * pad + lw);
+    if (o.state === 'deliver') {
+      const cr = ts * 0.19, cx = sel.x + sel.w - cr - ts * 0.06, cy = sel.y + cr + ts * 0.06;
+      ctx.fillStyle = this.fg; ctx.beginPath(); ctx.arc(cx, cy, cr, 0, Math.PI * 2); ctx.fill();
+      ctx.strokeStyle = this.bg; ctx.lineWidth = Math.max(2, cr * 0.12); ctx.stroke();
+      this.check(R(cx - cr, cy - cr, cr * 2, cr * 2), {color: this.bg});
+    }
+    const tipX = sel.x + sel.w * 0.62, tipY = sel.y + sel.h * 0.58;
+    if (o.state === 'deliver') this.burst(tipX, tipY, ts * 0.12, ts * 0.3, this.dark ? WHITE : BLACK);
+    this.cursor(tipX, tipY, Math.max(18, ts * 0.42));
+  }
+  // the build floater's texture tab, simplified
+  texTab(r, o = {}) {
+    const {ctx, u} = this;
+    const lw = Math.max(2, 0.35 * u);
+    const w = Math.min(r.w, r.h * 1.3);
+    const th = Math.min(w * 0.11, 7 * u), sw0 = (w - 15 * u) / 3;
+    const h = Math.min(r.h, th + lw + 4 * u + sw0 + 7 * u + 2 * 4.4 * u + 2 * u);
+    const x = r.x + (r.w - w) / 2, y = r.y + (r.h - h) / 2;
+    ctx.strokeStyle = this.fg; ctx.lineWidth = lw;
+    ctx.strokeRect(x + lw / 2, y + lw / 2, w - lw, h - lw);
+    const tabs = ['GEN', 'OBJ', 'FEAT', 'TEXTURE', 'CONT'];
+    const tw = (w - 2 * lw) / tabs.length;
+    tabs.forEach((t, i) => {
+      const tx = x + lw + i * tw;
+      if (t === 'TEXTURE') { ctx.fillStyle = this.fg; ctx.fillRect(tx, y + lw, tw, th); }
+      this.mono(t, tx + tw / 2, y + lw + th / 2, {size: Math.min(th * 0.34, tw * 0.17), align: 'center', valign: 'middle', color: t === 'TEXTURE' ? this.bg : this.soft});
+    });
+    ctx.fillStyle = this.fg; ctx.fillRect(x, y + th + lw, w, lw);
+    const sw = (w - 5 * 3 * u) / 3, sy = y + th + 4 * u;
+    const labels = ['MATERIAL', 'BASE', 'TINT'];
+    let tint = null;
+    labels.forEach((l, i) => {
+      const sx = x + 3 * u + i * (sw + 1.5 * 3 * u);
+      const sr = R(sx, sy, sw, sw);
+      if (l === 'MATERIAL') paintSwatch(ctx, sr, 'pyramids', 2, sw / 2);
+      else if (l === 'BASE') paintSwatch(ctx, sr, 'checker', 2, sw / 4);
+      else { ctx.fillStyle = o.tint || '#8f8f8f'; ctx.fillRect(sr.x, sr.y, sr.w, sr.h); tint = sr; }
+      ctx.strokeStyle = this.fg; ctx.lineWidth = lw; ctx.strokeRect(sr.x, sr.y, sr.w, sr.h);
+      this.mono(l, sx + sw / 2, sy + sw + 2.6 * u, {size: Math.min(2.4 * u, sw * 0.16), align: 'center', valign: 'top', color: l === 'TINT' ? this.fg : this.soft});
+    });
+    const ly = sy + sw + 7 * u;
+    const rows = [['METALLIC', 0.0], ['ROUGHNESS', 0.4]];
+    rows.forEach(([l, v], i) => {
+      const yy = ly + i * 4.4 * u;
+      if (yy + 3 * u > y + h) return;
+      this.mono(l, x + 3 * u, yy, {size: 2.2 * u, valign: 'top', bold: false, color: this.soft});
+      this.mono(v.toFixed(3), x + w - 3 * u, yy, {size: 2.2 * u, valign: 'top', align: 'right', bold: false, color: this.soft});
+    });
+    const hl = Math.max(3, 0.9 * u);
+    ctx.strokeStyle = this.fg; ctx.lineWidth = hl;
+    ctx.strokeRect(tint.x - hl * 1.5, tint.y - hl * 1.5, tint.w + hl * 3, tint.h + hl * 3);
+    this.cursor(tint.x + tint.w * 0.42, tint.y + tint.h * 0.3, Math.max(18, sw * 0.5));
+  }
+  slider(r, label, value, o = {}) {
+    const {ctx, u} = this;
+    const size = o.size || 3.6 * u;
+    this.mono(label, r.x, r.y, {size, valign: 'top'});
+    this.mono(value.toFixed(2), r.x + r.w, r.y, {size, valign: 'top', align: 'right', bold: false});
+    const k = 6 * u, th = Math.max(4, 1.6 * u), ty = r.y + size + 3 * u + k / 2 - th / 2;
+    ctx.fillStyle = this.dim; ctx.fillRect(r.x, ty, r.w, th);
+    ctx.fillStyle = this.fg; ctx.fillRect(r.x, ty, r.w * value, th);
+    const kx = clamp(r.x + r.w * value - k / 2, r.x, r.x + r.w - k);
+    ctx.fillRect(kx, ty + th / 2 - k / 2, k, k);
+    return size + 3 * u + k;
+  }
+  // a texture swatch struck through
+  noTexture(r) {
+    const ctx = this.ctx, s = Math.min(r.w, r.h), x = r.x + (r.w - s) / 2, y = r.y + (r.h - s) / 2;
+    paintSwatch(ctx, R(x, y, s, s), 'checker', 4, s / 5);
+    ctx.strokeStyle = this.fg; ctx.lineWidth = Math.max(3, s * 0.025);
+    ctx.strokeRect(x, y, s, s);
+    ctx.save();
+    ctx.beginPath(); ctx.rect(x, y, s, s); ctx.clip();
+    ctx.strokeStyle = this.bg; ctx.lineWidth = s * 0.16;
+    ctx.beginPath(); ctx.moveTo(x - s * 0.1, y + s * 1.1); ctx.lineTo(x + s * 1.1, y - s * 0.1); ctx.stroke();
+    ctx.strokeStyle = this.fg; ctx.lineWidth = s * 0.08;
+    ctx.beginPath(); ctx.moveTo(x - s * 0.1, y + s * 1.1); ctx.lineTo(x + s * 1.1, y - s * 0.1); ctx.stroke();
+    ctx.restore();
+  }
+
+  /* ======================================================================
+     Layout templates. Each one is responsive: it reads this.o and lays out
+     side by side (landscape), stacked (portrait) or compact (square).
+     ====================================================================== */
+  // Big title at the foot of the frame. Wide frames keep words whole; tall ones may break
+  // them. A single word that leaves the frame half empty repeats upward as outlines.
+  hero({dark, tag, kicker, title, mode = 'justify', sparkles = 0, art}) {
+    const {u} = this, b = this.body, gap = 3 * u;
+    const chip = kicker ? this.chip(kicker) : null;
+    const top = chip ? chip.h + gap * 1.4 : 0;
+    const avail = R(b.x, b.y + top, b.w, b.h - top);
+    const t = this.text(title, avail, {mode, lead: 0.1, maxLines: 4, breakCost: this.tall ? 0.92 : 0.2});
+    const free = avail.h - t.h;
+    if (!art && t.lay.lines.length === 1 && !/\s/.test(title.trim()) && free > avail.h * 0.3) return this.stack({dark, tag, kicker, word: title});
+    this.ground(dark); this.chrome(tag);
+    if (chip) chip.draw(b.x, b.y);
+    t.draw(b.x, b.y + b.h - t.h);
+    if (art && free > 12 * u) art(R(b.x, avail.y + gap, b.w, free - gap * 2.4));
+    else if (sparkles && free > 8 * u) this.sparkle(b.x + b.w - 5 * u, avail.y + Math.min(free / 2, 9 * u), Math.min(5 * u, free / 3));
+  }
+  // one word repeated down the frame, every row the full width: outlines above a solid row,
+  // or a row per tint level. One row in wide frames, where levels grade the letters instead.
+  stack({dark, tag, kicker, word, serif, maxRows = 6, levels}) {
+    this.ground(dark); this.chrome(tag);
+    const {u} = this, b = this.body, gap = 3 * u;
+    const chip = kicker ? this.chip(kicker) : null;
+    const s = serif ? this.serif(serif, R(0, 0, b.w, this.tall ? 12 * u : 9 * u), {max: this.tall ? 12 * u : 9 * u}) : null;
+    const top = chip ? chip.h + gap * 1.4 : 0, bottom = s ? s.h + gap * 1.2 : 0;
+    const avail = R(b.x, b.y + top, b.w, b.h - top - bottom);
+    const clean = word.replace(/[|\n]/g, '');
+    let best = null;
+    for (let n = 1; n <= maxRows; n++) {
+      const lay = fitDisplay(this.ctx, Array(n).fill(clean).join('\n'), avail, {mode: 'justify', lead: 0.12, maxLines: n});
+      const fill = lay.w * lay.h / (avail.w * avail.h);
+      if (!best || fill > best.fill + 0.03) best = {n, lay, fill};
+    }
+    const n = best.n, st = {};
+    if (levels && n > 1) st.colors = best.lay.lines.map((_, i) => gray(levels[Math.max(0, levels.length - n + i)]));
+    else if (levels) st.letters = (k, len) => gray(levels[Math.max(0, levels.length - len + k)]);
+    else st.outline = i => i < n - 1;
+    if (chip) chip.draw(b.x, b.y);
+    drawDisplay(this.ctx, best.lay, b.x, avail.y + avail.h - best.lay.h, 'left', b.w, this.fg, st);
+    if (s) s.draw(b.x, b.y + b.h - s.h);
+    return best;
+  }
+  // a light: sparkle with thin rays
+  flare(cx, cy, r) {
+    const ctx = this.ctx;
+    ctx.save();
+    ctx.strokeStyle = this.fg; ctx.lineWidth = Math.max(2, r * 0.035);
+    for (let i = 0; i < 12; i++) {
+      const a = i * Math.PI / 6 + Math.PI / 12, r1 = r * 0.42, r2 = r * (i % 2 ? 0.78 : 1);
+      ctx.beginPath(); ctx.moveTo(cx + Math.cos(a) * r1, cy + Math.sin(a) * r1); ctx.lineTo(cx + Math.cos(a) * r2, cy + Math.sin(a) * r2); ctx.stroke();
+    }
+    ctx.restore();
+    this.sparkle(cx, cy, r * 0.62);
+  }
+  // a big outlined numeral in whatever room is left
+  numeral(text, r, align = 'right') {
+    if (r.h < 14 * this.u) return;
+    const t = this.text(text, r, {mode: 'uniform', maxLines: 1, outline: () => true});
+    t.draw(r.x, r.y + (r.h - t.h) / 2, align, r.w);
+  }
+  mosaic(r, kinds) {
+    const {ctx, u} = this, gap = 1.6 * u;
+    const cols = r.w / r.h > 2.2 ? kinds.length : 2, rows = Math.ceil(kinds.length / cols);
+    const ts = Math.min((r.w - gap * (cols - 1)) / cols, (r.h - gap * (rows - 1)) / rows);
+    const lw = Math.max(2, 0.35 * u);
+    kinds.forEach((k, i) => {
+      const tr = R(r.x + (i % cols) * (ts + gap), r.y + Math.floor(i / cols) * (ts + gap), ts, ts);
+      paintSwatch(ctx, tr, k, i + 3);
+      ctx.strokeStyle = this.fg; ctx.lineWidth = lw; ctx.strokeRect(tr.x + lw / 2, tr.y + lw / 2, tr.w - lw, tr.h - lw);
+    });
+  }
+  // title + serif line, optional art beside or above
+  statement({dark, tag, title, serif, art, artWeight = 0.42, serifFirst = false, align = 'left'}) {
+    this.ground(dark); this.chrome(tag);
+    const {u} = this, b = this.body, gap = 3.5 * u;
+    let txt = b, artR = null;
+    if (art) {
+      const parts = this.split(b, this.wide ? [1 - artWeight, artWeight] : [artWeight, 1 - artWeight], 4 * u);
+      if (this.wide) [txt, artR] = parts; else [artR, txt] = parts;
+    }
+    const s = serif ? this.serif(serif, R(0, 0, txt.w, Math.min(txt.h * 0.3, 15 * u)), {max: 15 * u}) : null;
+    const tBox = R(txt.x, 0, txt.w, txt.h - (s ? s.h + gap : 0));
+    const t = this.text(title, tBox, {mode: 'uniform', lead: 0.14, maxLines: 4});
+    const blockH = t.h + (s ? s.h + gap : 0);
+    const y0 = txt.y + txt.h - blockH;
+    if (serifFirst && s) { s.draw(txt.x, y0, align, txt.w); t.draw(txt.x, y0 + s.h + gap, align, txt.w); }
+    else { t.draw(txt.x, y0, align, txt.w); if (s) s.draw(txt.x, y0 + t.h + gap, align, txt.w); }
+    if (art) art(artR);
+  }
+  step({dark, tag, n, title, note, result, icon, art}) {
+    this.ground(dark); this.chrome(tag);
+    const {u} = this, b = this.body, gap = 3 * u;
+    let txt, artR;
+    if (this.tall) [artR, txt] = splitRows(b, [0.44, 0.56], 5 * u);
+    else [txt, artR] = splitCols(b, this.wide ? [0.56, 0.44] : [0.56, 0.44], 4 * u);
+    const chip = this.chip(`Step ${n}`);
+    const st = this.status(result, R(0, 0, txt.w, this.tall ? 11 * u : 9 * u), icon);
+    const no = this.serif(note, R(0, 0, txt.w, 9 * u), {max: this.tall ? 9 * u : 7.5 * u});
+    const tH = txt.h - chip.h - no.h - st.h - gap * 3.4;
+    const t = this.text(title, R(txt.x, 0, txt.w, tH), {mode: 'uniform', lead: 0.12, maxLines: 4});
+    chip.draw(txt.x, txt.y);
+    t.draw(txt.x, txt.y + chip.h + gap * 1.2);
+    no.draw(txt.x, txt.y + chip.h + gap * 2.2 + t.h);
+    st.draw(txt.x, txt.y + txt.h - st.h);
+    art(artR);
+  }
+  signoff({dark, tag, a, b: script}) {
+    this.ground(dark); this.chrome(tag);
+    const {u} = this, b = this.body;
+    if (this.wide) {
+      const [l, r] = splitCols(b, [0.58, 0.42], 2 * u);
+      const t = this.text(a, l, {mode: 'uniform', maxLines: 1});
+      t.draw(l.x, b.y + b.h - t.h);
+      const s = this.serif(script, R(0, 0, r.w, b.h));
+      s.draw(r.x, b.y + b.h - s.h, 'right', r.w);
+    } else {
+      const t = this.text(a, R(b.x, b.y, b.w, b.h * (this.tall ? 0.34 : 0.4)), {mode: 'uniform', maxLines: 1});
+      t.draw(b.x, b.y);
+      const s = this.serif(script, R(0, 0, b.w * 0.92, b.h - t.h - 4 * u));
+      s.draw(b.x, b.y + b.h - s.h, 'right', b.w);
+    }
+    const sr = this.wide ? 4.5 * this.u : 5 * this.u;
+    this.sparkle(b.x + sr, b.y + b.h - sr, sr);
+  }
+  wayfind({dark, tag, q, a, dir}) {
+    this.ground(dark); this.chrome(tag);
+    const {u} = this, b = this.body, gap = 3 * u;
+    const vertical = dir === 'down' || dir === 'up';
+    let txt, ar;
+    if (this.wide) [txt, ar] = splitCols(b, [0.62, 0.38], 5 * u);
+    else if (vertical) [txt, ar] = splitRows(b, [0.58, 0.42], 4 * u);
+    else [txt, ar] = splitRows(b, [0.62, 0.38], 4 * u);
+    const s = this.serif(q, R(0, 0, txt.w, 10 * u), {max: this.tall ? 10 * u : 8.5 * u});
+    const t = this.text(a, R(txt.x, 0, txt.w, txt.h - s.h - gap), {mode: 'uniform', lead: 0.12, maxLines: 4});
+    s.draw(txt.x, txt.y);
+    t.draw(txt.x, txt.y + s.h + gap);
+    if (!this.wide) { const used = s.h + gap + t.h + 6 * u; ar = R(b.x, b.y + used, b.w, b.h - used); }
+    let arR;
+    if (vertical) { const w = Math.min(ar.w, ar.h * 0.8); arR = R(ar.x + (this.wide ? (ar.w - w) / 2 : 0), ar.y, w, ar.h); }
+    else { const h = Math.min(ar.h, ar.w * 0.7); arR = R(ar.x, ar.y + (ar.h - h) / 2, ar.w, h); }
+    this.arrow(arR, dir, {lw: Math.max(6, Math.min(arR.w, arR.h) * (vertical ? 0.17 : 0.2))});
+  }
+  swatch({dark, tag, name, kind, i, n, seed}) {
+    this.ground(dark); this.chrome(tag);
+    const {ctx, u} = this, b = this.body;
+    paintSwatch(ctx, b, kind, seed || i + 1);
+    const lw = Math.max(2, 0.35 * u);
+    ctx.strokeStyle = this.fg; ctx.lineWidth = lw; ctx.strokeRect(b.x + lw / 2, b.y + lw / 2, b.w - lw, b.h - lw);
+    const c = this.chip(`${String(i).padStart(2, '0')} / ${String(n).padStart(2, '0')}`);
+    c.draw(b.x + b.w - c.w, b.y);
+    const pad = 2.6 * u;
+    const box = R(0, 0, (this.wide ? b.w * 0.62 : b.w) - 2 * pad, (this.tall ? b.h * 0.3 : b.h * 0.42) - 2 * pad);
+    const t = this.text(name, box, {mode: 'uniform', lead: 0.1, maxLines: 3});
+    const lx = b.x, ly = b.y + b.h - t.h - 2 * pad;
+    ctx.fillStyle = this.bg; ctx.fillRect(lx, ly, t.w + 2 * pad, t.h + 2 * pad);
+    t.draw(lx + pad, ly + pad);
+  }
+  cta({dark, tag, serif, title, button, cursor = true, swatches}) {
+    this.ground(dark); this.chrome(tag);
+    const {u} = this, b = this.body, gap = 3.6 * u;
+    const s = this.serif(serif, R(0, 0, b.w, this.tall ? 13 * u : 10 * u), {max: this.tall ? 13 * u : 10 * u});
+    const bt = this.button(button, R(0, 0, this.wide ? b.w * 0.6 : b.w, 0), {textH: this.tall ? 5 * u : 4.4 * u});
+    const t = this.text(title, R(b.x, 0, b.w, b.h - s.h - bt.h - gap * 2.6), {mode: 'uniform', lead: 0.1, maxLines: 4});
+    s.draw(b.x, b.y);
+    t.draw(b.x, b.y + s.h + gap);
+    const by = b.y + b.h - bt.h;
+    const freeTop = b.y + s.h + gap + t.h + gap * 1.6, freeH = by - gap * 1.6 - freeTop;
+    if (swatches && freeH > 22 * u) this.mosaic(R(b.x, freeTop, b.w, freeH), swatches);
+    bt.draw(b.x, by);
+    if (cursor) this.cursor(b.x + bt.w * 0.82, by + bt.h * 0.55, this.tall ? 11 * u : 8.5 * u);
+  }
+  // two option cards, one active, like a pricing table
+  cards({dark, tag, title, cards, active}) {
+    this.ground(dark); this.chrome(tag);
+    const {ctx, u} = this, b = this.body, gap = 3 * u;
+    const head = this.text(title, R(b.x, 0, b.w, this.tall ? 9 * u : 7 * u), {mode: 'uniform', maxLines: 1});
+    head.draw(b.x, b.y);
+    const area = R(b.x, b.y + head.h + gap * 1.4, b.w, b.h - head.h - gap * 1.4);
+    const boxes = this.split(area, [1, 1], 3 * u, this.o !== 'portrait');
+    const lw = Math.max(2, 0.4 * u);
+    boxes.forEach((r, i) => {
+      const on = i === active, c = cards[i];
+      const fg = on ? this.bg : this.fg;
+      if (on) { ctx.fillStyle = this.fg; ctx.fillRect(r.x, r.y, r.w, r.h); }
+      else { ctx.strokeStyle = this.dim; ctx.lineWidth = lw; ctx.strokeRect(r.x + lw / 2, r.y + lw / 2, r.w - lw, r.h - lw); }
+      const pad = 3 * u, inner = R(r.x + pad, r.y + pad, r.w - 2 * pad, r.h - 2 * pad);
+      const lab = on ? 'Selected' : `Option ${i + 1}`;
+      this.mono(lab, inner.x, inner.y, {size: 2.5 * u, valign: 'top', color: on ? this.bg : this.soft});
+      const p = this.para(c.note, R(0, 0, inner.w, inner.h * 0.42), {max: this.tall ? 7.5 * u : 6 * u, color: on ? this.bg : this.soft});
+      const t = this.text(c.title, R(inner.x, 0, inner.w, inner.h - p.h - 7.5 * u), {mode: 'uniform', lead: 0.1, maxLines: 2, color: fg});
+      t.draw(inner.x, inner.y + 5 * u);
+      p.draw(inner.x, inner.y + inner.h - p.h);
+    });
+  }
+  stepper({dark, tag, title, steps, active}) {
+    this.ground(dark); this.chrome(tag);
+    const {ctx, u} = this, b = this.body, gap = 2.4 * u;
+    const head = this.text(title, R(b.x, 0, b.w, this.tall ? 8 * u : 6.5 * u), {mode: 'uniform', maxLines: 1});
+    head.draw(b.x, b.y);
+    const area = R(b.x, b.y + head.h + gap * 1.6, b.w, b.h - head.h - gap * 1.6);
+    const weights = steps.map((_, i) => i === active ? 2.1 : 1);
+    const boxes = this.wide ? splitCols(area, weights, gap) : splitRows(area, weights, gap);
+    const lw = Math.max(2, 0.4 * u);
+    boxes.forEach((r, i) => {
+      const on = i === active;
+      if (on) { ctx.fillStyle = this.fg; ctx.fillRect(r.x, r.y, r.w, r.h); }
+      else { ctx.strokeStyle = this.dim; ctx.lineWidth = lw; ctx.strokeRect(r.x + lw / 2, r.y + lw / 2, r.w - lw, r.h - lw); }
+      const pad = 2.6 * u, inner = R(r.x + pad, r.y + pad, r.w - 2 * pad, r.h - 2 * pad);
+      const col = on ? this.bg : this.soft;
+      this.mono(String(i + 1).padStart(2, '0'), inner.x, inner.y, {size: 2.6 * u, valign: 'top', color: col});
+      const tb = R(inner.x, 0, inner.w, inner.h - 5 * u);
+      const t = this.text(steps[i], tb, {mode: 'uniform', lead: 0.14, maxLines: on ? 4 : 3, maxSize: on ? undefined : 14 * u, color: on ? this.bg : this.soft});
+      t.draw(inner.x, inner.y + inner.h - t.h);
+    });
+  }
+}
+
+/* ==========================================================================
+   Signs. Each has 8 frames: a draw function, or an effect built from another
+   frame (glitch, invert, push). hold = seconds on screen. beat = which dot of
+   the progress bar is lit.
+   ========================================================================== */
+const field = (key, label, value, hint, options) => ({key, label, value, hint, options});
+const listOf = text => String(text).split(',').map(s => s.trim()).filter(Boolean);
+const kindsOf = text => { const items = listOf(text); return [0, 1, 2, 3].map(i => swatchFor(items[i] || '', i)); };
+const SIGNS = [
+  {
+    id: 'redelivery', name: 'Redelivery', tag: 'Info', beats: 5,
+    fields: [
+      field('kicker', 'Kicker', 'Lost a material?'),
+      field('title', 'Headline', 'Re|deliv|ery', 'A | marks where a long word may break.'),
+      field('step1', 'Step 1', 'Click the material'),
+      field('step1note', 'Step 1, small print', 'on the wall vendor'),
+      field('step1result', 'Step 1, result', 'It loads'),
+      field('step2', 'Step 2', 'Click again'),
+      field('step2note', 'Step 2, small print', 'same material, one more click'),
+      field('step2result', 'Step 2, result', 'Redelivered'),
+      field('done1', 'Sign-off', "That's"),
+      field('done2', 'Sign-off, script', 'it.'),
+      field('coll1', 'Collections, question', 'Full collections?'),
+      field('coll2', 'Collections, answer', 'Use the terminal below'),
+      field('arrow', 'Terminal is', 'down', null, ['down', 'left', 'right', 'up']),
+    ],
+    frames: [
+      {hold: 1.1, beat: 0, note: 'redelivery', draw: (g, c) => g.hero({dark: true, kicker: c.kicker, title: c.title, sparkles: 1})},
+      {hold: 0.12, beat: 0, note: 'glitch', fx: {type: 'glitch', of: 0, seed: 11}},
+      {hold: 0.12, beat: 1, note: 'scroll', fx: {type: 'push', from: 0, to: 3, t: 0.52, dir: 'up'}},
+      {hold: 2.5, beat: 1, note: 'step 1', draw: (g, c) => g.step({dark: false, tag: 'Step 1 / 2', n: 1, title: c.step1, note: c.step1note, result: c.step1result, icon: 'arrow',
+        art: r => g.vendor(r, {state: 'load', cap2: 'Owned · click again to redeliver'})})},
+      {hold: 2.5, beat: 2, note: 'step 2', draw: (g, c) => g.step({dark: true, tag: 'Step 2 / 2', n: 2, title: c.step2, note: c.step2note, result: c.step2result, icon: 'check',
+        art: r => g.vendor(r, {state: 'deliver', cap2: 'Sent to your inventory'})})},
+      {hold: 0.12, beat: 3, note: 'flash', fx: {type: 'invert', of: 6}},
+      {hold: 1.3, beat: 3, note: "that's it", draw: (g, c) => g.signoff({dark: true, a: c.done1, b: c.done2})},
+      {hold: 2.4, beat: 4, note: 'collections', draw: (g, c) => g.wayfind({dark: false, tag: 'Collections', q: c.coll1, a: c.coll2, dir: c.arrow})},
+    ],
+  },
+  {
+    id: 'freebies', name: 'Freebies', tag: 'Freebie', beats: 4,
+    fields: [
+      field('title', 'Headline', 'Free'),
+      field('kicker', 'Kicker', 'No catch'),
+      field('serif', 'Script line', 'free'),
+      field('sub', 'What it is', 'Sample materials'),
+      field('items', 'Four materials', 'Plain glass, Black tile, Wood, Metal', 'Comma separated. The first four are used.'),
+      field('more', 'And more', '& more'),
+      field('cta', 'Button', 'Click for yours'),
+    ],
+    frames: [
+      {hold: 1.0, beat: 0, note: 'free', draw: (g, c) => g.stack({dark: true, kicker: c.kicker, word: c.title})},
+      {hold: 0.12, beat: 0, note: 'flash', fx: {type: 'invert', of: 0}},
+      {hold: 1.6, beat: 1, note: 'sample materials', draw: (g, c) => g.cta({dark: true, serif: c.serif, title: c.sub, button: c.cta, swatches: kindsOf(c.items)})},
+      ...[0, 1, 2, 3].map(i => ({hold: 0.6, beat: 2, note: `material ${i + 1}`, draw: (g, c) => {
+        const items = c.items.split(',').map(s => s.trim()).filter(Boolean);
+        const name = items[i % Math.max(1, items.length)] || 'Material';
+        g.swatch({dark: true, tag: 'Included', name, kind: swatchFor(name, i), i: i + 1, n: 4, seed: i + 3});
+      }})),
+      {hold: 1.8, beat: 3, note: '& more', draw: (g, c) => g.cta({dark: false, serif: c.more, title: c.sub, button: c.cta, swatches: [...kindsOf(c.items).slice(0, 2), 'pyramids', 'herringbone']})},
+    ],
+  },
+  {
+    id: 'tint', name: 'Tint', tag: 'Pro tip', beats: 5,
+    fields: [
+      field('title', 'Headline', 'Tint'),
+      field('serif', 'Script line', 'any material'),
+      field('where', 'Where', 'Texture tab'),
+      field('tintword', 'Swatch name', 'Tint'),
+      field('shine', 'Question', 'Shinier? Less metal?'),
+      field('rough', 'Slider 1', 'Roughness'),
+      field('metal', 'Slider 2', 'Metallic'),
+      field('learn', 'Learn headline', 'Tutorials'),
+      field('learnSerif', 'Learn, script', 'on YouTube'),
+    ],
+    frames: [
+      {hold: 1.0, beat: 0, note: 'tint', draw: (g, c) => g.stack({dark: true, word: c.title, serif: c.serif, levels: [0.2, 0.36, 0.55, 0.76, 1]})},
+      ...[[1.0, 0.4], [0.6, 0.4], [0.28, 0.4]].map(([lvl, hold], i) => ({hold, beat: 1, note: `tint ${Math.round(lvl * 100)}%`, draw: (g, c) => {
+        g.ground(true); g.chrome('Tint · ' + '#' + hex2(lvl).repeat(3));
+        const {u} = g, b = g.body;
+        const [ballR, txt] = g.wide ? splitCols(b, [0.5, 0.5], 4 * u) : splitRows(b, [0.6, 0.4], 4 * u);
+        const rad = Math.min(ballR.w, ballR.h) / 2 * 0.94;
+        g.ball(ballR.x + ballR.w / 2, ballR.y + ballR.h / 2, rad, {mode: 'tint', level: lvl});
+        const hex = g.text('#' + hex2(lvl).repeat(3), R(txt.x, 0, txt.w, txt.h * 0.42), {mode: 'uniform', maxLines: 1, stretch: g.wide ? 'semi-condensed' : 'condensed'});
+        const sw = g.chip(c.tintword + ' ' + Math.round(lvl * 100) + '%');
+        const meter = R(txt.x, txt.y + txt.h - 2.2 * u, txt.w, 2.2 * u);
+        hex.draw(txt.x, txt.y + txt.h - hex.h - 6 * u);
+        sw.draw(txt.x, txt.y + txt.h - hex.h - 9 * u - sw.h);
+        g.ctx.fillStyle = g.dim; g.ctx.fillRect(meter.x, meter.y, meter.w, meter.h);
+        g.ctx.fillStyle = WHITE; g.ctx.fillRect(meter.x, meter.y, meter.w * lvl, meter.h);
+      }})),
+      {hold: 2.2, beat: 2, note: 'texture tab', draw: (g, c) => g.statement({dark: false, title: c.where + ' › ' + c.tintword, serif: c.serif, art: r => g.texTab(r), artWeight: g.wide ? 0.44 : 0.5})},
+      {hold: 2.0, beat: 3, note: 'shine / metal', draw: (g, c) => {
+        g.ground(true); g.chrome('Pro tip');
+        const {u} = g, b = g.body;
+        const [txt, sl] = g.wide ? splitCols(b, [0.5, 0.5], 6 * u) : splitRows(b, [0.52, 0.48], 5 * u);
+        const t = g.text(c.shine, txt, {mode: 'uniform', lead: 0.12, maxLines: 4});
+        t.draw(txt.x, g.wide ? txt.y + (txt.h - t.h) / 2 : txt.y + txt.h - t.h);
+        const sh = 12.6 * u, gs = g.tall ? 12 * u : 7 * u;
+        const y0 = sl.y + (sl.h - (2 * sh + gs)) / 2;
+        g.slider(R(sl.x, y0, sl.w, sh), c.rough, 0.2);
+        g.slider(R(sl.x, y0 + sh + gs, sl.w, sh), c.metal, 0.0);
+      }},
+      {hold: 0.12, beat: 3, note: 'glitch', fx: {type: 'glitch', of: 5, seed: 5}},
+      {hold: 2.0, beat: 4, note: 'tutorials', draw: (g, c) => g.statement({dark: false, tag: 'Learn', title: c.learn, serif: c.learnSerif, art: r => g.play(R(r.x, r.y + r.h * 0.12, r.w, r.h * 0.76)), artWeight: g.wide ? 0.4 : 0.42})},
+    ],
+  },
+  {
+    id: 'probes', name: 'Reflection probes', tag: 'Learn', beats: 5,
+    fields: [
+      field('l1', 'Problem', 'Shiny materials reflect'),
+      field('l1s', 'Problem, script', 'the sky.'),
+      field('l2', 'Twist', 'Not your room.'),
+      field('l3', 'Fix', 'Add a reflection probe'),
+      field('s1', 'Step 1', 'Build › Create › Box'),
+      field('s2', 'Step 2', 'Click Reflection Probe'),
+      field('s3', 'Step 3', 'Select it. Scale it up.'),
+      field('l4', 'Last tip', 'Dark inside? Add lights.'),
+      field('l4s', 'Last tip, script', 'just like real life :)'),
+      field('hint', 'Footnote', "Can't see it? Build › Options › Select Reflection Probes"),
+    ],
+    frames: [
+      {hold: 1.6, beat: 0, note: 'reflects the sky', draw: (g, c) => g.statement({dark: true, title: c.l1, serif: c.l1s, art: r => { const s = Math.min(r.w, r.h) * 0.46; g.ball(r.x + r.w / 2, r.y + r.h / 2, s, {mode: 'sky'}); }})},
+      {hold: 1.4, beat: 1, note: 'not your room', draw: (g, c) => g.hero({dark: false, title: c.l2, mode: 'justify'})},
+      {hold: 0.12, beat: 2, note: 'glitch', fx: {type: 'glitch', of: 3, seed: 21}},
+      {hold: 1.8, beat: 2, note: 'reflection probe', draw: (g, c) => g.statement({dark: true, tag: 'The fix', title: c.l3, art: r => g.probe(r, {mode: 'room'}), artWeight: 0.46})},
+      ...[0, 1, 2].map(i => ({hold: 1.7, beat: 3, note: `step ${i + 1}`, draw: (g, c) => g.stepper({dark: false, tag: `Step ${i + 1} / 3`, title: 'How to', steps: [c.s1, c.s2, c.s3], active: i})})),
+      {hold: 2.2, beat: 4, note: 'add lights', draw: (g, c) => {
+        g.ground(true); g.chrome('Last tip');
+        const {u} = g, b = g.body;
+        const foot = g.para(c.hint, R(0, 0, g.wide ? b.w * 0.6 : b.w, g.tall ? 9 * u : 7 * u), {face: FACE.monoReg, max: 2.6 * u, color: g.soft});
+        const s = g.serif(c.l4s, R(0, 0, b.w, 10 * u), {max: g.tall ? 10 * u : 8 * u});
+        const t = g.text(c.l4, R(b.x, 0, b.w, b.h - foot.h - s.h - 8 * u), {mode: 'uniform', lead: 0.12, maxLines: 4});
+        t.draw(b.x, b.y);
+        s.draw(b.x, b.y + t.h + 3 * u);
+        foot.draw(b.x, b.y + b.h - foot.h);
+        const ft = b.y + t.h + s.h + 8 * u, fh = b.y + b.h - foot.h - 6 * u - ft;
+        if (fh > 18 * u) { const r = Math.min(fh, b.w) / 2; g.flare(g.wide ? b.x + b.w - r : b.x + b.w / 2, ft + fh / 2, r); }
+      }},
+    ],
+  },
+  {
+    id: 'purchase', name: 'Purchase info', tag: 'Purchase info', beats: 4,
+    fields: [
+      field('q', 'Question', 'Bought it?'),
+      field('where', 'Lead-in', 'Find it in your'),
+      field('path', 'Folder', 'Materials folder'),
+      field('whereNote', 'Folder label', 'Individual materials'),
+      field('perms', 'Permissions headline', 'Per|mis|sions', 'A | marks where a long word may break.'),
+      field('cm', 'Option 1', 'Copy / Mod'),
+      field('cmNote', 'Option 1, detail', 'Use on objects you own.'),
+      field('fp', 'Option 2', 'Full perm'),
+      field('fpNote', 'Option 2, detail', 'Use on anything. Single-user license.'),
+      field('tex', 'Textures', 'Textures not included'),
+      field('texNote', 'Textures, script', 'texture maps aren’t part of any purchase'),
+    ],
+    frames: [
+      {hold: 1.2, beat: 0, note: 'bought it?', draw: (g, c) => g.hero({dark: true, title: c.q, mode: 'justify', kicker: 'Delivery', art: r => g.numeral('?', r)})},
+      {hold: 2.3, beat: 1, note: 'materials folder', draw: (g, c) => g.statement({dark: false, tag: 'Delivery', title: c.path, serif: c.where, serifFirst: true, art: r => g.folder(r, {label: c.whereNote}), artWeight: g.wide ? 0.34 : 0.4})},
+      {hold: 0.12, beat: 2, note: 'swipe', fx: {type: 'push', from: 1, to: 3, t: 0.5, dir: 'left'}},
+      {hold: 1.0, beat: 2, note: 'permissions', draw: (g, c) => g.hero({dark: true, tag: 'Permissions', title: c.perms, mode: 'justify', kicker: 'Two ways to buy'})},
+      {hold: 2.3, beat: 2, note: 'copy / mod', draw: (g, c) => g.cards({dark: true, tag: 'Permissions', title: c.perms, cards: [{title: c.cm, note: c.cmNote}, {title: c.fp, note: c.fpNote}], active: 0})},
+      {hold: 2.3, beat: 2, note: 'full perm', draw: (g, c) => g.cards({dark: true, tag: 'Permissions', title: c.perms, cards: [{title: c.cm, note: c.cmNote}, {title: c.fp, note: c.fpNote}], active: 1})},
+      {hold: 0.12, beat: 3, note: 'flash', fx: {type: 'invert', of: 7}},
+      {hold: 2.2, beat: 3, note: 'textures', draw: (g, c) => g.statement({dark: true, tag: 'Good to know', title: c.tex, serif: c.texNote, art: r => g.noTexture(R(r.x + r.w * 0.1, r.y + r.h * 0.1, r.w * 0.8, r.h * 0.8)), artWeight: g.wide ? 0.34 : 0.38})},
+    ],
+  },
+  {
+    id: 'welcome', name: 'Welcome', tag: 'Welcome', beats: 4,
+    fields: [
+      field('hello', 'Headline', 'Wel|come', 'A | marks where a long word may break.'),
+      field('thanks', 'Script line', 'thank you for visiting'),
+      field('made', 'List label', 'Made with'),
+      field('tools', 'Four tools', 'Substance Sampler, Substance Designer, Substance Painter, Materialize', 'Comma separated. The first four are used.'),
+      field('pat', 'Patterns headline', 'Patterns'),
+      field('patNote', 'Patterns, script', 'hand-drawn by me, or from open-source and paid stock sites'),
+    ],
+    frames: [
+      {hold: 1.4, beat: 0, note: 'welcome', draw: (g, c) => g.hero({dark: true, title: c.hello, mode: 'justify', art: r => {
+        const lh = Math.min(r.h * 0.78, r.w / 2.68);
+        g.logo(r.x + r.w / 2, r.y + (r.h - lh) / 2, lh, 'center');
+      }})},
+      {hold: 0.12, beat: 0, note: 'flash', fx: {type: 'invert', of: 0}},
+      {hold: 1.8, beat: 1, note: 'thank you', draw: (g, c) => {
+        g.ground(true); g.chrome();
+        const {u} = g, b = g.body;
+        const room = R(b.x, b.y, g.wide ? b.w * 0.82 : b.w, b.h - 12 * u);
+        const p = g.para(c.thanks, room, {max: g.tall ? 34 * u : 30 * u, lh: 0.98});
+        const y = b.y + b.h - p.h;
+        p.draw(b.x, y, 'left', room.w);
+        const sr = (g.tall ? 7 : 5.5) * u;
+        g.sparkle(b.x + b.w - sr, b.y + sr * 1.2, sr);
+        g.sparkle(b.x + b.w - sr * 3.2, b.y + sr * 3.4, sr * 0.55);
+      }},
+      ...[0, 1, 2, 3].map(i => ({hold: 0.6, beat: 2, note: `tool ${i + 1}`, draw: (g, c) => {
+        g.ground(true); g.chrome(`${c.made} · ${i + 1}/4`);
+        const {u} = g, b = g.body;
+        const chip = g.chip(c.made);
+        const tools = listOf(c.tools);
+        const parts = k => {
+          const name = tools[k % Math.max(1, tools.length)] || '';
+          const words = name.split(' ');
+          const small = words.length > 1 ? words[0] : '';
+          const sm = small ? g.serif(small, R(0, 0, b.w, 11 * u), {max: g.tall ? 11 * u : 9 * u}) : null;
+          const t = g.text(words.length > 1 ? words.slice(1).join(' ') : name, R(b.x, 0, b.w, b.h - chip.h - (sm ? sm.h + 3 * u : 0) - 5 * u), {mode: 'uniform', maxLines: 2});
+          return {t, sm, h: t.h + (sm ? sm.h + 3 * u : 0)};
+        };
+        const all = [0, 1, 2, 3].map(parts), me = all[i];
+        chip.draw(b.x, b.y);
+        const y = b.y + b.h - me.t.h;
+        me.t.draw(b.x, y);
+        if (me.sm) me.sm.draw(b.x, y - 3 * u - me.sm.h);
+        const freeTop = b.y + chip.h + 4 * u, tallest = Math.max(...all.map(a => a.h));
+        g.numeral(String(i + 1).padStart(2, '0'), R(b.x, freeTop, b.w, b.y + b.h - tallest - 5 * u - freeTop));
+      }})),
+      {hold: 2.2, beat: 3, note: 'patterns', draw: (g, c) => {
+        g.ground(false); g.chrome('Patterns');
+        const {u} = g, b = g.body;
+        const [txt, art] = g.wide ? splitCols(b, [0.6, 0.4], 5 * u) : splitRows(b, [0.6, 0.4], 4 * u);
+        const p = g.para(c.patNote, R(0, 0, txt.w, txt.h * 0.42), {max: g.tall ? 9 * u : 7 * u});
+        const t = g.text(c.pat, R(txt.x, 0, txt.w, txt.h - p.h - 3 * u), {mode: 'uniform', maxLines: 1});
+        t.draw(txt.x, txt.y);
+        p.draw(txt.x, txt.y + t.h + 3 * u);
+        const s = Math.min(art.w, art.h);
+        const ar = R(art.x + (art.w - s) * (g.wide ? 0.5 : 0), art.y + (art.h - s), s, s);
+        const q = splitCols(ar, [1, 1], 1.4 * u);
+        const qq = q.map(c2 => splitRows(c2, [1, 1], 1.4 * u)).flat();
+        ['pyramids', 'herringbone', 'dots', 'wood'].forEach((k, i) => { paintSwatch(g.ctx, qq[i], k, i + 9); g.ctx.strokeStyle = BLACK; g.ctx.lineWidth = 2; g.ctx.strokeRect(qq[i].x, qq[i].y, qq[i].w, qq[i].h); });
+      }},
+    ],
+  },
+];
+
+/* ---------- effects built from other frames ---------- */
+function fxGlitch(dst, src, seed, u) {
+  const ctx = dst.getContext('2d'), W = dst.width, H = dst.height, rnd = rng(seed);
+  ctx.drawImage(src, 0, 0);
+  let y = 0;
+  while (y < H) {
+    const h = Math.max(4, Math.round((0.025 + rnd() * 0.11) * H));
+    const roll = rnd();
+    if (roll < 0.6) {
+      const off = Math.round((rnd() - 0.5) * 2 * 10 * u);
+      ctx.drawImage(src, 0, y, W, h, off, y, W, h);
+    }
+    if (roll > 0.88) {
+      ctx.globalCompositeOperation = 'difference'; ctx.fillStyle = WHITE; ctx.fillRect(0, y, W, h);
+      ctx.globalCompositeOperation = 'source-over';
+    }
+    y += h;
+  }
+}
+function fxInvert(dst, src) {
+  const ctx = dst.getContext('2d');
+  ctx.drawImage(src, 0, 0);
+  ctx.globalCompositeOperation = 'difference'; ctx.fillStyle = WHITE; ctx.fillRect(0, 0, dst.width, dst.height);
+  ctx.globalCompositeOperation = 'source-over';
+}
+function fxPush(dst, from, to, t, dir) {
+  const ctx = dst.getContext('2d'), W = dst.width, H = dst.height;
+  if (dir === 'left') { ctx.drawImage(from, -Math.round(W * t), 0); ctx.drawImage(to, Math.round(W * (1 - t)), 0); }
+  else { ctx.drawImage(from, 0, -Math.round(H * t)); ctx.drawImage(to, 0, Math.round(H * (1 - t))); }
+}
+
+/* ---------- rendering ---------- */
+function makeCanvas(w, h) { const c = document.createElement('canvas'); c.width = w; c.height = h; return c; }
+function copyOf(sign, overrides = {}) {
+  const c = {};
+  sign.fields.forEach(f => { c[f.key] = overrides[f.key] ?? f.value; });
+  return c;
+}
+function renderFrames(sign, fmt, copy) {
+  const out = [];
+  sign.frames.forEach((f, i) => {
+    if (f.fx) return;
+    const c = makeCanvas(fmt.w, fmt.h);
+    const g = new G(c, fmt, {beat: f.beat, beats: sign.beats, tag: sign.tag});
+    f.draw(g, copy);
+    g.guard();
+    out[i] = c;
+  });
+  sign.frames.forEach((f, i) => {
+    if (!f.fx) return;
+    const c = makeCanvas(fmt.w, fmt.h);
+    const g = new G(c, fmt, {beat: f.beat, beats: sign.beats, tag: sign.tag});
+    if (f.fx.type === 'glitch') fxGlitch(c, out[f.fx.of], f.fx.seed, g.u);
+    else if (f.fx.type === 'invert') fxInvert(c, out[f.fx.of]);
+    else if (f.fx.type === 'push') fxPush(c, out[f.fx.from], out[f.fx.to], f.fx.t, f.fx.dir);
+    g.guard();
+    out[i] = c;
+  });
+  return out;
+}
+function composeSheet(frames, fmt) {
+  const sheet = makeCanvas(fmt.w * fmt.cols, fmt.h * fmt.rows);
+  const ctx = sheet.getContext('2d');
+  frames.forEach((f, i) => ctx.drawImage(f, (i % fmt.cols) * fmt.w, Math.floor(i / fmt.cols) * fmt.h));
+  return sheet;
+}
+
+/* ---------- timing ---------- */
+const QUICK = 0.5;   // frames shorter than this are cuts; longer ones are holds
+// Group the timeline into llSetTextureAnim runs. Equal-length frames share a run;
+// a run of cuts may land on a longer hold, because a run without LOOP stays on its
+// last frame. Mirrors build() in the LSL player.
+function runsOf(holds) {
+  const runs = [];
+  let a = 0;
+  while (a < holds.length) {
+    const step = Math.max(0.05, holds[a]);
+    let total = step, b = a;
+    while (b + 1 < holds.length) {
+      const next = holds[b + 1];
+      if (next === holds[a]) { b++; total += next; continue; }
+      if (next > step && next >= QUICK) { b++; total += next; }
+      break;
+    }
+    runs.push({first: a, count: b - a + 1, rate: 1 / step, seconds: total});
+    a = b + 1;
+  }
+  return runs;
+}
+
+/* ---------- checks ---------- */
+const isPow2 = n => n > 0 && (n & (n - 1)) === 0;
+function frameStats(canvas) {
+  const {width: w, height: h} = canvas;
+  const d = canvas.getContext('2d').getImageData(0, 0, w, h).data;
+  let sum = 0, lo = 255, hi = 0, hash = 2166136261;
+  for (let i = 0; i < d.length; i += 4) {
+    const v = d[i];
+    sum += v; if (v < lo) lo = v; if (v > hi) hi = v;
+    hash = Math.imul(hash ^ v, 16777619);
+  }
+  return {mean: sum / (w * h * 255), lo, hi, hash: hash >>> 0};
+}
+function runChecks(frames, fmt, holds) {
+  const sw = fmt.w * fmt.cols, sh = fmt.h * fmt.rows;
+  const stats = frames.map(frameStats);
+  const hashes = new Set(stats.map(s => s.hash));
+  const blank = stats.filter(s => s.hi - s.lo < 64).length;
+  // big luminance changes inside any 1 s window, counted around the loop
+  const times = [];
+  let t = 0;
+  holds.forEach(h => { times.push(t); t += h; });
+  const loop = t, flips = [];
+  for (let i = 0; i < frames.length; i++) {
+    const j = (i + 1) % frames.length;
+    if (Math.abs(stats[j].mean - stats[i].mean) > 0.25) flips.push(j === 0 ? loop : times[j]);
+  }
+  let maxFlips = 0;
+  for (const f of flips) {
+    const n = flips.filter(g => (g - f + loop) % loop < 1).length;
+    maxFlips = Math.max(maxFlips, n);
+  }
+  return [
+    {ok: isPow2(sw) && isPow2(sh) && sw <= 2048 && sh <= 2048, text: `Sheet ${sw} × ${sh}: powers of two, within 2048`},
+    {ok: sw % fmt.cols === 0 && sh % fmt.rows === 0, text: `${fmt.cols} × ${fmt.rows} grid divides it exactly: ${fmt.w} × ${fmt.h} cells`},
+    {ok: frames.length === fmt.cols * fmt.rows && blank === 0, text: `All ${fmt.cols * fmt.rows} cells used, none blank`},
+    {ok: hashes.size === frames.length, text: hashes.size === frames.length ? 'Every frame is unique' : `${frames.length - hashes.size} duplicate frame(s)`},
+    {ok: maxFlips <= 3, text: `Flash-safe: at most ${maxFlips} light/dark flip${maxFlips === 1 ? '' : 's'} in any second`},
+  ];
+}
+
+/* ---------- encoders ---------- */
+class Bytes {
+  constructor(n = 1 << 16) { this.b = new Uint8Array(n); this.n = 0; }
+  ensure(k) { if (this.n + k > this.b.length) { const nb = new Uint8Array(Math.max(this.b.length * 2, this.n + k)); nb.set(this.b.subarray(0, this.n)); this.b = nb; } }
+  u8(v) { this.ensure(1); this.b[this.n++] = v & 255; }
+  u16(v) { this.u8(v); this.u8(v >> 8); }
+  u32be(v) { this.u8(v >>> 24); this.u8(v >>> 16); this.u8(v >>> 8); this.u8(v); }
+  str(s) { for (let i = 0; i < s.length; i++) this.u8(s.charCodeAt(i)); }
+  bytes(a) { this.ensure(a.length); this.b.set(a, this.n); this.n += a.length; }
+  out() { return this.b.slice(0, this.n); }
+}
+const luma = (d, i) => (d[i] * 77 + d[i + 1] * 150 + d[i + 2] * 29 + 128) >> 8;
+
+// Animated GIF, 256-level gray palette, per-frame delays, loops forever.
+function encodeGIF(frames, holds) {
+  const w = frames[0].width, h = frames[0].height, out = new Bytes(w * h);
+  out.str('GIF89a'); out.u16(w); out.u16(h);
+  out.u8(0xF7); out.u8(0); out.u8(0);
+  for (let i = 0; i < 256; i++) { out.u8(i); out.u8(i); out.u8(i); }
+  out.u8(0x21); out.u8(0xFF); out.u8(11); out.str('NETSCAPE2.0'); out.u8(3); out.u8(1); out.u16(0); out.u8(0);
+  frames.forEach((cv, k) => {
+    const d = cv.getContext('2d').getImageData(0, 0, w, h).data;
+    const px = new Uint8Array(w * h);
+    for (let i = 0, j = 0; j < px.length; i += 4, j++) px[j] = luma(d, i);
+    out.u8(0x21); out.u8(0xF9); out.u8(4); out.u8(0x04); out.u16(Math.max(2, Math.round(holds[k] * 100))); out.u8(0); out.u8(0);
+    out.u8(0x2C); out.u16(0); out.u16(0); out.u16(w); out.u16(h); out.u8(0);
+    lzw(out, px, 8);
+  });
+  out.u8(0x3B);
+  return out.out();
+}
+function lzw(out, px, minSize) {
+  out.u8(minSize);
+  const clear = 1 << minSize, eoi = clear + 1;
+  let size = minSize + 1, next = eoi + 1;
+  const dict = new Map();
+  let acc = 0, bits = 0;
+  const block = new Uint8Array(255);
+  let bl = 0;
+  const byte = v => { block[bl++] = v; if (bl === 255) { out.u8(255); out.bytes(block); bl = 0; } };
+  const emit = code => { acc |= code << bits; bits += size; while (bits >= 8) { byte(acc & 255); acc >>>= 8; bits -= 8; } };
+  emit(clear);
+  let prefix = px[0];
+  for (let i = 1; i < px.length; i++) {
+    const k = px[i], key = prefix * 256 + k;
+    const hit = dict.get(key);
+    if (hit !== undefined) { prefix = hit; continue; }
+    emit(prefix);
+    if (next === 4096) {
+      emit(clear);
+      dict.clear(); size = minSize + 1; next = eoi + 1;
+    } else {
+      if (next >= (1 << size)) size++;
+      dict.set(key, next++);
+    }
+    prefix = k;
+  }
+  emit(prefix);
+  emit(eoi);
+  if (bits > 0) byte(acc & 255);
+  if (bl) { out.u8(bl); out.bytes(block.subarray(0, bl)); }
+  out.u8(0);
+}
+
+const CRC = (() => { const t = new Uint32Array(256); for (let n = 0; n < 256; n++) { let c = n; for (let k = 0; k < 8; k++) c = c & 1 ? 0xEDB88320 ^ (c >>> 1) : c >>> 1; t[n] = c >>> 0; } return t; })();
+function crc32(parts) { let c = 0xFFFFFFFF; for (const p of parts) for (let i = 0; i < p.length; i++) c = CRC[(c ^ p[i]) & 255] ^ (c >>> 8); return (c ^ 0xFFFFFFFF) >>> 0; }
+async function deflate(bytes) {
+  const s = new Blob([bytes]).stream().pipeThrough(new CompressionStream('deflate'));
+  return new Uint8Array(await new Response(s).arrayBuffer());
+}
+// PNG written by hand: 24-bit RGB for opaque sheets (no alpha channel, so Second
+// Life treats it as opaque), RGBA for the badge. Pixels are forced to gray.
+async function encodePNG(canvas, alpha = false) {
+  const w = canvas.width, h = canvas.height, ch = alpha ? 4 : 3, stride = w * ch;
+  const d = canvas.getContext('2d').getImageData(0, 0, w, h).data;
+  const raw = new Uint8Array((stride + 1) * h);
+  let prev = new Uint8Array(stride), cur = new Uint8Array(stride);
+  const cand = [0, 1, 2, 3, 4].map(() => new Uint8Array(stride));
+  for (let y = 0; y < h; y++) {
+    for (let x = 0; x < w; x++) {
+      const i = (y * w + x) * 4, o = x * ch, v = luma(d, i);
+      cur[o] = cur[o + 1] = cur[o + 2] = v;
+      if (alpha) cur[o + 3] = d[i + 3];
+    }
+    let best = 0, bestSum = Infinity;
+    for (let f = 0; f < 5; f++) {
+      const c = cand[f];
+      let sum = 0;
+      for (let i = 0; i < stride; i++) {
+        const a = i >= ch ? cur[i - ch] : 0, b = prev[i], cc = i >= ch ? prev[i - ch] : 0;
+        let p;
+        if (f === 0) p = 0; else if (f === 1) p = a; else if (f === 2) p = b; else if (f === 3) p = (a + b) >> 1;
+        else { const q = a + b - cc, pa = Math.abs(q - a), pb = Math.abs(q - b), pc = Math.abs(q - cc); p = pa <= pb && pa <= pc ? a : pb <= pc ? b : cc; }
+        const v = (cur[i] - p) & 255;
+        c[i] = v; sum += v < 128 ? v : 256 - v;
+      }
+      if (sum < bestSum) { bestSum = sum; best = f; }
+    }
+    raw[y * (stride + 1)] = best;
+    raw.set(cand[best], y * (stride + 1) + 1);
+    [prev, cur] = [cur, prev];
+  }
+  const idat = await deflate(raw);
+  const out = new Bytes(idat.length + 128);
+  out.bytes([137, 80, 78, 71, 13, 10, 26, 10]);
+  const chunk = (type, data) => {
+    const t = new TextEncoder().encode(type);
+    out.u32be(data.length); out.bytes(t); out.bytes(data); out.u32be(crc32([t, data]));
+  };
+  const ihdr = new Uint8Array(13);
+  const dv = new DataView(ihdr.buffer);
+  dv.setUint32(0, w); dv.setUint32(4, h); ihdr[8] = 8; ihdr[9] = alpha ? 6 : 2; ihdr[10] = 0; ihdr[11] = 0; ihdr[12] = 0;
+  chunk('IHDR', ihdr); chunk('IDAT', idat); chunk('IEND', new Uint8Array(0));
+  return out.out();
+}
+
+/* ---------- LSL ---------- */
+const fmtSec = s => (Math.round(s * 100) / 100).toFixed(2);
+function sheetName(sign, fmt) { return `artsy-${sign.id}-${fmt.id}-${fmt.cols}x${fmt.rows}`; }
+function lslPlayer(sign, fmt, holds) {
+  const name = sheetName(sign, fmt);
+  const runs = runsOf(holds);
+  const total = holds.reduce((a, b) => a + b, 0);
+  const rows = holds.map((h, i) => `    ${i}, ${fmtSec(h)}${i < holds.length - 1 ? ',' : ' '}   // ${sign.frames[i].note}`).join('\n');
+  return `// artsy kinetic sign player
+// Sign:  ${sign.name}, ${fmt.name.toLowerCase()} ${fmt.ratio}
+// Sheet: ${name}
+//        ${fmt.w * fmt.cols} x ${fmt.h * fmt.rows} px, ${fmt.cols} x ${fmt.rows} grid, ${fmt.cols * fmt.rows} frames of ${fmt.w} x ${fmt.h}
+// Loop:  ${fmtSec(total)} s in ${runs.length} runs
+//
+// 1. Put the spritesheet on the display face: Full Bright on, Glow 0, Alpha mode None.
+//    Repeats and offsets don't matter; the animation sets them.
+// 2. Drop this script into the same prim. It starts on its own.
+//
+// Holds are timed here instead of repeating frames in the sheet. That is what keeps
+// the sheet at ${fmt.cols * fmt.rows} frames. To change timing, edit TIMELINE: frame, seconds on screen.
+
+integer FACE = ALL_SIDES;   // set your display face number if other faces have their own textures
+integer COLS = ${fmt.cols};
+integer ROWS = ${fmt.rows};
+float   QUICK = 0.5;        // frames shorter than this are cuts, played inside one run
+
+list TIMELINE = [
+${rows}
+];
+
+list runs;      // first frame, frame count, frames per second, seconds
+integer run;
+
+build()
+{
+    runs = [];
+    integer n = llGetListLength(TIMELINE) / 2;
+    integer a = 0;
+    while (a < n)
+    {
+        integer first = llList2Integer(TIMELINE, a * 2);
+        float step = llList2Float(TIMELINE, a * 2 + 1);
+        if (step < 0.05) step = 0.05;
+        float total = step;
+        integer b = a;
+        integer more = TRUE;
+        while (more)
+        {
+            more = FALSE;
+            if (b + 1 < n)
+            {
+                if (llList2Integer(TIMELINE, (b + 1) * 2) == first + b + 1 - a)
+                {
+                    float next = llList2Float(TIMELINE, (b + 1) * 2 + 1);
+                    if (next == llList2Float(TIMELINE, a * 2 + 1))
+                    {
+                        ++b;
+                        total += next;
+                        more = TRUE;
+                    }
+                    else if (next > step && next >= QUICK)
+                    {
+                        // a run of cuts lands on a longer hold; the viewer stays on it
+                        ++b;
+                        total += next;
+                    }
+                }
+            }
+        }
+        runs += [first, b - a + 1, 1.0 / step, total];
+        a = b + 1;
+    }
+}
+
+play()
+{
+    // No LOOP flag: the viewer plays the run once and stays on its last frame.
+    // A late timer only stretches a hold; it never shows the wrong frame.
+    llSetTextureAnim(ANIM_ON, FACE, COLS, ROWS,
+        llList2Integer(runs, run), llList2Integer(runs, run + 1), llList2Float(runs, run + 2));
+    llSetTimerEvent(llList2Float(runs, run + 3));
+}
+
+default
+{
+    state_entry()
+    {
+        build();
+        run = 0;
+        if (llGetListLength(runs) == 4)
+        {
+            // one even run: let the viewer loop it, no timer needed
+            llSetTimerEvent(0.0);
+            llSetTextureAnim(ANIM_ON | LOOP, FACE, COLS, ROWS,
+                llList2Integer(runs, 0), llList2Integer(runs, 1), llList2Float(runs, 2));
+        }
+        else play();
+    }
+
+    timer()
+    {
+        run += 4;
+        if (run >= llGetListLength(runs)) run = 0;
+        play();
+    }
+
+    on_rez(integer start_param)
+    {
+        llResetScript();
+    }
+}
+`;
+}
+
+/* ---------- zero-frame motion: ticker and badge ---------- */
+const EXTRAS = [
+  {
+    id: 'ticker', name: 'Ticker strip', kind: 'ticker', size: [2048, 256],
+    fields: [field('items', 'Ticker lines', 'Redelivery: click twice / Free sample materials / Tint any material / Full perm or copy-mod / Tutorials on YouTube', 'Separate lines with /')],
+    seconds: 24,
+  },
+  {
+    id: 'badge', name: 'Spinning badge', kind: 'badge', size: [512, 512],
+    fields: [field('ring', 'Ring text', 'Free samples'), field('times', 'Repeats', '3', null, ['2', '3', '4'])],
+    seconds: 14,
+  },
+];
+function renderTicker(copy) {
+  const W = 2048, H = 256, c = makeCanvas(W, H), ctx = c.getContext('2d');
+  ctx.fillStyle = BLACK; ctx.fillRect(0, 0, W, H);
+  const items = copy.items.split('/').map(s => s.trim().toUpperCase()).filter(Boolean);
+  const face = FACE.display, st = 'semi-expanded';
+  const rule = 6, inset = 26;
+  ctx.fillStyle = WHITE; ctx.fillRect(0, inset, W, rule); ctx.fillRect(0, H - inset - rule, W, rule);
+  if (!items.length) return c;
+  const cap = measure(ctx, face, st, 'H').a;
+  let S = 104 * 100 / cap;       // cap height 104 px
+  const sp = S * 0.62;          // room on each side of a sparkle
+  const natural = items.reduce((a, t) => a + measure(ctx, face, st, t).w * S / 100 + 2 * sp, 0);
+  let reps = Math.max(1, Math.round(W / natural)), scale = 1, extra = 0;
+  if (natural > W) { scale = W / natural; reps = 1; }
+  else extra = (W - reps * natural) / (reps * items.length);   // spread the remainder into the gaps so the strip closes at exactly 2048
+  S *= scale;
+  const capPx = cap * S / 100, base = H / 2 + capPx / 2, gap = sp * scale + extra / 2;
+  const g = new G(c, {w: W, h: H}, {beat: 0, beats: 1, tag: ''});
+  // lay out once, then paint at -W, 0 and +W so anything crossing an edge wraps onto the other
+  const parts = [];
+  let x = 0;
+  for (let r = 0; r < reps; r++) items.forEach((t, i) => {
+    const m = measure(ctx, face, st, t), w = m.w * S / 100;
+    x += gap;
+    parts.push({t, m, x, w, inv: i % 2 === 1});
+    x += w + gap;
+    parts.push({spark: x});
+  });
+  for (const off of [-W, 0, W]) for (const p of parts) {
+    if (p.spark !== undefined) { g.sparkle(p.spark + off, H / 2, 22 * scale, WHITE); continue; }
+    if (p.inv) { ctx.fillStyle = WHITE; ctx.fillRect(p.x + off - 18 * scale, base - capPx - 16 * scale, p.w + 36 * scale, capPx + 32 * scale); }
+    applyFont(ctx, face, S, st);
+    ctx.fillStyle = p.inv ? BLACK : WHITE;
+    ctx.fillText(p.t, p.x + off + p.m.l * S / 100, base);
+  }
+  return c;
+}
+function renderBadge(copy) {
+  const S = 512, c = makeCanvas(S, S), ctx = c.getContext('2d');
+  const g = new G(c, {w: S, h: S}, {beat: 0, beats: 1, tag: ''});
+  const cx = S / 2, cy = S / 2, R0 = 252;
+  ctx.fillStyle = BLACK; ctx.beginPath(); ctx.arc(cx, cy, R0, 0, Math.PI * 2); ctx.fill();
+  ctx.strokeStyle = WHITE; ctx.lineWidth = 5;
+  ctx.beginPath(); ctx.arc(cx, cy, R0 - 14, 0, Math.PI * 2); ctx.stroke();
+  ctx.beginPath(); ctx.arc(cx, cy, 150, 0, Math.PI * 2); ctx.stroke();
+  const text = copy.ring.toUpperCase(), times = clamp(parseInt(copy.times, 10) || 3, 1, 6);
+  const face = FACE.mono, size = 46, rText = 194;
+  const chars = [...text];
+  const adv = chars.map(ch => measure(ctx, face, 'normal', ch).adv * size / 100);
+  const spark = 46;
+  const one = adv.reduce((a, b) => a + b, 0) + spark;
+  const k = (2 * Math.PI * rText) / (one * times);      // stretch the spacing so the ring closes exactly
+  let ang = -Math.PI / 2;
+  applyFont(ctx, face, size);
+  if (HAS_SPACING) ctx.letterSpacing = '0px';
+  ctx.fillStyle = WHITE;
+  for (let r = 0; r < times; r++) {
+    chars.forEach((ch, i) => {
+      const a = adv[i] * k / rText;
+      ctx.save();
+      ctx.translate(cx + Math.cos(ang + a / 2) * rText, cy + Math.sin(ang + a / 2) * rText);
+      ctx.rotate(ang + a / 2 + Math.PI / 2);
+      ctx.textAlign = 'center';
+      ctx.fillText(ch, 0, size * 0.36);
+      ctx.restore();
+      ang += a;
+    });
+    const a = spark * k / rText;
+    g.sparkle(cx + Math.cos(ang + a / 2) * rText, cy + Math.sin(ang + a / 2) * rText, 15, WHITE);
+    ang += a;
+  }
+  g.sparkle(cx, cy, 92, WHITE, 0.14);
+  return c;
+}
+function lslTicker(win, seconds) {
+  return `// artsy ticker: one texture, smooth scroll, no frames
+// Texture: artsy-ticker-2048x256 (8:1). The text repeats seamlessly at the texture edge.
+// Put it on the strip's display face: Full Bright on, Glow 0, Alpha mode None.
+
+integer FACE    = ALL_SIDES;  // set your display face number if other faces have their own textures
+integer WINDOWS = ${win};        // how much of the texture shows at once:
+                              // 1 = 8:1 strip (e.g. 4 x 0.5 m), 2 = 4:1 strip (2 x 0.5 m), 4 = 2:1 panel (1 x 0.5 m)
+float   SECONDS = ${fmtSec(seconds)};    // time for the whole texture to pass once
+integer FLIP    = FALSE;      // TRUE if it runs the wrong way on your prim
+
+default
+{
+    state_entry()
+    {
+        integer mode = ANIM_ON | SMOOTH | LOOP;
+        if (FLIP) mode = mode | REVERSE;
+        llSetTextureAnim(mode, FACE, WINDOWS, 1, 0.0, WINDOWS, WINDOWS / SECONDS);
+    }
+
+    on_rez(integer start_param)
+    {
+        llResetScript();
+    }
+}
+`;
+}
+function lslBadge(seconds) {
+  return `// artsy spinning badge: one texture, smooth rotation, no frames
+// Texture: artsy-badge-512 (transparent corners).
+// Face settings: Alpha mode Alpha masking (cutoff 128), Full Bright on,
+// Repeats 1 x 1, Offset 0, Rotation 0.
+
+integer FACE    = ALL_SIDES;  // set your display face number if other faces have their own textures
+float   SECONDS = ${fmtSec(seconds)};    // one full turn; make it negative to spin the other way
+
+default
+{
+    state_entry()
+    {
+        llSetTextureAnim(ANIM_ON | SMOOTH | ROTATE | LOOP, FACE, 1, 1, 0.0, TWO_PI, TWO_PI / SECONDS);
+    }
+
+    on_rez(integer start_param)
+    {
+        llResetScript();
+    }
+}
+`;
+}
+function setupNotes(sign, fmt, holds) {
+  const sw = fmt.w * fmt.cols, sh = fmt.h * fmt.rows, total = holds.reduce((a, b) => a + b, 0);
+  return `${sign.name.toUpperCase()}, ${fmt.name.toUpperCase()} ${fmt.ratio}
+
+Files
+  ${sheetName(sign, fmt)}.png   spritesheet to upload (${sw} x ${sh}, 24-bit, no alpha)
+  ${sheetName(sign, fmt)}.lsl   player script
+  ${sheetName(sign, fmt)}.gif   preview with real timing (not for upload)
+
+Sheet
+  ${fmt.cols} columns x ${fmt.rows} rows, ${fmt.cols * fmt.rows} frames of ${fmt.w} x ${fmt.h}, read left to right, top to bottom.
+  Every cell is used. No empty rows or columns.
+
+In Second Life
+  1. Upload the PNG.
+  2. Rez a box and size its display face ${fmt.ratio} (for example ${fmt.prim}).
+  3. Apply the texture to that face. Full Bright on, Glow 0, Alpha mode None.
+  4. Drop the script in. Loop: ${fmtSec(total)} s.
+
+Using a plain GIF player instead? llSetTextureAnim(ANIM_ON | LOOP, ALL_SIDES, ${fmt.cols}, ${fmt.rows}, 0, ${fmt.cols * fmt.rows}, 1.0)
+works, but every frame gets the same time. The player script keeps the quick cuts quick and the holds readable.
+`;
+}
+
+/* ---------- headless API (used by tools/render-signs.mjs) ---------- */
+function b64(bytes) {
+  let s = '';
+  for (let i = 0; i < bytes.length; i += 0x8000) s += String.fromCharCode.apply(null, bytes.subarray(i, i + 0x8000));
+  return btoa(s);
+}
+const READY = (async () => { await Promise.all([loadFonts(), loadAssets()]); return fontsOk; })();
+window.SignStudio = {
+  ready: READY,
+  signs: SIGNS.map(s => s.id),
+  formats: Object.keys(FORMATS),
+  async build(id, fmtId) {
+    await READY;
+    const sign = SIGNS.find(s => s.id === id), fmt = FORMATS[fmtId];
+    const frames = renderFrames(sign, fmt, copyOf(sign));
+    const holds = sign.frames.map(f => f.hold);
+    const sheet = composeSheet(frames, fmt);
+    return {
+      name: sheetName(sign, fmt),
+      png: b64(await encodePNG(sheet)),
+      gif: b64(encodeGIF(frames, holds)),
+      lsl: lslPlayer(sign, fmt, holds),
+      notes: setupNotes(sign, fmt, holds),
+      checks: runChecks(frames, fmt, holds),
+      sheet: [sheet.width, sheet.height], grid: [fmt.cols, fmt.rows], cell: [fmt.w, fmt.h],
+      holds, runs: runsOf(holds).length, fontsOk,
+    };
+  },
+  async extras() {
+    await READY;
+    const t = EXTRAS[0], b = EXTRAS[1];
+    return {
+      ticker: {png: b64(await encodePNG(renderTicker(copyOf(t)))), lsl: lslTicker(2, t.seconds)},
+      badge: {png: b64(await encodePNG(renderBadge(copyOf(b)), true)), lsl: lslBadge(b.seconds)},
+    };
+  },
+  // every frame of every sign in one image, for review
+  async contact(fmtId) {
+    await READY;
+    const fmt = FORMATS[fmtId], sc = 0.5, pad = 8;
+    const fw = fmt.w * sc, fh = fmt.h * sc;
+    const c = makeCanvas(Math.round(8 * (fw + pad) + pad), Math.round(SIGNS.length * (fh + pad) + pad));
+    const ctx = c.getContext('2d');
+    ctx.fillStyle = '#7a7a7a'; ctx.fillRect(0, 0, c.width, c.height);
+    SIGNS.forEach((s, j) => renderFrames(s, fmt, copyOf(s)).forEach((f, i) => ctx.drawImage(f, pad + i * (fw + pad), pad + j * (fh + pad), fw, fh)));
+    return c.toDataURL('image/png');
+  },
+  async frame(id, fmtId, i, scale = 1) {
+    await READY;
+    const sign = SIGNS.find(s => s.id === id), fmt = FORMATS[fmtId];
+    const f = renderFrames(sign, fmt, copyOf(sign))[i];
+    const c = makeCanvas(f.width * scale, f.height * scale);
+    c.getContext('2d').drawImage(f, 0, 0, c.width, c.height);
+    return c.toDataURL('image/png');
+  },
+};
+
+/* ==========================================================================
+   Studio UI
+   ========================================================================== */
+const $ = id => document.getElementById(id);
+const STORE = 'artsy-sign-studio-v1';
+const state = {sel: 'redelivery', fmt: 'portrait', win: 2, copy: {}, holds: {}, seconds: {}, playing: true};
+try { Object.assign(state, JSON.parse(localStorage.getItem(STORE) || '{}')); } catch (e) { /* storage blocked */ }
+if (matchMedia('(prefers-reduced-motion: reduce)').matches) state.playing = false;
+const save = () => { try { localStorage.setItem(STORE, JSON.stringify({sel: state.sel, fmt: state.fmt, win: state.win, copy: state.copy, holds: state.holds, seconds: state.seconds})); } catch (e) { /* ignore */ } };
+
+let current = null;   // {kind, frames, holds, sheet, ...}
+let clock = 0, lastTs = 0, shownFrame = -1;
+
+function itemById(id) { return SIGNS.find(s => s.id === id) || EXTRAS.find(e => e.id === id); }
+function holdsFor(sign) {
+  const saved = state.holds[sign.id];
+  return sign.frames.map((f, i) => (saved && saved[i] > 0) ? saved[i] : f.hold);
+}
+function toast(msg) {
+  const t = $('toast');
+  t.textContent = msg; t.hidden = false;
+  clearTimeout(toast.h); toast.h = setTimeout(() => { t.hidden = true; }, 2600);
+}
+
+function buildNav() {
+  const mk = (list, items, isExtra) => {
+    list.innerHTML = '';
+    items.forEach((s, i) => {
+      const li = document.createElement('li');
+      const b = document.createElement('button');
+      b.type = 'button'; b.dataset.id = s.id;
+      const sub = isExtra ? (s.kind === 'ticker' ? 'Smooth scroll · 0 frames' : 'Smooth spin · 0 frames') : navMeta(s);
+      b.innerHTML = `<span class="k">${isExtra ? '+' : String(i + 1).padStart(2, '0')}</span><strong></strong><small></small>`;
+      b.querySelector('strong').textContent = s.name;
+      b.querySelector('small').textContent = sub;
+      b.addEventListener('click', () => { state.sel = s.id; save(); rebuild(); });
+      li.append(b); list.append(li);
+    });
+  };
+  mk($('signList'), SIGNS, false);
+  mk($('extraList'), EXTRAS, true);
+}
+function navMeta(sign) { return `8 frames · ${fmtSec(holdsFor(sign).reduce((a, c) => a + c, 0))} s`; }
+// update text in place: rebuilding the list here would swallow a click that blurs a hold field
+function updateNavMeta(sign) {
+  const b = document.querySelector(`nav.signs button[data-id="${sign.id}"] small`);
+  if (b) b.textContent = navMeta(sign);
+}
+function markNav() {
+  document.querySelectorAll('nav.signs button').forEach(b => b.setAttribute('aria-current', String(b.dataset.id === state.sel)));
+}
+
+function buildCopyForm(item) {
+  const form = $('copyForm');
+  form.innerHTML = '';
+  const saved = state.copy[item.id] || {};
+  item.fields.forEach(f => {
+    const label = document.createElement('label');
+    label.htmlFor = `copy-${item.id}-${f.key}`;
+    label.textContent = f.label;
+    let input;
+    if (f.options) {
+      input = document.createElement('select');
+      f.options.forEach(o => { const op = document.createElement('option'); op.value = o; op.textContent = o; input.append(op); });
+    } else { input = document.createElement('input'); input.type = 'text'; }
+    input.id = `copy-${item.id}-${f.key}`;
+    input.value = saved[f.key] ?? f.value;
+    input.addEventListener('input', () => {
+      state.copy[item.id] = {...(state.copy[item.id] || {}), [f.key]: input.value};
+      save();
+      clearTimeout(buildCopyForm.t); buildCopyForm.t = setTimeout(() => rebuild(false), 220);
+    });
+    label.append(input);
+    if (f.hint) { const em = document.createElement('em'); em.textContent = f.hint; label.append(em); }
+    form.append(label);
+  });
+}
+
+function drawSheetPreview(sheet, cols, rows) {
+  const cv = $('sheet'), box = cv.parentElement;
+  const maxW = Math.max(200, Math.min(312, box.clientWidth - 22));
+  const sc = maxW / sheet.width;
+  cv.width = Math.round(sheet.width * sc); cv.height = Math.round(sheet.height * sc);
+  const ctx = cv.getContext('2d');
+  ctx.imageSmoothingQuality = 'high';
+  ctx.drawImage(sheet, 0, 0, cv.width, cv.height);
+  if (!cols) return;
+  const cw = cv.width / cols, ch = cv.height / rows;
+  ctx.save();
+  ctx.strokeStyle = 'rgba(255,255,255,.85)'; ctx.lineWidth = 1; ctx.setLineDash([4, 3]);
+  for (let i = 1; i < cols; i++) { ctx.beginPath(); ctx.moveTo(Math.round(i * cw) + 0.5, 0); ctx.lineTo(Math.round(i * cw) + 0.5, cv.height); ctx.stroke(); }
+  for (let j = 1; j < rows; j++) { ctx.beginPath(); ctx.moveTo(0, Math.round(j * ch) + 0.5); ctx.lineTo(cv.width, Math.round(j * ch) + 0.5); ctx.stroke(); }
+  ctx.setLineDash([]);
+  ctx.font = '700 10px "Space Mono", monospace';
+  for (let j = 0; j < rows; j++) for (let i = 0; i < cols; i++) {
+    const t = String(j * cols + i);
+    ctx.fillStyle = '#fff'; ctx.fillRect(i * cw + 3, j * ch + 3, 14, 13);
+    ctx.fillStyle = '#000'; ctx.fillText(t, i * cw + 6, j * ch + 13);
+  }
+  ctx.restore();
+}
+
+function setSpec(rows) {
+  const dl = $('spec');
+  dl.innerHTML = '';
+  rows.forEach(([k, v]) => { const dt = document.createElement('dt'); dt.textContent = k; const dd = document.createElement('dd'); dd.textContent = v; dl.append(dt, dd); });
+}
+function setChecks(list) {
+  const ul = $('checks');
+  ul.innerHTML = '';
+  list.forEach(c => { const li = document.createElement('li'); li.textContent = c.text; if (!c.ok) li.className = 'bad'; ul.append(li); });
+}
+
+function buildTimeline() {
+  const ol = $('timeline');
+  ol.innerHTML = '';
+  current.frames.forEach((f, i) => {
+    const li = document.createElement('li');
+    const b = document.createElement('button');
+    b.type = 'button'; b.className = 'thumb'; b.title = `Frame ${i}: ${current.sign.frames[i].note}`;
+    const tc = makeCanvas(Math.round(76 * f.width / f.height), 76);
+    tc.getContext('2d').drawImage(f, 0, 0, tc.width, tc.height);
+    const n = document.createElement('span'); n.textContent = i;
+    b.append(tc, n);
+    b.addEventListener('click', () => { state.playing = false; setPlayLabel(); clock = current.starts[i] + 0.001; draw(); });
+    const lab = document.createElement('label');
+    const inp = document.createElement('input');
+    inp.type = 'number'; inp.min = '0.05'; inp.max = '20'; inp.step = '0.05'; inp.value = fmtSec(current.holds[i]);
+    inp.id = `hold-${current.sign.id}-${i}`;
+    inp.setAttribute('aria-label', `Frame ${i} hold, seconds`);
+    inp.addEventListener('change', () => {
+      const v = clamp(parseFloat(inp.value) || current.sign.frames[i].hold, 0.05, 20);
+      inp.value = fmtSec(v);
+      const hs = holdsFor(current.sign); hs[i] = v;
+      state.holds[current.sign.id] = hs; save();
+      retime();
+    });
+    lab.append(inp, document.createTextNode('s'));
+    li.append(b, lab);
+    ol.append(li);
+  });
+}
+
+function retime() {
+  const s = current.sign;
+  current.holds = holdsFor(s);
+  current.starts = [];
+  let t = 0;
+  current.holds.forEach(h => { current.starts.push(t); t += h; });
+  current.total = t;
+  current.checks = runChecks(current.frames, current.fmt, current.holds);
+  const runs = runsOf(current.holds);
+  const fmt = current.fmt;
+  setSpec([
+    ['Sheet', `${fmt.w * fmt.cols} × ${fmt.h * fmt.rows} px`],
+    ['Grid', `${fmt.cols} columns × ${fmt.rows} rows`],
+    ['Frame', `${fmt.w} × ${fmt.h} px`],
+    ['Frames', `${fmt.cols * fmt.rows}, every cell used`],
+    ['Loop', `${fmtSec(t)} s, ${runs.length} script runs`],
+    ['Prim face', `${fmt.ratio}, e.g. ${fmt.prim}`],
+  ]);
+  setChecks(current.checks);
+  updateNavMeta(s);
+}
+
+function rebuild(full = true) {
+  const item = itemById(state.sel) || SIGNS[0];
+  state.sel = item.id;
+  const isSign = !item.kind;
+  $('fmtSeg').hidden = !isSign;
+  $('winSeg').hidden = item.kind !== 'ticker';
+  $('timeline').hidden = !isSign;
+  $('extraCtl').hidden = isSign;
+  $('exGif').hidden = !isSign;
+  if (full) buildCopyForm(item);
+  const copy = copyOf(item, state.copy[item.id]);
+  if (isSign) {
+    const fmt = FORMATS[state.fmt] || FORMATS.portrait;
+    const frames = renderFrames(item, fmt, copy);
+    current = {kind: 'sign', sign: item, fmt, frames, sheet: composeSheet(frames, fmt)};
+    $('sheetTitle').textContent = 'Spritesheet';
+    retime();
+    buildTimeline();
+    drawSheetPreview(current.sheet, fmt.cols, fmt.rows);
+    $('stageHint').textContent = 'Click a frame to stop on it. Hold times feed the GIF and the script.';
+  } else {
+    const tex = item.kind === 'ticker' ? renderTicker(copy) : renderBadge(copy);
+    const seconds = state.seconds[item.id] || item.seconds;
+    current = {kind: item.kind, sign: item, tex, seconds};
+    $('sheetTitle').textContent = 'Texture';
+    $('speedLabel').textContent = item.kind === 'ticker' ? 'Seconds per pass' : 'Seconds per turn';
+    $('speed').value = seconds;
+    drawSheetPreview(tex, 0, 0);
+    const win = item.kind === 'ticker' ? state.win : 0;
+    setSpec(item.kind === 'ticker'
+      ? [['Texture', '2048 × 256 px, 8:1'], ['Frames', 'none: one texture'], ['Motion', 'SMOOTH scroll, seamless wrap'], ['Showing', `${8 / win}:1 of the strip at a time`], ['Pass', `${fmtSec(seconds)} s`]]
+      : [['Texture', '512 × 512 px, transparent corners'], ['Frames', 'none: one texture'], ['Motion', 'SMOOTH rotate'], ['Turn', `${fmtSec(seconds)} s`], ['Prim face', '1:1, e.g. 0.5 × 0.5 m']]);
+    setChecks([
+      {ok: true, text: `Power-of-two texture, ${item.size[0]} × ${item.size[1]}`},
+      {ok: true, text: item.kind === 'ticker' ? 'Text spacing closes exactly at 2048 px: no seam' : 'Ring text spacing closes exactly: no seam'},
+      {ok: true, text: 'Motion runs in the viewer at full frame rate'},
+    ]);
+    $('stageHint').textContent = item.kind === 'ticker' ? 'Scrolls in the viewer, so it stays smooth at any length.' : 'Rotates in the viewer. Use alpha masking on the face.';
+  }
+  sizeLive();
+  markNav();
+  shownFrame = -1;
+  draw();
+}
+
+function sizeLive() {
+  const cv = $('live');
+  if (current.kind === 'sign') { cv.width = current.fmt.w; cv.height = current.fmt.h; }
+  else if (current.kind === 'ticker') { cv.width = 2048 / state.win; cv.height = 256; }
+  else { cv.width = 512; cv.height = 512; }
+}
+
+function draw() {
+  const cv = $('live'), ctx = cv.getContext('2d');
+  if (current.kind === 'sign') {
+    const t = ((clock % current.total) + current.total) % current.total;
+    let i = current.starts.length - 1;
+    while (i > 0 && current.starts[i] > t) i--;
+    if (i !== shownFrame) {
+      ctx.drawImage(current.frames[i], 0, 0);
+      shownFrame = i;
+      document.querySelectorAll('#timeline li').forEach((li, k) => li.classList.toggle('on', k === i));
+    }
+    $('clock').textContent = `${t.toFixed(1)} / ${current.total.toFixed(1)} s · frame ${i}`;
+  } else if (current.kind === 'ticker') {
+    const p = ((clock / current.seconds) % 1) * 2048;
+    ctx.drawImage(current.tex, -p, 0);
+    ctx.drawImage(current.tex, 2048 - p, 0);
+    $('clock').textContent = `${(clock % current.seconds).toFixed(1)} / ${fmtSec(current.seconds)} s`;
+  } else {
+    ctx.fillStyle = '#1a1a1a'; ctx.fillRect(0, 0, 512, 512);
+    ctx.save(); ctx.translate(256, 256); ctx.rotate((clock / current.seconds) * Math.PI * 2); ctx.drawImage(current.tex, -256, -256); ctx.restore();
+    $('clock').textContent = `${(clock % current.seconds).toFixed(1)} / ${fmtSec(current.seconds)} s`;
+  }
+}
+function tick(ts) {
+  if (state.playing && lastTs) clock += (ts - lastTs) / 1000;
+  lastTs = ts;
+  if (state.playing) draw();
+  requestAnimationFrame(tick);
+}
+function setPlayLabel() { $('play').textContent = state.playing ? 'Pause' : 'Play'; }
+
+/* ---------- saving files ---------- */
+const DL = (window.claude && typeof window.claude.use === 'function') ? window.claude.use('downloads').catch(() => null) : Promise.resolve(undefined);
+async function saveFile(name, data, mime) {
+  const blob = data instanceof Blob ? data : new Blob([data], {type: mime});
+  const dl = await DL;
+  if (dl === undefined) {
+    const a = document.createElement('a');
+    a.href = URL.createObjectURL(blob); a.download = name;
+    document.body.append(a); a.click(); a.remove();
+    setTimeout(() => URL.revokeObjectURL(a.href), 5000);
+    return;
+  }
+  if (!dl) { toast('Saving files is off in this view. Use Copy script, or open signs.html from the repo.'); return; }
+  const ok = /\.(gif|png|txt|zip|json|md)$/i.test(name);
+  try {
+    await dl.save({filename: ok ? name : name + '.txt', data: blob});
+    toast('Saved ' + (ok ? name : name + '.txt'));
+  } catch (e) {
+    if (e && e.code === 'declined') return;
+    toast(e && e.code === 'rate_limited' ? 'One save at a time. Try again in a moment.' : 'That file could not be saved here.');
+  }
+}
+function scriptText() {
+  if (current.kind === 'sign') return lslPlayer(current.sign, current.fmt, current.holds);
+  if (current.kind === 'ticker') return lslTicker(state.win, current.seconds);
+  return lslBadge(current.seconds);
+}
+function baseName() {
+  if (current.kind === 'sign') return sheetName(current.sign, current.fmt);
+  return current.kind === 'ticker' ? 'artsy-ticker-2048x256' : 'artsy-badge-512';
+}
+async function busy(btn, fn) {
+  btn.disabled = true;
+  try { await fn(); } finally { btn.disabled = false; }
+}
+
+function wire() {
+  document.querySelectorAll('input[name=fmt]').forEach(r => {
+    r.checked = r.value === state.fmt;
+    r.addEventListener('change', () => { state.fmt = r.value; save(); rebuild(false); });
+  });
+  document.querySelectorAll('input[name=win]').forEach(r => {
+    r.checked = Number(r.value) === state.win;
+    r.addEventListener('change', () => { state.win = Number(r.value); save(); rebuild(false); });
+  });
+  $('play').addEventListener('click', () => { state.playing = !state.playing; setPlayLabel(); });
+  $('speed').addEventListener('change', () => {
+    const v = clamp(parseFloat($('speed').value) || current.sign.seconds, 2, 120);
+    state.seconds[current.sign.id] = v; save(); rebuild(false);
+  });
+  $('exPng').addEventListener('click', e => busy(e.currentTarget, async () => {
+    const tex = current.kind === 'sign' ? current.sheet : current.tex;
+    await saveFile(baseName() + '.png', await encodePNG(tex, current.kind === 'badge'), 'image/png');
+  }));
+  $('exGif').addEventListener('click', e => busy(e.currentTarget, async () => {
+    await saveFile(baseName() + '.gif', encodeGIF(current.frames, current.holds), 'image/gif');
+  }));
+  $('exLsl').addEventListener('click', e => busy(e.currentTarget, () => saveFile(baseName() + '.lsl', scriptText(), 'text/plain')));
+  $('exCopy').addEventListener('click', () => {
+    const text = scriptText();
+    navigator.clipboard.writeText(text).then(() => toast('Script copied'), () => {
+      const ta = document.createElement('textarea'); ta.value = text; document.body.append(ta); ta.select();
+      try { document.execCommand('copy'); toast('Script copied'); } catch (e) { toast('Copy failed. Use the LSL script button.'); }
+      ta.remove();
+    });
+  });
+  $('exZip').addEventListener('click', e => busy(e.currentTarget, async () => {
+    if (typeof JSZip === 'undefined') { toast('The zip library did not load. Save files one at a time.'); return; }
+    const zip = new JSZip(), base = baseName();
+    if (current.kind === 'sign') {
+      zip.file(base + '.png', await encodePNG(current.sheet));
+      zip.file(base + '.gif', encodeGIF(current.frames, current.holds));
+      zip.file(base + '.lsl', scriptText());
+      zip.file('README.txt', setupNotes(current.sign, current.fmt, current.holds));
+    } else {
+      zip.file(base + '.png', await encodePNG(current.tex, current.kind === 'badge'));
+      zip.file(base + '.lsl', scriptText());
+    }
+    await saveFile(base + '.zip', await zip.generateAsync({type: 'blob'}), 'application/zip');
+  }));
+  $('resetCopy').addEventListener('click', () => {
+    delete state.copy[state.sel]; delete state.holds[state.sel]; delete state.seconds[state.sel];
+    save(); rebuild(); toast('Copy and timing reset');
+  });
+  let rt;
+  addEventListener('resize', () => { clearTimeout(rt); rt = setTimeout(() => { if (current) drawSheetPreview(current.kind === 'sign' ? current.sheet : current.tex, current.kind === 'sign' ? current.fmt.cols : 0, current.kind === 'sign' ? current.fmt.rows : 0); }, 150); });
+}
+
+(async function start() {
+  $('brandLogo').src = LOGO_PNG;
+  const ok = await READY;
+  if (!ok) toast('Fonts did not load, so previews use fallbacks. Exports need the real fonts.');
+  buildNav();
+  wire();
+  setPlayLabel();
+  rebuild();
+  requestAnimationFrame(tick);
+})();
+</script>
+</body>
+</html>

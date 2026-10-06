@@ -28,3 +28,9 @@ Open `index.html` in a browser. There's nothing to install or build.
 
 - The tool cleans a tile. It doesn't *make* a non-repeating image seamless. If the seam check says the source has a visible seam, the output will too.
 - Two-tone separation only for now: one ink against one paper.
+
+# Sign Studio
+
+`signs.html` makes kinetic black-and-white display signs for the Second Life store. The six signs are redelivery, freebies, tint, reflection probes, purchase info and welcome. Each comes in portrait, landscape and square and exports as an even spritesheet: power-of-two size, every cell used, 8 frames at 512 px per metre. A GIF preview and an LSL player script that handles the hold times come with each sheet. There's also a smooth ticker strip and a spinning badge that use no frames at all.
+
+Open `signs.html` in a browser to change the copy and timing and export. The ready-made sheets, previews, scripts and setup steps are in [`signs/`](signs/README.md).
