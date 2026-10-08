@@ -31,8 +31,8 @@ Open `index.html` in a browser. There's nothing to install or build.
 
 # Sign Studio
 
-`signs.html` makes looping glass slides for the Second Life store, one per message: redelivery, collections, delivery, permissions, textures, tint, shine, reflection probes, tutorials, welcome, freebies and patterns. The whole message is on screen in every frame, so nothing ever goes blank. Each slide moves between two states and back, or a light passes across the glass. It is set in Poppins and Avenir LT Pro, using your own copy of Avenir.
+`signs.html` makes looping slides for the Second Life store, one per message: redelivery, collections, delivery, permissions, textures, tint, shine, reflection probes, tutorials, welcome, freebies and patterns. They share the look of the artsy record sleeves: matte black and bone, a thin inset rule, wide-tracked capitals and the script logo. Each slide comes in black, bone, or two-tone like the split sleeve. The whole message is on screen in every frame, so nothing ever goes blank. Each slide moves between two states and back, or runs a short move once a loop. It is set in Poppins and Avenir LT Pro, using your own copy of Avenir.
 
-Every slide is 8 frames on one sheet with every cell used: 2048 × 1024 for square, 2048 × 2048 for landscape and portrait, all at 512 px per metre. An LSL player times the holds and plays the way back in reverse, so no frame is ever repeated. There's also a smooth ticker strip and a spinning badge that use no frames at all.
+Every slide is 8 frames on one sheet with every cell used: 2048 × 1024 for square, 2048 × 2048 for landscape and portrait, all at 512 px per metre. An LSL player times the holds and plays the way back in reverse, so no frame is ever repeated. There's also a smooth ticker strip and a spinning record badge that use no frames at all.
 
 Open `signs.html` in a browser to change the copy and timing and export. Ready-made square slides, previews, scripts and setup steps are in [`signs/`](signs/README.md).

@@ -18,13 +18,13 @@ integer ROWS = 2;
 float   QUICK = 0.5;        // frames shorter than this are motion, played inside one run
 
 list TIMELINE = [
-     1, 0.08,   // light passes
-     2, 0.08,   // light passes
-     3, 0.08,   // light passes
-     4, 0.08,   // light passes
-     5, 0.08,   // light passes
-     6, 0.08,   // light passes
-     7, 0.08,   // light passes
+     1, 0.08,   // the move
+     2, 0.08,   // the move
+     3, 0.08,   // the move
+     4, 0.08,   // the move
+     5, 0.08,   // the move
+     6, 0.08,   // the move
+     7, 0.08,   // the move
      0, 5.20    // hold: message
 ];
 

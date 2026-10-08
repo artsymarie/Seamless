@@ -11,17 +11,17 @@
 <style>
 /* Layout: slide list | the slide on a dark wall with its timing | sheets, checks, exports, copy and fonts */
 :root{
-  --void:#09090a;
-  --panel:#101012;
-  --raise:#18181b;
-  --line:#25252a;
-  --line-2:#37373d;
-  --ink:#f4f4f2;
-  --ink-2:#b3b3ae;
-  --ink-3:#7c7c77;
+  --void:#0a0a09;
+  --panel:#100f0e;
+  --raise:#191816;
+  --line:#272522;
+  --line-2:#3a3733;
+  --ink:#ece7de;
+  --ink-2:#b5b0a7;
+  --ink-3:#7f7a72;
   --ok:#c6f0d0;
   --warn:#ffc47d;
-  --wall:#131315;
+  --wall:#141312;
   --head:"Poppins","Helvetica Neue",Arial,sans-serif;
   --body:"Avenir LT Pro","Avenir","Nunito Sans","Helvetica Neue",Arial,sans-serif;
   color-scheme:dark;
@@ -41,8 +41,8 @@ button,input,select{font:inherit;color:inherit}
 .seg label{padding:7px 14px;border-radius:999px;font:500 12px/1 var(--head);letter-spacing:.03em;color:var(--ink-2);cursor:pointer;display:flex;gap:6px;align-items:baseline;white-space:nowrap}
 .seg label small{font:400 11px/1 var(--body);color:var(--ink-3)}
 .seg label:hover{color:var(--ink)}
-.seg input:checked+label{background:var(--ink);color:#0b0b0c}
-.seg input:checked+label small{color:#5b5b55}
+.seg input:checked+label{background:var(--ink);color:#100f0e}
+.seg input:checked+label small{color:#5e5a53}
 .seg input:focus-visible+label{outline:2px solid var(--ink);outline-offset:2px}
 
 nav.signs{border-right:1px solid var(--line);overflow:auto;padding:14px 0 24px;min-height:0;background:var(--panel)}
@@ -51,20 +51,20 @@ nav.signs{border-right:1px solid var(--line);overflow:auto;padding:14px 0 24px;m
 .signs li button{all:unset;box-sizing:border-box;display:flex;flex-direction:column;gap:1px;width:100%;padding:8px 10px;border-radius:10px;cursor:pointer}
 .signs li button:hover{background:var(--raise)}
 .signs li button:focus-visible{outline:2px solid var(--ink);outline-offset:-2px}
-.signs li button[aria-current="true"]{background:var(--ink);color:#0b0b0c}
-.signs li button[aria-current="true"] small{color:#5b5b55}
+.signs li button[aria-current="true"]{background:var(--ink);color:#100f0e}
+.signs li button[aria-current="true"] small{color:#5e5a53}
 .signs strong{font:500 14px/1.3 var(--head)}
 .signs small{font:400 12px/1.3 var(--body);color:var(--ink-3)}
 
 main.stage{display:flex;flex-direction:column;min-width:0;min-height:0;overflow:auto}
-.wall{flex:1 0 auto;display:grid;place-items:center;padding:28px 18px;min-height:340px;background:radial-gradient(120% 90% at 50% 40%,#1c1c1f 0%,var(--wall) 55%,#070708 100%)}
-.wall canvas{display:block;max-width:100%;max-height:min(58vh,640px);width:auto;height:auto;border-radius:4px;box-shadow:0 0 0 1px #2a2a2e,0 30px 80px -30px rgba(0,0,0,.9)}
+.wall{flex:1 0 auto;display:grid;place-items:center;padding:28px 18px;min-height:340px;background:radial-gradient(120% 90% at 50% 40%,#1d1c1a 0%,var(--wall) 55%,#080807 100%)}
+.wall canvas{display:block;max-width:100%;max-height:min(58vh,640px);width:auto;height:auto;border-radius:4px;box-shadow:0 0 0 1px #2c2a27,0 30px 80px -30px rgba(0,0,0,.9)}
 .transport{display:flex;align-items:center;gap:14px;padding:12px 18px;border-top:1px solid var(--line);flex-wrap:wrap}
 .btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;padding:9px 14px;border:1px solid var(--line-2);border-radius:999px;background:transparent;cursor:pointer;font:500 12px/1 var(--head);letter-spacing:.03em;white-space:nowrap}
 .btn:hover{border-color:var(--ink)}
 .btn:focus-visible{outline:2px solid var(--ink);outline-offset:2px}
-.btn.solid{background:var(--ink);color:#0b0b0c;border-color:var(--ink)}
-.btn.solid:hover{background:#fff}
+.btn.solid{background:var(--ink);color:#100f0e;border-color:var(--ink)}
+.btn.solid:hover{background:#f6f2ea}
 .btn[disabled]{opacity:.45;cursor:not-allowed}
 .clock{font:400 12.5px/1 var(--body);color:var(--ink-2);font-variant-numeric:tabular-nums}
 .hint{font:400 12.5px/1.5 var(--body);color:var(--ink-3)}
@@ -107,7 +107,7 @@ form.copy label em{font:400 12px/1.35 var(--body);letter-spacing:0;text-transfor
 .fontrow span{color:var(--ink-2)}
 .fontrow span.warn{color:var(--warn)}
 .note{font:400 12px/1.45 var(--body);color:var(--ink-3);margin:0}
-.toast{position:fixed;left:50%;bottom:calc(18px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);background:var(--ink);color:#0b0b0c;font:500 12.5px/1.3 var(--head);padding:10px 16px;border-radius:999px;max-width:calc(100% - 32px);z-index:5}
+.toast{position:fixed;left:50%;bottom:calc(18px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);background:var(--ink);color:#100f0e;font:500 12.5px/1.3 var(--head);padding:10px 16px;border-radius:999px;max-width:calc(100% - 32px);z-index:5}
 
 @media (max-width:1100px){
   .app{grid-template-columns:210px minmax(0,1fr);grid-template-rows:auto auto auto;height:auto}
@@ -149,7 +149,7 @@ form.copy label em{font:400 12px/1.35 var(--body);letter-spacing:0;text-transfor
       <span class="hint" id="stageHint"></span>
     </div>
     <div class="timing" id="timing"></div>
-    <ol class="frames" id="frames" aria-label="The 16 frames on the sheet"></ol>
+    <ol class="frames" id="frames" aria-label="The 8 frames on the sheet"></ol>
   </main>
 
   <aside class="side">
@@ -187,7 +187,8 @@ form.copy label em{font:400 12px/1.35 var(--body);letter-spacing:0;text-transfor
 <script>
 'use strict';
 /* ==========================================================================
-   artsy Sign Studio: one looping glass slide per message, for Second Life.
+   artsy Sign Studio: one looping slide per message, for Second Life, in the
+   look of the artsy record sleeves (matte black and bone, two inks only).
 
    Every slide is 8 frames, and every frame shows the whole message: there is
    no blank or half-built frame anywhere in the loop.
@@ -199,8 +200,8 @@ form.copy label em{font:400 12px/1.35 var(--body);letter-spacing:0;text-transfor
    The motion comes from the slide itself:
      toggle  frame 0 is the first state, 7 the second, 1-6 the move between
              them. It plays forwards, holds, then plays backwards and holds.
-     pulse   frame 0 is the message, 1-7 a light passing across the glass
-             (and whatever the illustration does with it).
+     pulse   frame 0 is the message, 1-7 a short move that runs once a loop:
+             an arrow slides through, a playhead runs, light crosses the logo.
    Holds live in the script, never in repeated frames.
    ========================================================================== */
 
@@ -211,7 +212,6 @@ const SHAPES = {
   portrait:  {id: 'portrait',  name: 'Portrait',  ratio: '1:2', w: 512,  h: 1024, cols: 4, rows: 2, prim: '1 × 2 m'},
 };
 const ACC_STEP = 0.08, QUICK = 0.5;
-const WHITE = '#ffffff', BLACK = '#000000';
 
 /* ---------- small utilities ---------- */
 const R = (x, y, w, h) => ({x, y, w, h});
@@ -243,7 +243,25 @@ function splitCols(r, weights, gap = 0) {
   let x = r.x;
   return weights.map(w => { const ww = avail * w / tot; const o = R(x, r.y, ww, r.h); x += ww + gap; return o; });
 }
-const gray = v => { const k = Math.round(clamp(v, 0, 1) * 255); return `rgb(${k},${k},${k})`; };
+/* ---------- colour: every pixel is a mix of two inks, matte black and bone ---------- */
+const INK = [16, 15, 14], PAPER = [236, 231, 222];
+const lumOf = c => (c[0] * 77 + c[1] * 150 + c[2] * 29 + 128) >> 8;
+const INK_L = lumOf(INK), PAPER_L = lumOf(PAPER);
+// t = 0 is the black, 1 the bone
+function tone(t, a = 1) {
+  const k = clamp(t, 0, 1);
+  const r = Math.round(INK[0] + (PAPER[0] - INK[0]) * k), g = Math.round(INK[1] + (PAPER[1] - INK[1]) * k), b = Math.round(INK[2] + (PAPER[2] - INK[2]) * k);
+  return a >= 1 ? `rgb(${r},${g},${b})` : `rgba(${r},${g},${b},${+clamp(a, 0, 1).toFixed(3)})`;
+}
+// a gray level (0 black .. 1 white) as the mix with that brightness
+const gray = v => tone((clamp(v, 0, 1) * 255 - INK_L) / (PAPER_L - INK_L));
+// the colour of brightness L (0..255) on the line black, ink, bone, white: the GIF palette
+function duoAt(L) {
+  if (L <= INK_L) return INK.map(v => Math.round(v * L / Math.max(1, INK_L)));
+  if (L >= PAPER_L) return PAPER.map(v => Math.round(v + (255 - v) * (L - PAPER_L) / Math.max(1, 255 - PAPER_L)));
+  const k = (L - INK_L) / (PAPER_L - INK_L);
+  return INK.map((v, i) => Math.round(v + (PAPER[i] - v) * k));
+}
 const hex2 = v => Math.round(clamp(v, 0, 1) * 255).toString(16).padStart(2, '0').toUpperCase();
 function makeCanvas(w, h) { const c = document.createElement('canvas'); c.width = w; c.height = h; return c; }
 
@@ -251,12 +269,11 @@ function makeCanvas(w, h) { const c = document.createElement('canvas'); c.width 
 const POPPINS = '"Poppins", "Helvetica Neue", Arial, sans-serif';
 const BODY = '"Avenir LT Pro", "Avenir", "Nunito Sans", "Helvetica Neue", Arial, sans-serif';
 const FACE = {
-  head:  {family: POPPINS, weight: 600, style: 'normal', track: -0.012},
-  light: {family: POPPINS, weight: 300, style: 'normal', track: 0},
-  label: {family: POPPINS, weight: 500, style: 'normal', track: 0.22},
-  num:   {family: POPPINS, weight: 500, style: 'normal', track: 0.04},
+  title: {family: POPPINS, weight: 600, style: 'normal', track: 0.2},
+  meta:  {family: POPPINS, weight: 500, style: 'normal', track: 0.42},
+  cap:   {family: POPPINS, weight: 500, style: 'normal', track: 0.2},
+  num:   {family: POPPINS, weight: 500, style: 'normal', track: 0.08},
   body:  {family: BODY, weight: 400, style: 'normal', track: 0},
-  bodyB: {family: BODY, weight: 600, style: 'normal', track: 0},
 };
 const HAS_SPACING = 'letterSpacing' in CanvasRenderingContext2D.prototype;
 function applyFont(ctx, face, size, track = face.track) {
@@ -291,7 +308,7 @@ function wrapWords(ctx, face, words, size, maxW) {
   return lines;
 }
 
-/* ---------- material swatches (procedural, black and white) ---------- */
+/* ---------- material swatches (procedural, in the two inks) ---------- */
 const SWATCHES = ['pyramids', 'tiles', 'glass', 'wood', 'metal', 'dots', 'herringbone', 'checker', 'stripes'];
 function swatchFor(name, i) {
   const n = name.toLowerCase();
@@ -311,39 +328,39 @@ function paintSwatch(ctx, r, kind, seed = 1, cell) {
     for (let y = r.y; y < r.y + r.h; y += s) for (let x = r.x; x < r.x + r.w; x += s) {
       const cx = x + s / 2, cy = y + s / 2;
       const tri = (ax, ay, bx, by, c) => { ctx.fillStyle = c; ctx.beginPath(); ctx.moveTo(ax, ay); ctx.lineTo(bx, by); ctx.lineTo(cx, cy); ctx.closePath(); ctx.fill(); };
-      tri(x, y, x + s, y, '#efefef');
-      tri(x + s, y, x + s, y + s, '#5c5c5c');
-      tri(x + s, y + s, x, y + s, '#1a1a1a');
-      tri(x, y + s, x, y, '#b4b4b4');
+      tri(x, y, x + s, y, gray(0.94));
+      tri(x + s, y, x + s, y + s, gray(0.36));
+      tri(x + s, y + s, x, y + s, gray(0.1));
+      tri(x, y + s, x, y, gray(0.7));
       const g = ctx.createLinearGradient(x, y, x + s, y + s);
-      g.addColorStop(0, 'rgba(255,255,255,.18)'); g.addColorStop(1, 'rgba(0,0,0,.18)');
+      g.addColorStop(0, tone(1, 0.18)); g.addColorStop(1, tone(0, 0.18));
       ctx.fillStyle = g; ctx.fillRect(x, y, s, s);
     }
   } else if (kind === 'tiles') {
     const s = cell || big / 3, gr = Math.max(2, s * 0.035);
-    ctx.fillStyle = '#5a5a5a'; ctx.fillRect(r.x, r.y, r.w, r.h);
+    ctx.fillStyle = gray(0.35); ctx.fillRect(r.x, r.y, r.w, r.h);
     for (let y = r.y; y < r.y + r.h; y += s) for (let x = r.x; x < r.x + r.w; x += s) {
       const g = ctx.createLinearGradient(x, y, x + s, y + s);
       const v = 0.05 + rnd() * 0.05;
       g.addColorStop(0, gray(v + 0.12)); g.addColorStop(0.5, gray(v)); g.addColorStop(1, gray(v * 0.4));
       ctx.fillStyle = g; ctx.fillRect(x + gr / 2, y + gr / 2, s - gr, s - gr);
-      ctx.fillStyle = 'rgba(255,255,255,.10)';
+      ctx.fillStyle = tone(1, 0.1);
       ctx.beginPath(); ctx.moveTo(x + gr, y + gr); ctx.lineTo(x + s * 0.55, y + gr); ctx.lineTo(x + gr, y + s * 0.55); ctx.fill();
     }
   } else if (kind === 'glass') {
     const g = ctx.createLinearGradient(r.x, r.y, r.x + r.w * 0.3, r.y + r.h);
-    g.addColorStop(0, '#6b6b6b'); g.addColorStop(0.55, '#262626'); g.addColorStop(1, '#3a3a3a');
+    g.addColorStop(0, gray(0.42)); g.addColorStop(0.55, gray(0.15)); g.addColorStop(1, gray(0.23));
     ctx.fillStyle = g; ctx.fillRect(r.x, r.y, r.w, r.h);
     const bands = [[0.12, 0.10, .42], [0.30, 0.04, .30], [0.58, 0.16, .20], [0.80, 0.03, .38]];
     for (const [p, w, a] of bands) {
-      ctx.fillStyle = `rgba(255,255,255,${a})`;
+      ctx.fillStyle = tone(1, a);
       const x0 = r.x + p * (r.w + r.h) - r.h;
       ctx.beginPath(); ctx.moveTo(x0, r.y + r.h); ctx.lineTo(x0 + r.h, r.y); ctx.lineTo(x0 + r.h + w * big, r.y); ctx.lineTo(x0 + w * big, r.y + r.h); ctx.fill();
     }
-    ctx.strokeStyle = 'rgba(255,255,255,.55)'; ctx.lineWidth = Math.max(1.5, big * 0.006);
+    ctx.strokeStyle = tone(1, 0.55); ctx.lineWidth = Math.max(1.5, big * 0.006);
     ctx.strokeRect(r.x + big * 0.03, r.y + big * 0.03, r.w - big * 0.06, r.h - big * 0.06);
   } else if (kind === 'wood') {
-    ctx.fillStyle = '#2c2c2c'; ctx.fillRect(r.x, r.y, r.w, r.h);
+    ctx.fillStyle = gray(0.17); ctx.fillRect(r.x, r.y, r.w, r.h);
     const n = Math.round(r.h / (big * 0.035)) + 2;
     for (let i = -1; i < n; i++) {
       const y0 = r.y + i * r.h / n;
@@ -359,36 +376,36 @@ function paintSwatch(ctx, r, kind, seed = 1, cell) {
     }
   } else if (kind === 'metal') {
     const g = ctx.createLinearGradient(r.x, r.y, r.x + r.w, r.y + r.h);
-    g.addColorStop(0, '#4d4d4d'); g.addColorStop(0.35, '#dedede'); g.addColorStop(0.55, '#7a7a7a'); g.addColorStop(0.8, '#c8c8c8'); g.addColorStop(1, '#555555');
+    g.addColorStop(0, gray(0.3)); g.addColorStop(0.35, gray(0.87)); g.addColorStop(0.55, gray(0.48)); g.addColorStop(0.8, gray(0.78)); g.addColorStop(1, gray(0.33));
     ctx.fillStyle = g; ctx.fillRect(r.x, r.y, r.w, r.h);
     const step = Math.max(2, big / 220);
     for (let y = r.y; y < r.y + r.h; y += step) {
-      ctx.fillStyle = rnd() < 0.5 ? `rgba(255,255,255,${0.05 + rnd() * 0.12})` : `rgba(0,0,0,${0.05 + rnd() * 0.14})`;
+      ctx.fillStyle = rnd() < 0.5 ? tone(1, 0.05 + rnd() * 0.12) : tone(0, 0.05 + rnd() * 0.14);
       ctx.fillRect(r.x, y, r.w, Math.max(1, step * 0.5));
     }
   } else if (kind === 'dots') {
-    ctx.fillStyle = '#e9e9e9'; ctx.fillRect(r.x, r.y, r.w, r.h);
+    ctx.fillStyle = gray(0.91); ctx.fillRect(r.x, r.y, r.w, r.h);
     const s = cell || big / 7;
-    ctx.fillStyle = '#111';
+    ctx.fillStyle = gray(0.07);
     for (let y = r.y + s / 2, row = 0; y < r.y + r.h + s; y += s, row++) for (let x = r.x + (row % 2 ? s : s / 2); x < r.x + r.w + s; x += s) {
       ctx.beginPath(); ctx.arc(x, y, s * 0.3, 0, 6.2832); ctx.fill();
     }
   } else if (kind === 'herringbone') {
-    ctx.fillStyle = '#1b1b1b'; ctx.fillRect(r.x, r.y, r.w, r.h);
+    ctx.fillStyle = gray(0.11); ctx.fillRect(r.x, r.y, r.w, r.h);
     const s = cell || big / 6;
-    ctx.lineWidth = Math.max(1.5, s * 0.06); ctx.strokeStyle = '#8a8a8a';
+    ctx.lineWidth = Math.max(1.5, s * 0.06); ctx.strokeStyle = gray(0.54);
     for (let x = r.x - s; x < r.x + r.w + s; x += s) for (let y = r.y - s; y < r.y + r.h + s; y += s) {
       ctx.beginPath(); ctx.moveTo(x, y + s / 2); ctx.lineTo(x + s / 2, y); ctx.lineTo(x + s, y + s / 2); ctx.stroke();
     }
   } else if (kind === 'checker') {
     const s = cell || big / 6;
     for (let y = r.y, i = 0; y < r.y + r.h; y += s, i++) for (let x = r.x, j = 0; x < r.x + r.w; x += s, j++) {
-      ctx.fillStyle = (i + j) % 2 ? '#141414' : '#cfcfcf'; ctx.fillRect(x, y, s, s);
+      ctx.fillStyle = (i + j) % 2 ? gray(0.08) : gray(0.81); ctx.fillRect(x, y, s, s);
     }
   } else {
     const s = cell || big / 10;
-    ctx.fillStyle = '#d4d4d4'; ctx.fillRect(r.x, r.y, r.w, r.h);
-    ctx.fillStyle = '#181818';
+    ctx.fillStyle = gray(0.83); ctx.fillRect(r.x, r.y, r.w, r.h);
+    ctx.fillStyle = gray(0.09);
     for (let x = r.x - r.h; x < r.x + r.w; x += s) { ctx.beginPath(); ctx.moveTo(x, r.y + r.h); ctx.lineTo(x + r.h, r.y); ctx.lineTo(x + r.h + s / 2, r.y); ctx.lineTo(x + s / 2, r.y + r.h); ctx.fill(); }
   }
   ctx.restore();
@@ -470,348 +487,359 @@ async function addFontFiles(files) {
   return added;
 }
 
-/* ---------- the background every slide sits on ---------- */
-function backdrop(W, H) {
-  const c = makeCanvas(W, H), ctx = c.getContext('2d');
-  const u = Math.min(W, H) / 100, big = Math.max(W, H);
-  const g = ctx.createLinearGradient(0, 0, W * 0.35, H);
-  g.addColorStop(0, '#222225'); g.addColorStop(0.55, '#111113'); g.addColorStop(1, '#060607');
-  ctx.fillStyle = g; ctx.fillRect(0, 0, W, H);
-  const orb = (x, y, r, a) => {
-    const rg = ctx.createRadialGradient(x, y, 0, x, y, r);
-    rg.addColorStop(0, `rgba(255,255,255,${a})`); rg.addColorStop(0.55, `rgba(255,255,255,${a * 0.35})`); rg.addColorStop(1, 'rgba(255,255,255,0)');
-    ctx.fillStyle = rg; ctx.fillRect(0, 0, W, H);
-  };
-  orb(W * 0.14, H * 0.16, big * 0.42, 0.26);
-  orb(W * 0.9, H * 0.88, big * 0.4, 0.15);
-  orb(W * 0.84, H * 0.1, big * 0.16, 0.14);
-  // fine diagonal lines: crisp around the glass, frosted behind it
-  ctx.save();
-  ctx.globalAlpha = 0.07; ctx.strokeStyle = WHITE; ctx.lineWidth = Math.max(1, 0.24 * u);
-  for (let x = -H; x < W; x += 2.8 * u) { ctx.beginPath(); ctx.moveTo(x, H); ctx.lineTo(x + H, 0); ctx.stroke(); }
-  ctx.restore();
-  // darker edges, so neighbouring frames on the sheet never bleed light at a distance
-  const v = ctx.createRadialGradient(W / 2, H / 2, Math.min(W, H) * 0.3, W / 2, H / 2, big * 0.78);
-  v.addColorStop(0, 'rgba(0,0,0,0)'); v.addColorStop(1, 'rgba(0,0,0,0.6)');
-  ctx.fillStyle = v; ctx.fillRect(0, 0, W, H);
+/* ==========================================================================
+   Frame graphics, in the look of the artsy record sleeves: matte black and
+   bone, a thin inset rule, wide-tracked capitals, a small label line and the
+   script logo. st.pacc is how far this frame is through the slide's move.
+   ========================================================================== */
+// each surface: its background and ink, and the tones for body text, small labels and rules
+const SURF = {
+  dark:  {bg: 0, fg: 1, sub: 0.74, meta: 0.5, line: 0.3},
+  light: {bg: 1, fg: 0, sub: 0.3, meta: 0.46, line: 0.62},
+};
+const FINISHES = ['black', 'bone', 'two-tone'];
+const LOGOS = new Map();
+// the logo in one colour at one size, from the full-size white original
+function logoIn(color, w, h) {
+  const key = `${color}|${w}|${h}`;
+  let c = LOGOS.get(key);
+  if (!c) {
+    c = makeCanvas(w, h);
+    const x = c.getContext('2d');
+    x.imageSmoothingQuality = 'high';
+    x.drawImage(ASSETS.logoWhite, 0, 0, w, h);
+    x.globalCompositeOperation = 'source-in';
+    x.fillStyle = color; x.fillRect(0, 0, w, h);
+    if (LOGOS.size > 48) LOGOS.clear();
+    LOGOS.set(key, c);
+  }
   return c;
 }
-// three box blurs on the gray channel: a frosted copy for the glass (same result in every browser)
-function frosted(src, radius) {
-  const W = src.width, H = src.height;
-  const img = src.getContext('2d').getImageData(0, 0, W, H), d = img.data;
-  let a = new Float32Array(W * H), b = new Float32Array(W * H);
-  for (let i = 0, j = 0; j < a.length; i += 4, j++) a[j] = d[i];
-  const r = Math.max(1, Math.round(radius)), k = 1 / (2 * r + 1);
-  const pass = (s, t, horiz) => {
-    const n = horiz ? W : H, lines = horiz ? H : W;
-    for (let L = 0; L < lines; L++) {
-      const at = i => horiz ? L * W + clamp(i, 0, n - 1) : clamp(i, 0, n - 1) * W + L;
-      let acc = 0;
-      for (let i = -r; i <= r; i++) acc += s[at(i)];
-      for (let i = 0; i < n; i++) {
-        t[at(i)] = acc * k;
-        acc += s[at(i + r + 1)] - s[at(i - r)];
-      }
-    }
-  };
-  for (let p = 0; p < 3; p++) { pass(a, b, true); pass(b, a, false); }
-  for (let i = 0, j = 0; j < a.length; i += 4, j++) { const v = a[j]; d[i] = d[i + 1] = d[i + 2] = v; d[i + 3] = 255; }
-  const out = makeCanvas(W, H);
-  out.getContext('2d').putImageData(img, 0, 0);
-  return out;
-}
-const BACKDROPS = new Map();
-function backdropFor(W, H) {
-  const key = W + 'x' + H;
-  if (!BACKDROPS.has(key)) {
-    const bg = backdrop(W, H);
-    BACKDROPS.set(key, {bg, blur: frosted(bg, Math.min(W, H) * 0.028)});
-  }
-  return BACKDROPS.get(key);
-}
 
-/* ==========================================================================
-   Frame graphics: one per frame. st.pin is entrance progress (0..1),
-   st.pacc accent progress (0..1).
-   ========================================================================== */
 class G {
-  constructor(canvas, st) {
+  constructor(canvas, st, finish = 'black') {
     this.c = canvas;
     this.ctx = canvas.getContext('2d');
     this.W = canvas.width; this.H = canvas.height;
     const u = this.u = Math.min(this.W, this.H) / 100;
     this.o = this.W > this.H ? 'landscape' : this.W < this.H ? 'portrait' : 'square';
     this.st = st;
-    this.cache = backdropFor(this.W, this.H);
     this.t = ease.inOut(st.pacc);              // toggles: 0 first state, 1 second state
     this.wave = Math.sin(Math.PI * st.pacc);   // pulses: 0, up to 1, back to 0
-    const e = ease.out(seg(st.pin, 0, 0.55));
-    this.alpha = e;
-    const m = Math.round(5.5 * u);
-    this.card = R(m, m + (1 - e) * 7 * u, this.W - 2 * m, this.H - 2 * m);
-    this.rad = 3.4 * u;
-    const pad = Math.round(5.2 * u);
-    this.inner = R(this.card.x + pad, this.card.y + pad, this.card.w - 2 * pad, this.card.h - 2 * pad);
-    this.artAlpha = 1;
+    this.finish = FINISHES.includes(finish) ? finish : 'black';
+    this.s = SURF[this.finish === 'bone' ? 'light' : 'dark'];
+    this.edge = Math.round(4.2 * u);                       // the inset rule
+    const m = this.edge + Math.round(5 * u);
+    this.inner = R(m, m, this.W - 2 * m, this.H - 2 * m);  // where everything else goes
+    this.lw = Math.max(1.5, 0.34 * u);                     // a hairline
   }
   get wide() { return this.o === 'landscape'; }
   get tall() { return this.o === 'portrait'; }
-  p(a, b) { return ease.out(seg(this.st.pin, a, b)); }
-  fade(x) { this.ctx.globalAlpha = clamp(x, 0, 1) * this.alpha; }
-  // where the passing light is: off the card on held frames, on it for every in-between frame
-  glintPos() {
-    const a = this.st.pacc;
-    if (this.st.kind === 'pulse') return a === 0 ? null : lerp(-0.3, 1.3, a);
-    return lerp(-0.45, 1.45, ease.sine(a));
-  }
+  // a colour between this surface's background (0) and its ink (1)
+  ink(x = 1, a = 1) { return tone(lerp(this.s.bg, this.s.fg, x), a); }
+  role(name, a = 1) { return tone(this.s[name], a); }
+  on(name, fn) { const prev = this.s; this.s = SURF[name]; try { return fn(); } finally { this.s = prev; } }
 
-  background() { this.ctx.drawImage(this.cache.bg, 0, 0); }
-  // frosted smoked glass: blurred backdrop, a sheen, a light edge, and an optional passing glint
-  glass(r, rad, o = {}) {
-    const {ctx, u} = this;
-    const alpha = (o.alpha ?? 1);
-    if (alpha <= 0.002) return;
-    ctx.save();
-    ctx.globalAlpha = alpha;
-    if (o.shadow !== false) {
+  // matte paper: flat, a little lighter where the light falls
+  paint(r, name) {
+    const {ctx} = this;
+    const cx = r.x + r.w / 2, cy = r.y + r.h * 0.4, rad = Math.hypot(r.w, r.h) * 0.6;
+    const g = ctx.createRadialGradient(cx, cy, 0, cx, cy, rad);
+    if (name === 'dark') { g.addColorStop(0, tone(0.045)); g.addColorStop(1, tone(0)); }
+    else { g.addColorStop(0, tone(1)); g.addColorStop(1, tone(0.93)); }
+    ctx.fillStyle = g; ctx.fillRect(r.x, r.y, r.w, r.h);
+  }
+  // the thin inset rule, in each panel's own rule colour
+  border(panels) {
+    const {ctx, edge: m, W, H} = this, t = Math.max(1, Math.round(0.36 * this.u));
+    for (const p of panels) {
       ctx.save();
-      ctx.shadowColor = 'rgba(0,0,0,0.6)'; ctx.shadowBlur = 7 * u; ctx.shadowOffsetY = 2.4 * u;
-      ctx.fillStyle = 'rgba(0,0,0,0.32)';
-      ctx.beginPath(); ctx.roundRect(r.x, r.y, r.w, r.h, rad); ctx.fill();
+      ctx.beginPath(); ctx.rect(p.r.x, p.r.y, p.r.w, p.r.h); ctx.clip();
+      ctx.fillStyle = tone(SURF[p.surf].line);
+      ctx.fillRect(m, m, W - 2 * m, t); ctx.fillRect(m, H - m - t, W - 2 * m, t);
+      ctx.fillRect(m, m, t, H - 2 * m); ctx.fillRect(W - m - t, m, t, H - 2 * m);
       ctx.restore();
     }
-    ctx.save();
-    ctx.beginPath(); ctx.roundRect(r.x, r.y, r.w, r.h, rad); ctx.clip();
-    if (o.frost !== false) ctx.drawImage(this.cache.blur, 0, 0);
-    ctx.fillStyle = o.fill || 'rgba(255,255,255,0.055)'; ctx.fillRect(r.x, r.y, r.w, r.h);
-    const sh = ctx.createLinearGradient(r.x, r.y, r.x + r.w * 0.55, r.y + r.h);
-    sh.addColorStop(0, 'rgba(255,255,255,0.14)'); sh.addColorStop(0.6, 'rgba(255,255,255,0.02)'); sh.addColorStop(1, 'rgba(255,255,255,0)');
-    ctx.fillStyle = sh; ctx.fillRect(r.x, r.y, r.w, r.h);
-    if (o.glint != null) this.glintBand(r, o.glint, o.glintAlpha ?? 0.2);
-    ctx.restore();
-    const lw = Math.max(1.5, 0.3 * u);
-    const bd = ctx.createLinearGradient(r.x, r.y, r.x + r.w, r.y + r.h);
-    bd.addColorStop(0, 'rgba(255,255,255,0.6)'); bd.addColorStop(0.45, 'rgba(255,255,255,0.12)'); bd.addColorStop(1, 'rgba(255,255,255,0.32)');
-    ctx.strokeStyle = bd; ctx.lineWidth = lw;
-    ctx.beginPath(); ctx.roundRect(r.x + lw / 2, r.y + lw / 2, r.w - lw, r.h - lw, Math.max(0, rad - lw / 2)); ctx.stroke();
-    ctx.restore();
   }
-  glintBand(r, pos, a) {
-    const {ctx} = this;
-    const cx = r.x + r.w * pos, cy = r.y + r.h / 2, bw = Math.max(r.w, r.h) * 0.2, len = Math.hypot(r.w, r.h);
-    ctx.save();
-    ctx.translate(cx, cy); ctx.rotate(0.38);
-    const g = ctx.createLinearGradient(-bw, 0, bw, 0);
-    g.addColorStop(0, 'rgba(255,255,255,0)'); g.addColorStop(0.5, `rgba(255,255,255,${a})`); g.addColorStop(1, 'rgba(255,255,255,0)');
-    ctx.fillStyle = g; ctx.fillRect(-bw, -len, 2 * bw, 2 * len);
-    ctx.restore();
-  }
-  panel() { this.glass(this.card, this.rad, {alpha: this.alpha, glint: this.glintPos()}); }
 
-  logo(x, y, h, align = 'left') {
-    const img = ASSETS.logoWhite, w = h * img.width / img.height;
-    const xx = align === 'left' ? x : align === 'right' ? x - w : x - w / 2;
-    this.ctx.drawImage(img, xx, y, w, h);
-    return R(xx, y, w, h);
-  }
-  label(text, x, y, size, track, color = '#d0d0cb', align = 'left') {
-    const {ctx} = this, t = String(text).toUpperCase();
-    const m = measure(ctx, FACE.label, t, track), cap = measure(ctx, FACE.label, 'H', track).a * size / 100;
-    const w = m.w * size / 100;
-    const xx = align === 'right' ? x - w : align === 'center' ? x - w / 2 : x;
-    applyFont(ctx, FACE.label, size, track);
-    ctx.fillStyle = color;
+  /* -- type -- */
+  // one line; y is the top of the capitals
+  line(str, face, size, x, y, o = {}) {
+    const {ctx} = this, t = o.caps ? String(str).toUpperCase() : String(str);
+    const m = measure(ctx, face, t), cap = measure(ctx, face, 'H').a * size / 100, w = m.w * size / 100;
+    const xx = o.align === 'center' ? x - w / 2 : o.align === 'right' ? x - w : x;
+    applyFont(ctx, face, size);
+    ctx.fillStyle = o.color || this.ink(1);
     ctx.fillText(t, xx + m.l * size / 100, y + cap);
     return R(xx, y, w, cap);
   }
-  // header: tracked label tightening as it fades in, the logo, a rule drawn left to right
-  header(label) {
-    const {ctx, u, inner} = this;
-    const a = this.p(0.1, 0.7);
-    this.fade(a);
-    this.label(label, inner.x, inner.y + 0.4 * u, 2.5 * u, lerp(0.7, 0.24, a));
-    this.fade(a * 0.92);
-    this.logo(inner.x + inner.w, inner.y - 0.9 * u, 4.8 * u, 'right');
-    const lp = this.p(0.18, 0.85);
-    this.fade(1);
-    ctx.fillStyle = 'rgba(255,255,255,0.2)';
-    ctx.fillRect(inner.x, inner.y + 6.4 * u, inner.w * lp, Math.max(1, 0.22 * u));
-    ctx.globalAlpha = 1;
-    return inner.y + 6.4 * u + 4 * u;
+  metaSize() { return 2.3 * this.u; }
+  metaH() { return measure(this.ctx, FACE.meta, 'H').a * this.metaSize() / 100; }
+  meta(str, cx, y) { return this.line(str, FACE.meta, this.metaSize(), cx, y, {caps: true, align: 'center', color: this.role('meta')}); }
+  logo(x, y, h, align = 'center', color = this.ink(1)) {
+    const img = ASSETS.logoWhite, hh = Math.max(1, Math.round(h)), w = Math.max(1, Math.round(hh * img.width / img.height));
+    const xx = Math.round(align === 'left' ? x : align === 'right' ? x - w : x - w / 2), yy = Math.round(y);
+    this.ctx.drawImage(logoIn(color, w, hh), xx, yy);
+    return R(xx, yy, w, hh);
   }
-  // a wrapped text block: a fixed size, or the largest size up to max that fits
+  footH() { return Math.round(5.6 * this.u); }
+  // the script logo between two short rules, like the label line on a sleeve
+  footer(cx, y) {
+    const {ctx, u} = this;
+    const lr = this.logo(cx, y, this.footH(), 'center', this.ink(1));
+    const t = Math.max(1, Math.round(0.3 * u)), len = Math.round(7 * u), gap = Math.round(3 * u), ly = Math.round(lr.y + lr.h * 0.55);
+    ctx.fillStyle = this.role('line');
+    ctx.fillRect(lr.x - gap - len, ly, len, t);
+    ctx.fillRect(lr.x + lr.w + gap, ly, len, t);
+  }
+  // wrapped text: a size that shrinks until it fits the box, or the largest size up to max that fits
   block(text, box, o) {
     const {ctx} = this, face = o.face, lh = o.lh || 1.2;
-    const words = String(text).split(/\s+/).filter(Boolean);
-    const capA = measure(ctx, face, 'H').a / 100, desc = measure(ctx, face, 'gjpqy').d / 100;
+    const words = String(o.caps ? String(text).toUpperCase() : text).split(/\s+/).filter(Boolean);
+    if (!words.length) return {S: 0, lines: [], h: 0, w: 0, draw() {}};
+    const capA = measure(ctx, face, 'H').a / 100, desc = o.caps ? 0 : measure(ctx, face, 'gjpqy').d / 100;
     const lay = S => {
       const lines = wrapWords(ctx, face, words, S, box.w);
       return {S, lines, h: (capA + desc) * S + (lines.length - 1) * lh * S};
     };
-    const fits = L => L.lines.length <= (o.maxLines || 9) && L.h <= box.h;
+    const fits = L => L.lines.length <= (o.maxLines || 9) && L.h <= box.h && L.lines.every(l => measure(ctx, face, l).w * L.S / 100 <= box.w + 0.5);
     let L;
     if (o.size) {
       L = lay(o.size);
       let s = o.size;
-      while (!fits(L) && s > (o.min || 6)) { s *= 0.94; L = lay(s); }
+      while (!fits(L) && s > (o.min || 6)) { s *= 0.95; L = lay(s); }
     } else {
       let lo = o.min || 6, hi = o.max || box.h;
       L = lay(lo);
       for (let i = 0; i < 18; i++) { const mid = (lo + hi) / 2, M = lay(mid); if (fits(M)) { lo = mid; L = M; } else hi = mid; }
     }
+    // balanced: the narrowest width that still takes the same number of lines, so no word is left alone
+    if (o.balance && L.lines.length > 1) {
+      const n = L.lines.length;
+      let lo = 0, hi = box.w;
+      for (let i = 0; i < 14; i++) { const mid = (lo + hi) / 2; if (wrapWords(ctx, face, words, L.S, mid).length <= n) hi = mid; else lo = mid; }
+      L.lines = wrapWords(ctx, face, words, L.S, hi);
+    }
     L.w = Math.max(0, ...L.lines.map(l => measure(ctx, face, l).w * L.S / 100));
-    // draw: lines rise and fade in one after another between pin a and b
     L.draw = (x, y, d = {}) => {
       const S = L.S;
       L.lines.forEach((line, i) => {
-        const k = d.from == null ? 1 : this.p(d.from + i * 0.07, d.to + i * 0.07);
-        if (k <= 0) return;
         const m = measure(ctx, face, line), w = m.w * S / 100;
         const xx = d.align === 'center' ? x + ((d.width || 0) - w) / 2 : d.align === 'right' ? x + (d.width || 0) - w : x;
-        this.fade(k * (d.alpha ?? 1));
         applyFont(ctx, face, S);
-        ctx.fillStyle = d.color || WHITE;
-        ctx.fillText(line, xx + m.l * S / 100, y + capA * S + i * lh * S + (1 - k) * (d.dy ?? 2.6 * this.u));
+        ctx.fillStyle = d.color || this.ink(1);
+        ctx.fillText(line, xx + m.l * S / 100, y + capA * S + i * lh * S);
       });
-      ctx.globalAlpha = 1;
     };
     return L;
   }
-  headingSize() { return (this.tall ? 9.2 : this.wide ? 10.6 : 8.2) * this.u; }
-  bodySize() { return (this.tall ? 4.1 : this.wide ? 4.5 : 3.7) * this.u; }
-  // heading + body for a given width, drawn later at any y
-  textPlan(width, c, o = {}) {
-    const {u} = this, gap = 2.4 * u, maxH = o.maxH || 9999, reserve = o.reserve || 0;
-    const body = c.body ? this.block(c.body, R(0, 0, width, maxH * 0.5), {face: FACE.body, lh: 1.38, size: this.bodySize(), maxLines: 4}) : null;
-    const head = this.block(c.heading, R(0, 0, width, maxH - (body ? body.h + gap : 0) - reserve), {face: FACE.head, lh: 1.1, min: 3.4 * u, max: o.max || this.headingSize(), maxLines: o.lines || 3});
-    const h = head.h + (body ? gap + body.h : 0) + reserve;
-    return {h, draw: (x, y) => {
-      head.draw(x, y, {color: WHITE, from: 0.28, to: 0.8});
-      if (body) body.draw(x, y + head.h + gap, {color: '#d3d3cf', from: 0.42, to: 0.95});
+  // the words of a slide in one column: the title, then body or steps, then a button
+  words(c, width, maxH, o = {}) {
+    const {u} = this;
+    const titleMax = (this.tall ? 7.4 : this.wide ? 7.4 : 5.8) * u * (o.steps && !this.tall ? 0.9 : 1);
+    const bodyMax = (this.tall ? 4.1 : this.wide ? 4.3 : 3.7) * u;
+    let plan;
+    for (let k = 1; ; k -= 0.06) {
+      const items = [];
+      const title = this.block(c.heading, R(0, 0, width, 9999), {face: FACE.title, size: titleMax * k, min: 3 * u, lh: 1.28, maxLines: this.tall ? 3 : 2, caps: true, balance: true});
+      items.push({h: title.h, gap: 0, draw: (x, y, w) => title.draw(x, y, {align: 'center', width: w, color: this.ink(1)})});
+      const bs = bodyMax * Math.max(0.8, k);
+      if (o.steps) {
+        const st = this.steps(o.steps, width, bs * (this.tall ? 1 : 0.92), o);
+        items.push({h: st.h, gap: 3.2 * u, draw: st.draw});
+      } else if (c.body) {
+        const body = this.block(c.body, R(0, 0, width * 0.94, 9999), {face: FACE.body, size: bs, lh: 1.42, maxLines: 4, balance: true});
+        items.push({h: body.h, gap: 3 * u, draw: (x, y, w) => body.draw(x, y, {align: 'center', width: w, color: this.role('sub')})});
+      }
+      if (o.cta) {
+        const b = this.button(o.cta);
+        items.push({h: b.h, gap: 4.4 * u, draw: (x, y, w) => b.draw(x + w / 2, y)});
+      }
+      const h = items.reduce((a, it) => a + it.gap + it.h, 0);
+      plan = {h, items};
+      if (h <= maxH || k < 0.6) break;
+    }
+    return {h: plan.h, draw: (x, y, w) => { let yy = y; for (const it of plan.items) { yy += it.gap; it.draw(x, yy, w); yy += it.h; } }};
+  }
+  // numbered steps set like a track list. focus (a fractional row) slides an inverted bar
+  // between rows; lit picks one row to show brighter.
+  steps(items, width, size, o = {}) {
+    const {ctx, u} = this;
+    const n = items.length, padY = (n > 2 ? (this.tall ? 1.3 : 0.95) : 1.7) * u, numW = 6.4 * u, padX = 2 * u, numS = 2.3 * u;
+    const rows = items.map(t => this.block(t, R(0, 0, width - numW - 2 * padX, 9999), {face: FACE.body, size, lh: 1.24, maxLines: 2}));
+    const rowH = rows.map(b => b.h + 2 * padY);
+    const listW = Math.min(width, numW + Math.max(...rows.map(b => b.w)) + 2 * padX + 1.5 * u);
+    const h = rowH.reduce((a, b) => a + b, 0);
+    return {h, draw: (x, y, w) => {
+      const x0 = x + (w - listW) / 2, ys = [];
+      let yy = y;
+      rowH.forEach(rh => { ys.push(yy); yy += rh; });
+      const capN = measure(ctx, FACE.num, 'H').a * numS / 100;
+      const paintRows = inv => rows.forEach((b, i) => {
+        const lit = inv || o.lit === i;
+        const nc = inv ? this.ink(0) : lit ? this.ink(1) : this.role('meta');
+        const tc = inv ? this.ink(0) : lit ? this.ink(1) : this.role('sub');
+        this.line(String(i + 1).padStart(2, '0'), FACE.num, numS, x0 + padX, ys[i] + padY + (Math.min(b.h, size * 0.9) - capN) / 2, {color: nc});
+        b.draw(x0 + padX + numW, ys[i] + padY, {color: tc});
+      });
+      const t = Math.max(1, Math.round(0.26 * u));
+      ctx.fillStyle = this.role('line');
+      for (let i = 1; i < n; i++) ctx.fillRect(Math.round(x0), Math.round(ys[i]), Math.round(listW), t);
+      paintRows(false);
+      if (o.focus != null) {
+        const f = clamp(o.focus, 0, n - 1), i0 = Math.floor(f), i1 = Math.min(n - 1, i0 + 1), k = f - i0;
+        const by = lerp(ys[i0], ys[i1], k), bh = lerp(rowH[i0], rowH[i1], k);
+        ctx.save();
+        ctx.beginPath(); ctx.rect(x0, by, listW, bh); ctx.clip();
+        ctx.fillStyle = this.ink(1); ctx.fillRect(x0, by, listW, bh);
+        paintRows(true);
+        ctx.restore();
+      }
     }};
   }
-  // text at the foot and the illustration in the room left above it; side by side when wide
-  place(top, plan, artWeight = 0.44) {
-    const {inner, u} = this;
-    const r = R(inner.x, top, inner.w, inner.y + inner.h - top);
-    if (this.wide) {
-      const [text, art] = splitCols(r, [1 - artWeight, artWeight], 5 * u);
-      const p = plan(text.w, text.h);
-      const y = text.y + (text.h - p.h) / 2;
-      return {art, text: R(text.x, y, text.w, p.h), draw: () => p.draw(text.x, y)};
-    }
-    const p = plan(r.w, r.h * (this.tall ? 0.56 : 0.62));
-    const gap = (this.tall ? 5 : 3.6) * u;
-    const ty = r.y + r.h - p.h;
-    return {art: R(r.x, r.y, r.w, ty - gap - r.y), text: R(r.x, ty, r.w, p.h), draw: () => p.draw(r.x, ty)};
-  }
-  // illustrations scale up a touch and fade in with the entrance
-  art(r, fn) {
-    const {ctx} = this, e = this.p(0.3, 0.92);
-    if (e <= 0) return;
-    const s = lerp(0.92, 1, e), cx = r.x + r.w / 2, cy = r.y + r.h / 2;
-    ctx.save();
-    ctx.translate(cx, cy); ctx.scale(s, s); ctx.translate(-cx, -cy);
-    this.artAlpha = e;
-    fn(r);
-    ctx.restore();
-    this.artAlpha = 1;
-    ctx.globalAlpha = 1;
-  }
-  afade(x = 1) { this.fade(x * this.artAlpha); }
-  // the usual slide: header, illustration, heading and body
-  std(c, artWeight, draw, o = {}) {
-    this.background();
-    this.panel();
-    const top = this.header(c.label);
-    const z = this.place(top, (w, h) => this.textPlan(w, c, {...o, maxH: h}), artWeight);
-    if (draw) this.art(z.art, draw);
-    z.draw();
-    return z;
+  // a solid pill with tracked capitals, and a cursor pressing it
+  button(text) {
+    const {ctx, u} = this, size = 2.6 * u, face = FACE.cap;
+    const t = String(text).toUpperCase(), m = measure(ctx, face, t), cap = measure(ctx, face, 'H').a * size / 100;
+    const w = m.w * size / 100 + 11 * u, h = Math.round(cap + 4.8 * u);
+    return {h, w, draw: (cx, y) => {
+      const x = cx - w / 2;
+      ctx.fillStyle = this.ink(1); ctx.beginPath(); ctx.roundRect(x, y, w, h, h / 2); ctx.fill();
+      applyFont(ctx, face, size);
+      ctx.fillStyle = this.ink(0);
+      ctx.fillText(t, x + (w - m.w * size / 100) / 2 + m.l * size / 100, y + h / 2 + cap / 2);
+      const pr = this.wave;
+      this.cursor(x + w - 3.4 * u - pr * 0.5 * u, y + h * 0.52 - pr * 0.5 * u, 5.2 * u * (1 - 0.06 * pr));
+    }};
   }
 
-  /* -- illustrations -- */
+  // A slide: the label at the top, the art, the words, the logo at the foot. Square and
+  // portrait stack them; landscape sets the art and the words side by side. Two-tone puts
+  // the art on bone and the words on black, like the split sleeve.
+  compose(c, o = {}) {
+    const {u, inner, W, H} = this;
+    const two = this.finish === 'two-tone';
+    const artS = this.finish === 'black' ? 'dark' : 'light', wordS = this.finish === 'bone' ? 'light' : 'dark';
+    const metaH = this.metaH(), footH = o.footer === false ? 0 : this.footH();
+    const near = 4 * u, gap = (two ? 9 : 4.8) * u, wordsFirst = o.order === 'words-first';
+    let artR, words, wx, wy, ww, panels, metaAt, footAt;
+    if (this.wide) {
+      const aw = o.artWeight ?? 0.5;
+      const cols = splitCols(inner, wordsFirst ? [1 - aw, aw] : [aw, 1 - aw], two ? 10 * u : 6 * u);
+      const [a, t] = wordsFirst ? [cols[1], cols[0]] : cols;
+      const top = t.y + metaH + near, bottom = t.y + t.h - (footH ? footH + near : 0);
+      words = this.on(wordS, () => this.words(c, t.w, bottom - top, o));
+      artR = a; wx = t.x; ww = t.w; wy = top + (bottom - top - words.h) / 2;
+      metaAt = {cx: t.x + t.w / 2, y: t.y, s: wordS};
+      footAt = {cx: t.x + t.w / 2, y: t.y + t.h - footH, s: wordS};
+      const sx = Math.round(wordsFirst ? (t.x + t.w + a.x) / 2 : (a.x + a.w + t.x) / 2);
+      panels = wordsFirst
+        ? [{r: R(0, 0, sx, H), surf: wordS}, {r: R(sx, 0, W - sx, H), surf: artS}]
+        : [{r: R(0, 0, sx, H), surf: artS}, {r: R(sx, 0, W - sx, H), surf: wordS}];
+    } else {
+      const top = inner.y + metaH + near, bottom = inner.y + inner.h - (footH ? footH + near : 0);
+      words = this.on(wordS, () => this.words(c, inner.w, (bottom - top) * (o.wordShare ?? (this.tall ? 0.46 : 0.54)), o));
+      wx = inner.x; ww = inner.w;
+      let sy;
+      if (wordsFirst && two) {
+        // a black band across the top for the words, the art on bone below
+        sy = Math.max(top + words.h + gap / 2, H * (this.tall ? 0.3 : 0.34));
+        wy = top + (sy - gap / 2 - top - words.h) / 2;
+        artR = R(inner.x, sy + gap / 2, inner.w, bottom - sy - gap / 2);
+      } else if (wordsFirst) {
+        wy = top;
+        artR = R(inner.x, top + words.h + gap, inner.w, bottom - top - words.h - gap);
+        sy = top + words.h + gap / 2;
+      } else if (two) {
+        // the black band is at least a third of the slide or so, with the words centred in it
+        sy = Math.min(bottom - words.h - gap / 2, H * (this.tall ? 0.63 : 0.6));
+        wy = sy + gap / 2 + (bottom - sy - gap / 2 - words.h) / 2;
+        artR = R(inner.x, top, inner.w, sy - gap / 2 - top);
+      } else {
+        wy = bottom - words.h;
+        artR = R(inner.x, top, inner.w, wy - gap - top);
+        sy = wy - gap / 2;
+      }
+      sy = Math.round(sy);
+      const first = wordsFirst ? wordS : artS, second = wordsFirst ? artS : wordS;
+      panels = [{r: R(0, 0, W, sy), surf: first}, {r: R(0, sy, W, H - sy), surf: second}];
+      metaAt = {cx: W / 2, y: inner.y, s: first};
+      footAt = {cx: W / 2, y: inner.y + inner.h - footH, s: second};
+    }
+    if (!two) panels = [{r: R(0, 0, W, H), surf: artS}];
+    for (const p of panels) this.paint(p.r, p.surf);
+    this.border(panels);
+    this.on(metaAt.s, () => this.meta(c.label, metaAt.cx, metaAt.y));
+    if (footH) this.on(footAt.s, () => this.footer(footAt.cx, footAt.y));
+    if (o.art) this.on(artS, () => { this.ctx.save(); o.art(artR); this.ctx.restore(); this.ctx.globalAlpha = 1; });
+    this.on(wordS, () => words.draw(wx, wy, ww));
+    return {art: artR};
+  }
+
+  /* -- illustrations: flat shapes in the surface's ink, hairlines, no gloss -- */
   tile(r, kind, seed, o = {}) {
-    const {ctx, u} = this, rad = o.rad ?? Math.min(r.w, r.h) * 0.12;
+    const {ctx} = this, rad = o.rad ?? Math.min(r.w, r.h) * 0.06;
     ctx.save();
     ctx.beginPath(); ctx.roundRect(r.x, r.y, r.w, r.h, rad); ctx.clip();
     paintSwatch(ctx, r, kind, seed, o.cell);
-    const g = ctx.createLinearGradient(r.x, r.y, r.x + r.w, r.y + r.h);
-    g.addColorStop(0, 'rgba(255,255,255,0.22)'); g.addColorStop(0.5, 'rgba(255,255,255,0)'); g.addColorStop(1, 'rgba(0,0,0,0.28)');
-    ctx.fillStyle = g; ctx.fillRect(r.x, r.y, r.w, r.h);
     ctx.restore();
-    ctx.strokeStyle = 'rgba(255,255,255,0.3)'; ctx.lineWidth = Math.max(1, 0.2 * u);
+    ctx.strokeStyle = this.ink(0.3); ctx.lineWidth = Math.max(1, 0.2 * this.u);
     ctx.beginPath(); ctx.roundRect(r.x + 0.5, r.y + 0.5, r.w - 1, r.h - 1, rad); ctx.stroke();
   }
   cursor(x, y, s) {
     const {ctx} = this, k = s / 18.5;
     const P = [[0, 0], [0, 16], [4, 12.4], [6.9, 18.5], [9.7, 17.3], [6.8, 11.3], [12.1, 11.3]];
-    ctx.save();
-    ctx.shadowColor = 'rgba(0,0,0,0.5)'; ctx.shadowBlur = s * 0.25; ctx.shadowOffsetY = s * 0.06;
     ctx.beginPath();
     P.forEach(([px, py], i) => i ? ctx.lineTo(x + px * k, y + py * k) : ctx.moveTo(x + px * k, y + py * k));
     ctx.closePath();
-    ctx.fillStyle = WHITE; ctx.fill();
-    ctx.shadowColor = 'transparent';
-    ctx.lineJoin = 'round'; ctx.lineWidth = Math.max(1.2, 1.1 * k); ctx.strokeStyle = 'rgba(0,0,0,0.75)'; ctx.stroke();
-    ctx.restore();
+    ctx.lineJoin = 'round'; ctx.lineWidth = Math.max(2, 2.2 * k); ctx.strokeStyle = this.ink(0); ctx.stroke();
+    ctx.fillStyle = this.ink(1); ctx.fill();
   }
-  ring(cx, cy, r, a, lw) {
+  ring(cx, cy, r, a, lw = this.lw) {
     const {ctx} = this;
     if (a <= 0.01) return;
     const prev = ctx.globalAlpha;
     ctx.globalAlpha = prev * a;
-    ctx.strokeStyle = WHITE; ctx.lineWidth = lw;
+    ctx.strokeStyle = this.ink(1); ctx.lineWidth = lw;
     ctx.beginPath(); ctx.arc(cx, cy, r, 0, Math.PI * 2); ctx.stroke();
     ctx.globalAlpha = prev;
   }
-  check(cx, cy, s, color = BLACK) {
+  check(cx, cy, s, color) {
     const {ctx} = this;
     ctx.save();
     ctx.strokeStyle = color; ctx.lineWidth = s * 0.15; ctx.lineCap = 'round'; ctx.lineJoin = 'round';
     ctx.beginPath(); ctx.moveTo(cx - s * 0.3, cy + s * 0.02); ctx.lineTo(cx - s * 0.08, cy + s * 0.24); ctx.lineTo(cx + s * 0.32, cy - s * 0.22); ctx.stroke();
     ctx.restore();
   }
+  // a round tick that grows in as k goes 0 to 1
   badge(cx, cy, r, k = 1) {
     if (k <= 0.01) return;
     const {ctx} = this, rr = r * (0.6 + 0.4 * k);
     const prev = ctx.globalAlpha;
     ctx.globalAlpha = prev * clamp(k * 1.4, 0, 1);
-    ctx.save();
-    ctx.shadowColor = 'rgba(0,0,0,0.45)'; ctx.shadowBlur = r * 0.6; ctx.shadowOffsetY = r * 0.12;
-    ctx.fillStyle = WHITE; ctx.beginPath(); ctx.arc(cx, cy, rr, 0, Math.PI * 2); ctx.fill();
-    ctx.restore();
-    this.check(cx, cy, rr * 1.15, '#111');
+    ctx.fillStyle = this.ink(0); ctx.beginPath(); ctx.arc(cx, cy, rr + this.lw, 0, Math.PI * 2); ctx.fill();
+    ctx.fillStyle = this.ink(1); ctx.beginPath(); ctx.arc(cx, cy, rr, 0, Math.PI * 2); ctx.fill();
+    this.check(cx, cy, rr * 1.15, this.ink(0));
     ctx.globalAlpha = prev;
   }
-  sparkle(cx, cy, r, waist = 0.12) {
-    const {ctx} = this, k = r * waist;
-    ctx.fillStyle = WHITE;
-    ctx.beginPath();
-    ctx.moveTo(cx, cy - r);
-    ctx.quadraticCurveTo(cx + k, cy - k, cx + r, cy);
-    ctx.quadraticCurveTo(cx + k, cy + k, cx, cy + r);
-    ctx.quadraticCurveTo(cx - k, cy + k, cx - r, cy);
-    ctx.quadraticCurveTo(cx - k, cy - k, cx, cy - r);
-    ctx.fill();
-  }
-  // a small glass pill with a tick or a dot and a few words
-  pill(text, cx, y, o = {}) {
-    const {ctx, u} = this, size = o.size || 2.9 * u;
-    const m = measure(ctx, FACE.bodyB, text), cap = measure(ctx, FACE.bodyB, 'H').a * size / 100;
-    const tw = m.w * size / 100, h = cap + 3.2 * u, icon = o.check ? h * 0.62 : 0;
-    const w = tw + 4.4 * u + (icon ? icon + 1.2 * u : 0);
+  // a status line: tracked capitals in a hairline pill, with a tick when it's done
+  caption(text, cx, y, o = {}) {
+    const {ctx, u} = this, size = o.size || 2.4 * u, face = FACE.cap;
+    const t = String(text).toUpperCase();
+    const m = measure(ctx, face, t), cap = measure(ctx, face, 'H').a * size / 100;
+    const tw = m.w * size / 100, h = cap + 3.8 * u, icon = o.check ? h * 0.56 : 0;
+    const w = tw + 5.4 * u + (icon ? icon + 1.4 * u : 0);
     const x = clamp(cx - w / 2, o.minX ?? -Infinity, (o.maxX ?? Infinity) - w);
-    this.glass(R(x, y, w, h), h / 2, {alpha: ctx.globalAlpha, shadow: true, fill: 'rgba(255,255,255,0.12)'});
-    let tx = x + 2.2 * u;
-    if (icon) { this.badge(tx + icon / 2, y + h / 2, icon / 2, 1); tx += icon + 1.2 * u; }
-    applyFont(ctx, FACE.bodyB, size);
-    ctx.fillStyle = WHITE;
-    ctx.fillText(text, tx + m.l * size / 100, y + h / 2 + cap / 2);
+    ctx.strokeStyle = this.ink(0.45); ctx.lineWidth = this.lw;
+    ctx.beginPath(); ctx.roundRect(x, y, w, h, h / 2); ctx.stroke();
+    let tx = x + 2.7 * u;
+    if (icon) { this.badge(tx + icon / 2, y + h / 2, icon / 2, 1); tx += icon + 1.4 * u; }
+    applyFont(ctx, face, size);
+    ctx.fillStyle = this.ink(1);
+    ctx.fillText(t, tx + m.l * size / 100, y + h / 2 + cap / 2);
     return R(x, y, w, h);
   }
-  // material ball: base pattern under a tint, an environment reflection, a highlight
+  // material ball: the pattern under a tint, an environment reflection, a highlight
   ball(cx, cy, r, o = {}) {
     const {ctx} = this;
     const tint = o.tint ?? 1, rough = o.rough ?? 0.35, metal = o.metal ?? 0.4, room = o.room ?? 0;
@@ -819,40 +847,42 @@ class G {
     ctx.beginPath(); ctx.arc(cx, cy, r, 0, Math.PI * 2); ctx.clip();
     if (o.kind === 'smooth') {
       const base = ctx.createRadialGradient(cx - r * 0.3, cy - r * 0.35, r * 0.1, cx, cy, r);
-      base.addColorStop(0, '#9a9a9a'); base.addColorStop(1, '#3a3a3a');
+      base.addColorStop(0, gray(0.6)); base.addColorStop(1, gray(0.23));
       ctx.fillStyle = base; ctx.fillRect(cx - r, cy - r, 2 * r, 2 * r);
     } else paintSwatch(ctx, R(cx - r, cy - r, 2 * r, 2 * r), o.kind || 'pyramids', 3, r * 0.5);
+    // the tint multiplies, as in the build tool (by a neutral gray, so the two inks stay)
+    const k = Math.round(clamp(tint, 0, 1) * 255);
     ctx.globalCompositeOperation = 'multiply';
-    ctx.fillStyle = gray(tint); ctx.fillRect(cx - r, cy - r, 2 * r, 2 * r);
+    ctx.fillStyle = `rgb(${k},${k},${k})`; ctx.fillRect(cx - r, cy - r, 2 * r, 2 * r);
     ctx.globalCompositeOperation = 'source-over';
     // environment: a sky gradient, or the room's windows
     const env = metal * 0.7;
     if (room < 1) {
       ctx.globalAlpha = env * (1 - room);
       const sky = ctx.createLinearGradient(0, cy - r, 0, cy + r);
-      sky.addColorStop(0, '#f5f5f5'); sky.addColorStop(0.46, '#8e8e8e'); sky.addColorStop(0.5, '#262626'); sky.addColorStop(1, '#080808');
+      sky.addColorStop(0, gray(0.96)); sky.addColorStop(0.46, gray(0.56)); sky.addColorStop(0.5, gray(0.15)); sky.addColorStop(1, gray(0.03));
       ctx.fillStyle = sky; ctx.fillRect(cx - r, cy - r, 2 * r, 2 * r);
     }
     if (room > 0) {
       ctx.globalAlpha = env * room;
-      ctx.fillStyle = '#1c1c1c'; ctx.fillRect(cx - r, cy - r, 2 * r, 2 * r);
-      ctx.fillStyle = '#3c3c3c'; ctx.fillRect(cx - r, cy + r * 0.2, 2 * r, r);
+      ctx.fillStyle = gray(0.11); ctx.fillRect(cx - r, cy - r, 2 * r, 2 * r);
+      ctx.fillStyle = gray(0.24); ctx.fillRect(cx - r, cy + r * 0.2, 2 * r, r);
       for (let i = 0; i < 3; i++) {
-        ctx.fillStyle = i === 1 ? '#f0f0f0' : '#bcbcbc';
+        ctx.fillStyle = i === 1 ? gray(0.94) : gray(0.74);
         ctx.beginPath(); ctx.ellipse(cx - r * 0.62 + i * r * 0.5, cy - r * 0.3, r * 0.12, r * 0.32, -0.25 + i * 0.2, 0, Math.PI * 2); ctx.fill();
       }
     }
     ctx.globalAlpha = 1;
     const sh = ctx.createRadialGradient(cx - r * 0.35, cy - r * 0.4, r * 0.1, cx, cy, r);
-    sh.addColorStop(0, 'rgba(255,255,255,0.12)'); sh.addColorStop(0.6, 'rgba(0,0,0,0.05)'); sh.addColorStop(1, 'rgba(0,0,0,0.62)');
+    sh.addColorStop(0, tone(1, 0.12)); sh.addColorStop(0.6, tone(0, 0.05)); sh.addColorStop(1, tone(0, 0.62));
     ctx.fillStyle = sh; ctx.fillRect(cx - r, cy - r, 2 * r, 2 * r);
     // the highlight: sharp and small when smooth, wide and soft when rough
     const hr = r * lerp(0.07, 0.42, rough), hx = cx - r * 0.38, hy = cy - r * 0.42;
     const hg = ctx.createRadialGradient(hx, hy, 0, hx, hy, hr);
-    hg.addColorStop(0, `rgba(255,255,255,${lerp(0.95, 0.45, rough)})`); hg.addColorStop(lerp(0.55, 0.2, rough), `rgba(255,255,255,${lerp(0.8, 0.25, rough)})`); hg.addColorStop(1, 'rgba(255,255,255,0)');
+    hg.addColorStop(0, tone(1, lerp(0.95, 0.45, rough))); hg.addColorStop(lerp(0.55, 0.2, rough), tone(1, lerp(0.8, 0.25, rough))); hg.addColorStop(1, tone(1, 0));
     ctx.fillStyle = hg; ctx.fillRect(cx - r, cy - r, 2 * r, 2 * r);
     ctx.restore();
-    ctx.strokeStyle = 'rgba(255,255,255,0.45)'; ctx.lineWidth = Math.max(1.2, r * 0.018);
+    ctx.strokeStyle = this.ink(0.4); ctx.lineWidth = Math.max(1.2, r * 0.016);
     ctx.beginPath(); ctx.arc(cx, cy, r, 0, Math.PI * 2); ctx.stroke();
   }
   // wireframe probe box (isometric); s scales it
@@ -861,7 +891,7 @@ class G {
     const P = (x, y, z) => [cx + (x - z) * s * 0.866, cy + (x + z) * s * 0.5 - y * s];
     const lw = Math.max(1.4, s * 0.03);
     ctx.save();
-    ctx.strokeStyle = WHITE; ctx.lineWidth = lw;
+    ctx.strokeStyle = this.ink(1); ctx.lineWidth = lw;
     const V = [-1, 1];
     for (const a of V) for (const b of V) {
       const edges = [[[-1, a, b], [1, a, b]], [[a, -1, b], [a, 1, b]], [[a, b, -1], [a, b, 1]]];
@@ -878,7 +908,7 @@ class G {
     ctx.setLineDash([]);
     if (o.handles) {
       const hs = Math.max(4, s * 0.09);
-      ctx.fillStyle = WHITE;
+      ctx.fillStyle = this.ink(1);
       for (const a of V) for (const b of V) for (const c of V) {
         if (a === -1 && b === -1 && c === -1) continue;
         const [x, y] = P(a, b, c); ctx.fillRect(x - hs / 2, y - hs / 2, hs, hs);
@@ -890,10 +920,11 @@ class G {
 
 /* ==========================================================================
    Slides. kind 'toggle': two held states. kind 'pulse': one held state and a
-   passing accent. draw(g, c) paints one frame from g.st.
+   short move that runs once per loop. draw(g, c) paints one frame from g.st.
    ========================================================================== */
 const field = (key, label, value, hint, options) => ({key, label, value, hint, options});
 const listOf = text => String(text).split(',').map(s => s.trim()).filter(Boolean);
+const finishField = value => field('finish', 'Finish', value, 'Black, bone, or two-tone like the split sleeve.', FINISHES);
 
 const SLIDES = [
   {
@@ -905,14 +936,9 @@ const SLIDES = [
       field('step2', 'Step 2', 'Click it again to redeliver'),
       field('pill1', 'After step 1', 'Loaded'),
       field('pill2', 'After step 2', 'Sent to your inventory'),
+      finishField('black'),
     ],
-    draw(g, c) {
-      g.background(); g.panel();
-      const top = g.header(c.label);
-      const z = g.place(top, (w, h) => stepsPlan(g, w, h, c.heading, [c.step1, c.step2], g.t), 0.42);
-      g.art(z.art, r => vendorArt(g, r, c));
-      z.draw();
-    },
+    draw(g, c) { g.compose(c, {steps: [c.step1, c.step2], focus: g.t, artWeight: 0.46, art: r => vendorArt(g, r, c)}); },
   },
   {
     id: 'collections', group: 'Buying', name: 'Collections', kind: 'pulse',
@@ -921,8 +947,9 @@ const SLIDES = [
       field('heading', 'Heading', 'Redeliver a collection'),
       field('body', 'Body', 'Use the redelivery terminal below.'),
       field('arrow', 'Terminal is', 'down', null, ['down', 'left', 'right', 'up']),
+      finishField('black'),
     ],
-    draw(g, c) { g.std(c, 0.44, r => arrowArt(g, r, c.arrow)); },
+    draw(g, c) { g.compose(c, {art: r => arrowArt(g, r, c.arrow)}); },
   },
   {
     id: 'delivery', group: 'Buying', name: 'Delivery', kind: 'toggle',
@@ -931,8 +958,9 @@ const SLIDES = [
       field('heading', 'Heading', 'Look in your Materials folder'),
       field('body', 'Body', 'Individual materials are delivered there.'),
       field('folder', 'Folder name', 'Materials'),
+      finishField('black'),
     ],
-    draw(g, c) { g.std(c, 0.46, r => folderArt(g, r, c.folder)); },
+    draw(g, c) { g.compose(c, {art: r => folderArt(g, r, c.folder)}); },
   },
   {
     id: 'permissions', group: 'Buying', name: 'Permissions', kind: 'toggle',
@@ -943,25 +971,9 @@ const SLIDES = [
       field('opt1note', 'Option 1, detail', 'For objects you own'),
       field('opt2', 'Option 2', 'Full Perm'),
       field('opt2note', 'Option 2, detail', 'For anything you make. Single-user license.'),
+      finishField('black'),
     ],
-    draw(g, c) {
-      g.background(); g.panel();
-      const top = g.header(c.label);
-      const {u} = g;
-      const r = R(g.inner.x, top, g.inner.w, g.inner.y + g.inner.h - top);
-      if (g.wide) {
-        const [l, rr] = splitCols(r, [0.4, 0.6], 5 * u);
-        const p = g.textPlan(l.w, {heading: c.heading}, {max: 9 * u, maxH: l.h});
-        p.draw(l.x, l.y + (l.h - p.h) / 2);
-        optionsArt(g, rr, c);
-      } else {
-        const head = g.block(c.heading, R(0, 0, r.w, r.h * 0.3), {face: FACE.head, lh: 1.1, min: 3.4 * u, max: g.headingSize(), maxLines: 2});
-        const cardsH = Math.min(r.h - head.h - 4 * u, 2 * 26 * u + 2.4 * u);
-        const y0 = r.y + (r.h - (head.h + 4 * u + cardsH)) / 2;
-        head.draw(r.x, y0, {color: WHITE, from: 0.28, to: 0.8});
-        optionsArt(g, R(r.x, y0 + head.h + 4 * u, r.w, cardsH), c);
-      }
-    },
+    draw(g, c) { g.compose({label: c.label, heading: c.heading}, {order: 'words-first', artWeight: 0.6, wordShare: 0.3, art: r => optionsArt(g, r, c)}); },
   },
   {
     id: 'textures', group: 'Buying', name: 'Textures', kind: 'pulse',
@@ -969,8 +981,9 @@ const SLIDES = [
       field('label', 'Label', 'Good to know'),
       field('heading', 'Heading', 'Textures not included'),
       field('body', 'Body', 'Individual texture maps aren’t part of any purchase.'),
+      finishField('black'),
     ],
-    draw(g, c) { g.std(c, 0.46, r => mapsArt(g, r)); },
+    draw(g, c) { g.compose(c, {art: r => mapsArt(g, r)}); },
   },
   {
     id: 'tint', group: 'Tips', name: 'Tint', kind: 'toggle',
@@ -979,8 +992,9 @@ const SLIDES = [
       field('heading', 'Heading', 'Tint any material'),
       field('body', 'Body', 'Texture tab › Tint'),
       field('level', 'Second tint', '35', 'Percent brightness of the tinted state.'),
+      finishField('black'),
     ],
-    draw(g, c) { g.std(c, 0.46, r => tintArt(g, r, clamp((parseFloat(c.level) || 35) / 100, 0.05, 1))); },
+    draw(g, c) { g.compose(c, {art: r => tintArt(g, r, clamp((parseFloat(c.level) || 35) / 100, 0.05, 1))}); },
   },
   {
     id: 'shine', group: 'Tips', name: 'Shine', kind: 'toggle',
@@ -990,8 +1004,9 @@ const SLIDES = [
       field('body', 'Body', 'Roughness and Metallic are in the texture tab too.'),
       field('rough', 'Slider 1', 'Roughness'),
       field('metal', 'Slider 2', 'Metallic'),
+      finishField('black'),
     ],
-    draw(g, c) { g.std(c, g.wide ? 0.48 : 0.5, r => shineArt(g, r, c)); },
+    draw(g, c) { g.compose(c, {artWeight: 0.52, art: r => shineArt(g, r, c)}); },
   },
   {
     id: 'probes', group: 'Tips', name: 'Reflection probes', kind: 'toggle',
@@ -1004,14 +1019,9 @@ const SLIDES = [
       field('s4', 'Step 4', 'Scale it up'),
       field('sky', 'Before', 'Reflects the sky'),
       field('room', 'After', 'Reflects the room'),
+      finishField('black'),
     ],
-    draw(g, c) {
-      g.background(); g.panel();
-      const top = g.header(c.label);
-      const z = g.place(top, (w, h) => stepsPlan(g, w, h, c.heading, [c.s1, c.s2, c.s3, c.s4], null, 3), 0.44);
-      g.art(z.art, r => probeArt(g, r, c));
-      z.draw();
-    },
+    draw(g, c) { g.compose(c, {steps: [c.s1, c.s2, c.s3, c.s4], lit: 3, artWeight: 0.46, art: r => probeArt(g, r, c)}); },
   },
   {
     id: 'tutorials', group: 'Tips', name: 'Tutorials', kind: 'pulse',
@@ -1019,8 +1029,9 @@ const SLIDES = [
       field('label', 'Label', 'Learn'),
       field('heading', 'Heading', 'Video tutorials'),
       field('body', 'Body', 'Find them on my YouTube channel.'),
+      finishField('black'),
     ],
-    draw(g, c) { g.std(c, 0.44, r => playArt(g, r)); },
+    draw(g, c) { g.compose(c, {art: r => playArt(g, r)}); },
   },
   {
     id: 'welcome', group: 'Store', name: 'Welcome', kind: 'pulse',
@@ -1028,8 +1039,9 @@ const SLIDES = [
       field('label', 'Label', 'Welcome'),
       field('heading', 'Heading', 'Thank you for visiting'),
       field('body', 'Body', 'Materials made in Substance Sampler, Designer, Painter and Materialize.'),
+      finishField('two-tone'),
     ],
-    draw(g, c) { g.std(c, g.wide ? 0.44 : 0.4, r => logoArt(g, r)); },
+    draw(g, c) { g.compose(c, {footer: false, artWeight: 0.48, art: r => logoArt(g, r)}); },
   },
   {
     id: 'freebies', group: 'Store', name: 'Freebies', kind: 'pulse',
@@ -1039,19 +1051,9 @@ const SLIDES = [
       field('body', 'Body', 'Plain glass, black tile, wood, metal and more.'),
       field('items', 'Swatches', 'Glass, Tile, Wood, Metal', 'Comma separated, up to four.'),
       field('cta', 'Button', 'Click for yours', 'Leave empty for no button.'),
+      finishField('black'),
     ],
-    draw(g, c) {
-      const {u} = g;
-      const z = g.std(c, 0.46, r => swatchArt(g, r, listOf(c.items).slice(0, 4)), {reserve: c.cta ? 9.4 * u : 0});
-      if (c.cta) {
-        const a = g.p(0.55, 1);
-        g.fade(a);
-        const b = buttonPill(g, c.cta, z.text.x, z.text.y + z.text.h - 6.6 * u + (1 - a) * 2 * u);
-        g.fade(a * (0.75 + 0.25 * g.wave));
-        g.cursor(b.x + b.w - 1.4 * u - g.wave * 0.6 * u, b.y + b.h - 1 * u - g.wave * 0.6 * u, 5.2 * u);
-        g.ctx.globalAlpha = 1;
-      }
-    },
+    draw(g, c) { g.compose(c, {cta: c.cta, art: r => swatchArt(g, r, listOf(c.items).slice(0, 4))}); },
   },
   {
     id: 'patterns', group: 'Store', name: 'Patterns', kind: 'pulse',
@@ -1059,198 +1061,167 @@ const SLIDES = [
       field('label', 'Label', 'Patterns'),
       field('heading', 'Heading', 'Hand-drawn and sourced'),
       field('body', 'Body', 'Drawn by me, or from open-source and paid stock sites.'),
+      finishField('black'),
     ],
-    draw(g, c) { g.std(c, 0.44, r => patternArt(g, r)); },
+    draw(g, c) { g.compose(c, {art: r => patternArt(g, r)}); },
   },
 ];
 
-/* ---------- slide parts ---------- */
-// numbered steps under a heading; focus (0..n-1, fractional) slides a glass highlight between rows
-function stepsPlan(g, width, maxH, heading, items, focus, lastLit) {
-  const {ctx, u} = g;
-  const n = items.length;
-  const rowSize = (n > 2 ? (g.tall ? 3.9 : g.wide ? 4 : 3.3) : (g.tall ? 4.4 : g.wide ? 4.8 : 4.1)) * u;
-  const numW = (n > 2 ? 5.6 : 6.6) * u, rowGap = (n > 2 ? 0.6 : 2.2) * u, headGap = (n > 2 ? 2.8 : 3.6) * u;
-  const rows = items.map(t => g.block(t, R(0, 0, width - numW - 3 * u, rowSize * 3.2), {face: FACE.body, lh: 1.25, size: rowSize, maxLines: 2}));
-  const rowH = rows.map(b => Math.max(b.h + (n > 2 ? 1.8 : 2.6) * u, numW));
-  const listH = rowH.reduce((a, b) => a + b, 0) + rowGap * (n - 1);
-  const head = g.block(heading, R(0, 0, width, Math.max(6 * u, maxH - listH - headGap)), {face: FACE.head, lh: 1.1, min: 3.4 * u, max: g.headingSize() * (n > 2 ? 0.9 : 1), maxLines: 2});
-  const h = head.h + headGap + listH;
-  return {h, draw: (x, y0) => {
-    head.draw(x, y0, {color: WHITE, from: 0.28, to: 0.8});
-    let y = y0 + head.h + headGap;
-    const ys = [];
-    rows.forEach((b, i) => { ys.push(y); y += rowH[i] + rowGap; });
-    if (focus != null) {
-      const f = clamp(focus, 0, n - 1), i0 = Math.floor(f), i1 = Math.min(n - 1, i0 + 1), k = f - i0;
-      const hy = lerp(ys[i0], ys[i1], k), hh = lerp(rowH[i0], rowH[i1], k);
-      g.fade(g.p(0.5, 1));
-      g.glass(R(x - 1.6 * u, hy - 0.2 * u, width + 3.2 * u, hh + 0.4 * u), 2.2 * u, {alpha: ctx.globalAlpha, shadow: false, frost: false, fill: 'rgba(255,255,255,0.1)'});
-      ctx.globalAlpha = 1;
-    }
-    rows.forEach((b, i) => {
-      const lit = focus == null ? (lastLit != null && i === lastLit ? 1 : 0.86) : clamp(1 - Math.abs(focus - i), 0, 1);
-      const k = g.p(0.42 + i * 0.08, 0.92 + i * 0.04);
-      const yy = ys[i] + (1 - k) * 2 * u;
-      g.fade(k * lerp(0.42, 1, lit));
-      const cx = x + numW / 2 - 0.6 * u, cy = yy + rowH[i] / 2;
-      ctx.strokeStyle = WHITE; ctx.lineWidth = Math.max(1.2, 0.26 * u);
-      ctx.beginPath(); ctx.arc(cx, cy, numW * 0.38, 0, Math.PI * 2); ctx.stroke();
-      const ns = 2.6 * u, nm = measure(ctx, FACE.num, String(i + 1)), cap = measure(ctx, FACE.num, 'H').a * ns / 100;
-      applyFont(ctx, FACE.num, ns);
-      ctx.fillStyle = WHITE;
-      ctx.fillText(String(i + 1), cx - nm.w * ns / 200 + nm.l * ns / 100, cy + cap / 2);
-      ctx.globalAlpha = 1;
-      b.draw(x + numW + 2 * u, yy + (rowH[i] - b.h) / 2, {color: '#e6e6e2', alpha: k * lerp(0.42, 1, lit), dy: 0});
-    });
-  }};
-}
+/* ---------- slide art ---------- */
+// the wall vendor: the picked material, a click, a tick, and a status under it
 function vendorArt(g, r, c) {
   const {ctx, u} = g, t = g.t;
-  const n = 3, gap = 1.2 * u, pillRoom = 8 * u;
-  const s = Math.min((r.w - gap * (n - 1)) / n, (r.h - pillRoom - gap * (n - 1)) / n);
-  const gw = n * s + (n - 1) * gap;
-  const gx = r.x + (r.w - gw) / 2, gy = r.y + (r.h - pillRoom - gw) / 2;
-  const kinds = ['tiles', 'glass', 'wood', 'metal', 'pyramids', 'dots', 'herringbone', 'checker', 'stripes'];
+  const gap = 1.1 * u, capRoom = 8.6 * u;
+  const fit = (cols, rows) => Math.min((r.w - gap * (cols - 1)) / cols, (r.h - capRoom - gap * (rows - 1)) / rows);
+  const [cols, rows] = fit(5, 1) > fit(3, 3) * 1.15 ? [5, 1] : [3, 3];
+  const s = fit(cols, rows), pick = cols === 5 ? 2 : 4;
+  const gw = cols * s + (cols - 1) * gap, gh = rows * s + (rows - 1) * gap;
+  const gx = r.x + (r.w - gw) / 2, gy = r.y + (r.h - capRoom - gh) / 2;
+  const kinds = cols === 5 ? ['wood', 'glass', 'pyramids', 'metal', 'dots'] : ['tiles', 'glass', 'wood', 'metal', 'pyramids', 'dots', 'herringbone', 'checker', 'stripes'];
   let sel = null;
   kinds.forEach((k, i) => {
-    const tr = R(gx + (i % n) * (s + gap), gy + Math.floor(i / n) * (s + gap), s, s);
-    if (i === 4) { sel = tr; return; }
-    g.afade(0.55);
+    const tr = R(gx + (i % cols) * (s + gap), gy + Math.floor(i / cols) * (s + gap), s, s);
+    if (i === pick) { sel = tr; return; }
+    ctx.globalAlpha = 0.42;
     g.tile(tr, k, i + 2);
+    ctx.globalAlpha = 1;
   });
-  g.afade(1);
-  const lift = 1.08, sx = sel.x + sel.w / 2, sy = sel.y + sel.h / 2;
-  const sr = R(sx - sel.w * lift / 2, sy - sel.h * lift / 2, sel.w * lift, sel.h * lift);
-  ctx.save();
-  ctx.shadowColor = 'rgba(0,0,0,0.6)'; ctx.shadowBlur = 3 * u; ctx.shadowOffsetY = 1 * u;
-  ctx.fillStyle = '#111'; ctx.beginPath(); ctx.roundRect(sr.x, sr.y, sr.w, sr.h, sr.w * 0.12); ctx.fill();
-  ctx.restore();
-  g.tile(sr, 'pyramids', 5, {cell: sr.w / 3});
-  ctx.strokeStyle = WHITE; ctx.lineWidth = Math.max(2, 0.5 * u);
-  ctx.beginPath(); ctx.roundRect(sr.x - 0.9 * u, sr.y - 0.9 * u, sr.w + 1.8 * u, sr.h + 1.8 * u, sr.w * 0.15); ctx.stroke();
+  g.tile(sel, 'pyramids', 5, {cell: sel.w / 3});
+  ctx.strokeStyle = g.ink(1); ctx.lineWidth = g.lw;
+  ctx.strokeRect(sel.x - 0.9 * u, sel.y - 0.9 * u, sel.w + 1.8 * u, sel.h + 1.8 * u);
   // the second click: a ripple, a press, a tick
-  const tipX = sx + sel.w * 0.08, tipY = sy + sel.h * 0.06;
-  g.ring(tipX, tipY, lerp(0.15, 0.75, t) * s, Math.sin(Math.PI * t) * 0.9, Math.max(1.5, 0.4 * u));
-  g.badge(sr.x + sr.w - 0.4 * u, sr.y + 0.4 * u, 2.6 * u, ease.out(seg(t, 0.4, 1)));
-  g.cursor(tipX, tipY, s * 0.5 * (1 - 0.1 * Math.sin(Math.PI * t)));
-  // what happened, under the grid
-  const py = gy + gw + 2.6 * u;
-  g.afade(1 - seg(t, 0, 0.45));
-  g.pill(c.pill1, r.x + r.w / 2, py, {minX: r.x, maxX: r.x + r.w});
-  g.afade(seg(t, 0.55, 1));
-  g.pill(c.pill2, r.x + r.w / 2, py, {check: true, minX: r.x, maxX: r.x + r.w});
-  g.afade(1);
+  const tipX = sel.x + sel.w * 0.58, tipY = sel.y + sel.h * 0.56;
+  g.ring(tipX, tipY, lerp(0.15, 0.75, t) * s, Math.sin(Math.PI * t) * 0.9);
+  g.badge(sel.x + sel.w + 0.2 * u, sel.y - 0.2 * u, 2.6 * u, ease.out(seg(t, 0.4, 1)));
+  g.cursor(tipX, tipY, Math.min(s * 0.46, 9 * u) * (1 - 0.1 * Math.sin(Math.PI * t)));
+  const py = gy + gh + 3 * u, cx = r.x + r.w / 2;
+  ctx.globalAlpha = 1 - seg(t, 0, 0.45);
+  g.caption(c.pill1, cx, py, {minX: r.x, maxX: r.x + r.w});
+  ctx.globalAlpha = seg(t, 0.55, 1);
+  g.caption(c.pill2, cx, py, {check: true, minX: r.x, maxX: r.x + r.w});
+  ctx.globalAlpha = 1;
 }
+// an arrow that slides through a ring toward the terminal, and the next one follows it in
 function arrowArt(g, r, dir) {
-  const {ctx, u} = g;
-  const d = Math.min(r.w, r.h) * 0.86, cx = r.x + r.w / 2, cy = r.y + r.h / 2;
-  g.ring(cx, cy, d / 2 * (1 + 0.16 * g.st.pacc), g.wave * 0.55, Math.max(1.2, 0.3 * u));
-  g.glass(R(cx - d / 2, cy - d / 2, d, d), d / 2, {alpha: ctx.globalAlpha, fill: 'rgba(255,255,255,0.08)'});
+  const {ctx, u} = g, p = g.st.pacc;
+  const d = Math.min(r.w, r.h) * 0.8, rad = d / 2, cx = r.x + r.w / 2, cy = r.y + r.h / 2;
+  g.ring(cx, cy, rad * (1 + 0.22 * p), g.wave * 0.5);
+  ctx.strokeStyle = g.ink(0.5); ctx.lineWidth = g.lw;
+  ctx.beginPath(); ctx.arc(cx, cy, rad, 0, Math.PI * 2); ctx.stroke();
   const ang = {down: 0, left: Math.PI / 2, up: Math.PI, right: -Math.PI / 2}[dir] || 0;
-  const nudge = g.wave * d * 0.08, L = d * 0.4, hw = d * 0.13;
+  const L = d * 0.42, hw = d * 0.12, travel = d * 0.8;
   ctx.save();
-  ctx.translate(cx, cy); ctx.rotate(ang); ctx.translate(0, nudge);
-  ctx.strokeStyle = WHITE; ctx.lineWidth = Math.max(2, d * 0.045); ctx.lineCap = 'round'; ctx.lineJoin = 'round';
-  ctx.beginPath(); ctx.moveTo(0, -L / 2); ctx.lineTo(0, L / 2); ctx.stroke();
-  ctx.beginPath(); ctx.moveTo(-hw, L / 2 - hw); ctx.lineTo(0, L / 2); ctx.lineTo(hw, L / 2 - hw); ctx.stroke();
+  ctx.beginPath(); ctx.arc(cx, cy, rad - 2.4 * g.lw, 0, Math.PI * 2); ctx.clip();
+  ctx.translate(cx, cy); ctx.rotate(ang);
+  ctx.strokeStyle = g.ink(1); ctx.lineWidth = Math.max(2, d * 0.05); ctx.lineCap = 'round'; ctx.lineJoin = 'round';
+  for (const off of [0, -travel]) {
+    const y = off + ease.inOut(p) * travel;
+    ctx.beginPath(); ctx.moveTo(0, y - L / 2); ctx.lineTo(0, y + L / 2); ctx.stroke();
+    ctx.beginPath(); ctx.moveTo(-hw, y + L / 2 - hw); ctx.lineTo(0, y + L / 2); ctx.lineTo(hw, y + L / 2 - hw); ctx.stroke();
+  }
   ctx.restore();
 }
+// a material drops into the folder
 function folderArt(g, r, name) {
   const {ctx, u} = g, t = g.t;
-  const w = Math.min(r.w * 0.78, r.h * 0.92), h = w * 0.68, ts0 = w * 0.42;
+  const w = Math.min(r.w * 0.74, r.h * 0.98), h = w * 0.64, ts0 = w * 0.34;
   const groupH = ts0 + 2.4 * u + h;
   const x = r.x + (r.w - w) / 2, y = r.y + (r.h - groupH) / 2 + ts0 + 2.4 * u;
-  const tab = h * 0.16, rad = w * 0.06;
-  // back of the folder
-  g.afade(1);
-  ctx.fillStyle = 'rgba(255,255,255,0.14)';
+  const tab = h * 0.15, rad = w * 0.035;
   ctx.beginPath();
-  ctx.moveTo(x + rad, y); ctx.lineTo(x + w * 0.36, y); ctx.lineTo(x + w * 0.43, y + tab); ctx.lineTo(x + w - rad, y + tab);
+  ctx.moveTo(x + rad, y); ctx.lineTo(x + w * 0.34, y); ctx.lineTo(x + w * 0.41, y + tab); ctx.lineTo(x + w - rad, y + tab);
   ctx.quadraticCurveTo(x + w, y + tab, x + w, y + tab + rad); ctx.lineTo(x + w, y + h - rad); ctx.quadraticCurveTo(x + w, y + h, x + w - rad, y + h);
   ctx.lineTo(x + rad, y + h); ctx.quadraticCurveTo(x, y + h, x, y + h - rad); ctx.lineTo(x, y + rad); ctx.quadraticCurveTo(x, y, x + rad, y);
-  ctx.fill();
-  ctx.strokeStyle = 'rgba(255,255,255,0.4)'; ctx.lineWidth = Math.max(1.2, 0.25 * u); ctx.stroke();
-  // the material drops in
-  const ts = w * lerp(0.42, 0.34, t);
-  const tx = x + w / 2 - ts / 2, ty = lerp(y - ts0 - 2.4 * u, y + tab + h * 0.12, ease.inOut(t));
+  ctx.fillStyle = g.ink(0.12); ctx.fill();
+  ctx.strokeStyle = g.ink(0.45); ctx.lineWidth = g.lw; ctx.stroke();
+  const ts = w * lerp(0.34, 0.28, t);
+  const tx = x + w / 2 - ts / 2, ty = lerp(y - ts0 - 2.4 * u, y + tab + h * 0.1, t);
   g.tile(R(tx, ty, ts, ts), 'pyramids', 6, {cell: ts / 3});
-  // front panel of the folder, frosted
-  const fy = y + h * 0.36;
-  g.glass(R(x, fy, w, h - h * 0.36), rad, {alpha: ctx.globalAlpha, fill: 'rgba(255,255,255,0.1)'});
-  const ls = Math.min(3.4 * u, w * 0.08);
-  g.label(name, x + w / 2, fy + (h - h * 0.36) / 2 - ls * 0.36, ls, 0.2, WHITE, 'center');
-  g.badge(x + w - 1.2 * u, fy + 1.2 * u, 2.8 * u, ease.out(seg(t, 0.7, 1)));
+  const fy = y + h * 0.36, fh = h - h * 0.36;
+  ctx.fillStyle = g.ink(0.2);
+  ctx.beginPath(); ctx.roundRect(x, fy, w, fh, rad); ctx.fill();
+  ctx.strokeStyle = g.ink(0.6); ctx.stroke();
+  const ls = Math.min(3 * u, w * 0.07), cap = measure(ctx, FACE.cap, 'H').a * ls / 100;
+  g.line(name, FACE.cap, ls, x + w / 2, fy + fh / 2 - cap / 2, {caps: true, align: 'center', color: g.ink(1)});
+  g.badge(x + w - 1.4 * u, fy + 1.4 * u, 2.8 * u, ease.out(seg(t, 0.7, 1)));
 }
+// two options; a solid bar slides from the first to the second, the words inverted on it
 function optionsArt(g, r, c) {
   const {ctx, u} = g, t = g.t;
   const opts = [[c.opt1, c.opt1note], [c.opt2, c.opt2note]];
-  const gap = 2.4 * u, bh = Math.min((r.h - gap) / 2, (g.wide ? 30 : 26) * u);
+  const gap = 2 * u, bh = Math.min((r.h - gap) / 2, (g.wide ? 30 : g.tall ? 34 : 26) * u);
   const boxes = splitRows(R(r.x, r.y + (r.h - (2 * bh + gap)) / 2, r.w, 2 * bh + gap), [1, 1], gap);
-  boxes.forEach((b, i) => {
-    const lit = i === 0 ? 1 - t : t;
-    const k = g.p(0.4 + i * 0.1, 0.95 + i * 0.05);
-    g.fade(k);
-    g.glass(b, 2.8 * u, {alpha: ctx.globalAlpha, shadow: lit > 0.5, frost: false, fill: `rgba(255,255,255,${lerp(0.04, 0.16, lit)})`});
-    const pad = 3.4 * u, inner = R(b.x + pad, b.y + pad, b.w - 2 * pad, b.h - 2 * pad);
-    const title = g.block(opts[i][0], R(0, 0, inner.w - 7 * u, inner.h * 0.5), {face: FACE.head, lh: 1.05, min: 3 * u, max: (g.wide ? 7.4 : 6.6) * u, maxLines: 1});
-    const note = g.block(opts[i][1], R(0, 0, inner.w, inner.h - title.h - 1.6 * u), {face: FACE.body, lh: 1.3, size: (g.wide ? 3.9 : 3.5) * u, maxLines: 3});
-    const th = title.h + 1.6 * u + note.h, ty = inner.y + (inner.h - th) / 2;
-    title.draw(inner.x, ty, {color: WHITE, alpha: k * lerp(0.45, 1, lit), dy: 0});
-    note.draw(inner.x, ty + title.h + 1.6 * u, {color: '#dcdcd8', alpha: k * lerp(0.4, 1, lit), dy: 0});
-    // a radio dot that fills as the option is picked
-    const rx = inner.x + inner.w - 2.6 * u, ry = inner.y + 2.6 * u;
-    g.fade(k);
-    ctx.strokeStyle = WHITE; ctx.lineWidth = Math.max(1.2, 0.28 * u);
-    ctx.beginPath(); ctx.arc(rx, ry, 2.2 * u, 0, Math.PI * 2); ctx.stroke();
-    if (lit > 0.02) { ctx.fillStyle = WHITE; ctx.beginPath(); ctx.arc(rx, ry, 1.3 * u * ease.out(lit), 0, Math.PI * 2); ctx.fill(); }
-    ctx.globalAlpha = 1;
+  const rad = 1.6 * u, pad = 3.6 * u, numS = 2.3 * u;
+  const lay = boxes.map((b, i) => {
+    const inner = R(b.x + pad, b.y + pad, b.w - 2 * pad, b.h - 2 * pad);
+    const title = g.block(opts[i][0], R(0, 0, inner.w - 7 * u, inner.h * 0.5), {face: FACE.title, min: 2.6 * u, max: (g.wide ? 5 : g.tall ? 5.4 : 4.6) * u, lh: 1.1, maxLines: 1, caps: true});
+    const note = g.block(opts[i][1], R(0, 0, inner.w, inner.h * 0.6), {face: FACE.body, size: (g.wide ? 3.8 : g.tall ? 4.1 : 3.4) * u, lh: 1.32, maxLines: 3});
+    const capN = measure(ctx, FACE.num, 'H').a * numS / 100;
+    const th = capN + 2.2 * u + title.h + 2 * u + note.h;
+    return {b, inner, title, note, capN, ty: inner.y + (inner.h - th) / 2};
   });
+  const paintRows = inv => lay.forEach((L, i) => {
+    const {b, inner, title, note, capN, ty} = L;
+    const fg = inv ? g.ink(0) : g.ink(1);
+    if (!inv) {
+      ctx.strokeStyle = g.ink(0.4); ctx.lineWidth = g.lw;
+      ctx.beginPath(); ctx.roundRect(b.x, b.y, b.w, b.h, rad); ctx.stroke();
+    }
+    g.line(`Option 0${i + 1}`, FACE.meta, numS, inner.x, ty, {caps: true, color: inv ? g.ink(0, 0.7) : g.role('meta')});
+    title.draw(inner.x, ty + capN + 2.2 * u, {color: fg});
+    note.draw(inner.x, ty + capN + 2.2 * u + title.h + 2 * u, {color: inv ? g.ink(0, 0.82) : g.role('sub')});
+    const rx = inner.x + inner.w - 2 * u, ry = ty + capN / 2 + 0.6 * u;
+    ctx.strokeStyle = fg; ctx.lineWidth = Math.max(1.2, 0.28 * u);
+    ctx.beginPath(); ctx.arc(rx, ry, 2 * u, 0, Math.PI * 2); ctx.stroke();
+    if (inv) { ctx.fillStyle = fg; ctx.beginPath(); ctx.arc(rx, ry, 1.1 * u, 0, Math.PI * 2); ctx.fill(); }
+  });
+  paintRows(false);
+  const sel = R(boxes[0].x, lerp(boxes[0].y, boxes[1].y, t), boxes[0].w, bh);
+  ctx.save();
+  ctx.beginPath(); ctx.roundRect(sel.x, sel.y, sel.w, sel.h, rad); ctx.clip();
+  ctx.fillStyle = g.ink(1); ctx.fillRect(sel.x, sel.y, sel.w, sel.h);
+  paintRows(true);
+  ctx.restore();
 }
+// the three maps, lifting one after another, and a crossed circle: not included
 function mapsArt(g, r) {
-  const {ctx, u} = g;
-  const s = Math.min(r.w * 0.46, (r.h - 5 * u) * 0.78), cx = r.x + r.w / 2, cy = r.y + (r.h - 5 * u) / 2 + 0.4 * u;
-  const spread = 1 + 0.55 * g.wave;
+  const {ctx, u} = g, p = g.st.pacc;
+  const capH = 5.6 * u;
+  const s = Math.min(r.w * 0.4, (r.h - capH) * 0.72), cx = r.x + r.w / 2, cy = r.y + (r.h - capH) / 2 + 0.6 * u;
+  const spread = 1 + 0.35 * g.wave;
   const maps = [['Base', 'checker', -1], ['Normal', 'herringbone', 0], ['ORM', 'dots', 1]];
-  maps.forEach(([name, kind, k]) => {
+  maps.forEach(([name, kind, k], i) => {
+    const lift = Math.sin(Math.PI * seg(p, i * 0.2, i * 0.2 + 0.5)) * 2.6 * u;
     ctx.save();
-    ctx.translate(cx + k * s * 0.32 * spread, cy + Math.abs(k) * s * 0.05);
-    ctx.rotate(k * 0.16 * spread);
-    const tr = R(-s / 2, -s / 2, s, s);
-    ctx.shadowColor = 'rgba(0,0,0,0.55)'; ctx.shadowBlur = 3 * u; ctx.shadowOffsetY = u;
-    ctx.fillStyle = '#111'; ctx.beginPath(); ctx.roundRect(tr.x, tr.y, tr.w, tr.h, s * 0.08); ctx.fill();
-    ctx.shadowColor = 'transparent';
-    g.tile(tr, kind, 7 + k, {rad: s * 0.08, cell: s / 4});
+    ctx.translate(cx + k * s * 0.36 * spread, cy + Math.abs(k) * s * 0.05 - lift);
+    ctx.rotate(k * 0.14 * spread);
+    const e = g.lw * 1.6;
+    ctx.fillStyle = g.ink(0); ctx.fillRect(-s / 2 - e, -s / 2 - e, s + 2 * e, s + 2 * e);
+    g.tile(R(-s / 2, -s / 2, s, s), kind, 7 + k, {cell: s / 4});
     ctx.restore();
   });
-  g.label(maps.map(m => m[0]).join('  ·  '), cx, cy + s * 0.62 + 1.2 * u, 2.2 * u, 0.2, '#cfcfca', 'center');
-  // a crossed circle over the stack
-  const rr = s * 0.24, bx = cx + s * 0.5, by = cy - s * 0.42;
-  ctx.save();
-  ctx.shadowColor = 'rgba(0,0,0,0.5)'; ctx.shadowBlur = 2 * u;
-  ctx.fillStyle = 'rgba(20,20,22,0.85)'; ctx.beginPath(); ctx.arc(bx, by, rr, 0, Math.PI * 2); ctx.fill();
-  ctx.restore();
-  ctx.strokeStyle = WHITE; ctx.lineWidth = Math.max(2, rr * 0.13);
-  ctx.beginPath(); ctx.arc(bx, by, rr * 0.7, 0, Math.PI * 2); ctx.stroke();
+  g.line(maps.map(m => m[0]).join('  ·  '), FACE.meta, 2.2 * u, cx, cy + s * 0.62 + 2.4 * u, {caps: true, align: 'center', color: g.role('meta')});
+  const rr = s * 0.21, bx = cx + s * 0.58, by = cy - s * 0.5;
+  ctx.fillStyle = g.ink(0); ctx.beginPath(); ctx.arc(bx, by, rr, 0, Math.PI * 2); ctx.fill();
+  ctx.strokeStyle = g.ink(1); ctx.lineWidth = Math.max(2, rr * 0.12);
+  ctx.beginPath(); ctx.arc(bx, by, rr * 0.72, 0, Math.PI * 2); ctx.stroke();
   ctx.beginPath(); ctx.moveTo(bx - rr * 0.5, by + rr * 0.5); ctx.lineTo(bx + rr * 0.5, by - rr * 0.5); ctx.stroke();
 }
+// the ball darkens with the tint, and the tint box beside it shows the value
 function tintArt(g, r, level) {
   const {ctx, u} = g, t = g.t;
   const tint = lerp(1, level, t);
   const rad = Math.min(r.h / 2 * 0.92, (r.w - 4 * u) / 2.8);
   const cx = r.x + (r.w - (2.72 * rad + 3 * u)) / 2 + rad, cy = r.y + r.h / 2;
   g.ball(cx, cy, rad, {tint, rough: 0.35, metal: 0.35});
-  // the colour swatch beside it, like the build tool's tint box
   const sw = rad * 0.72, sx = cx + rad + 3 * u, sy = cy - sw * 0.75;
-  ctx.save();
-  ctx.shadowColor = 'rgba(0,0,0,0.5)'; ctx.shadowBlur = 2 * u;
-  ctx.fillStyle = gray(tint); ctx.beginPath(); ctx.roundRect(sx, sy, sw, sw, sw * 0.14); ctx.fill();
-  ctx.restore();
-  ctx.strokeStyle = 'rgba(255,255,255,0.6)'; ctx.lineWidth = Math.max(1.2, 0.25 * u);
-  ctx.beginPath(); ctx.roundRect(sx, sy, sw, sw, sw * 0.14); ctx.stroke();
-  g.label('Tint', sx, sy + sw + 2 * u, 2.3 * u, 0.22, '#d0d0cb');
-  g.label('#' + hex2(tint).repeat(3), sx, sy + sw + 5.6 * u, 2.3 * u, 0.06, WHITE);
+  ctx.fillStyle = gray(tint); ctx.fillRect(sx, sy, sw, sw);
+  ctx.strokeStyle = g.ink(0.55); ctx.lineWidth = g.lw;
+  ctx.strokeRect(sx, sy, sw, sw);
+  g.line('Tint', FACE.meta, 2.2 * u, sx, sy + sw + 2.2 * u, {caps: true, color: g.role('meta')});
+  g.line('#' + hex2(tint).repeat(3), FACE.num, 2.6 * u, sx, sy + sw + 5.6 * u, {color: g.ink(1)});
 }
+// roughness and metallic slide; the highlight sharpens
 function shineArt(g, r, c) {
   const {ctx, u} = g, t = g.t;
   const rough = lerp(0.75, 0.12, t), metal = lerp(1, 0.25, t);
@@ -1259,88 +1230,93 @@ function shineArt(g, r, c) {
   g.ball(ballR.x + ballR.w / 2, ballR.y + ballR.h / 2, rad, {tint: 0.9, rough, metal, kind: 'smooth'});
   const rows = [[c.rough, rough], [c.metal, metal]];
   const rowH = 9 * u, top = sl.y + (sl.h - (rows.length * rowH + 2 * u)) / 2;
+  const ls = (g.wide ? 2.4 : 2.2) * u;
   rows.forEach(([name, v], i) => {
     const y = top + i * (rowH + 2 * u);
-    const ls = (g.wide ? 2.6 : 2.2) * u;
-    g.label(name, sl.x, y, ls, 0.18, '#d0d0cb');
-    g.label(v.toFixed(2), sl.x + sl.w, y, ls, 0.04, WHITE, 'right');
-    const ty = y + 5.4 * u, th = Math.max(2, 0.5 * u);
-    ctx.fillStyle = 'rgba(255,255,255,0.18)'; ctx.fillRect(sl.x, ty, sl.w, th);
-    ctx.fillStyle = 'rgba(255,255,255,0.85)'; ctx.fillRect(sl.x, ty, sl.w * v, th);
-    ctx.save();
-    ctx.shadowColor = 'rgba(0,0,0,0.5)'; ctx.shadowBlur = 1.5 * u;
-    ctx.fillStyle = WHITE; ctx.beginPath(); ctx.arc(sl.x + sl.w * v, ty + th / 2, 1.8 * u, 0, Math.PI * 2); ctx.fill();
-    ctx.restore();
+    g.line(name, FACE.meta, ls, sl.x, y, {caps: true, color: g.role('meta')});
+    g.line(v.toFixed(2), FACE.num, ls * 1.1, sl.x + sl.w, y, {align: 'right', color: g.ink(1)});
+    const ty = y + 5.4 * u, th = Math.max(2, Math.round(0.4 * u));
+    ctx.fillStyle = g.ink(0.25); ctx.fillRect(sl.x, ty, sl.w, th);
+    ctx.fillStyle = g.ink(1); ctx.fillRect(sl.x, ty, sl.w * v, th);
+    ctx.fillStyle = g.ink(0); ctx.beginPath(); ctx.arc(sl.x + sl.w * v, ty + th / 2, 2.1 * u, 0, Math.PI * 2); ctx.fill();
+    ctx.fillStyle = g.ink(1); ctx.beginPath(); ctx.arc(sl.x + sl.w * v, ty + th / 2, 1.6 * u, 0, Math.PI * 2); ctx.fill();
   });
 }
+// the probe box scales up and the ball starts reflecting the room
 function probeArt(g, r, c) {
-  const {u} = g, t = g.t, e = ease.inOut(t);
+  const {ctx, u} = g, t = g.t, e = ease.inOut(t);
   const side = r.w > r.h * 1.7;
-  const area = side ? R(r.x, r.y, r.w * 0.5, r.h) : R(r.x, r.y, r.w, r.h - 8 * u);
-  const base = Math.min(area.w / 3.2, area.h / 3.6);
+  const area = side ? R(r.x, r.y, r.w * 0.46, r.h) : R(r.x, r.y, r.w, r.h - 8.6 * u);
+  // the full-size box is 4 x its scale tall and 3.5 x wide; the small one sits right of the ball
+  const base = Math.min(area.w / 3.5, area.h / (side ? 3.25 : 3.5));
   const cx = area.x + area.w / 2, cy = area.y + area.h / 2;
   g.ball(cx, cy + base * 0.18, base * 0.62, {rough: 0.12, metal: 1, tint: 0.9, room: ease.inOut(seg(t, 0.35, 1)), kind: 'smooth'});
-  const s = lerp(base * 0.32, base * 0.85, e);
-  g.cube(lerp(cx + base * 1.15, cx, e), lerp(cy + base * 0.75, cy, e), s, {handles: t > 0.02 && t < 0.98});
-  const px = side ? r.x + r.w * 0.75 : r.x + r.w / 2, py = side ? r.y + r.h / 2 - 3 * u : r.y + r.h - 6.8 * u;
-  g.afade(1 - seg(t, 0, 0.5));
-  g.pill(c.sky, px, py, {minX: r.x, maxX: r.x + r.w});
-  g.afade(seg(t, 0.5, 1));
-  g.pill(c.room, px, py, {check: true, minX: r.x, maxX: r.x + r.w});
-  g.afade(1);
+  const s = lerp(base * 0.32, base * 0.82, e);
+  g.cube(lerp(cx + base * 1.05, cx, e), lerp(cy + base * 0.7, cy, e), s, {handles: t > 0.02 && t < 0.98});
+  const px = side ? r.x + r.w * 0.73 : r.x + r.w / 2, py = side ? r.y + r.h / 2 - 3 * u : r.y + r.h - 6.8 * u;
+  ctx.globalAlpha = 1 - seg(t, 0, 0.5);
+  g.caption(c.sky, px, py, {minX: r.x, maxX: r.x + r.w});
+  ctx.globalAlpha = seg(t, 0.5, 1);
+  g.caption(c.room, px, py, {check: true, minX: r.x, maxX: r.x + r.w});
+  ctx.globalAlpha = 1;
 }
+// a video frame: the play button pulses and the playhead runs on
 function playArt(g, r) {
-  const {ctx, u} = g;
-  const d = Math.min(r.w, r.h) * 0.84, cx = r.x + r.w / 2, cy = r.y + r.h / 2;
-  g.ring(cx, cy, d / 2 * (1 + 0.2 * g.st.pacc), g.wave * 0.6, Math.max(1.2, 0.3 * u));
-  g.glass(R(cx - d / 2, cy - d / 2, d, d), d / 2, {alpha: ctx.globalAlpha, fill: 'rgba(255,255,255,0.09)'});
-  const k = d * 0.17 * (1 + 0.06 * g.wave);
-  ctx.fillStyle = WHITE;
-  ctx.beginPath();
-  ctx.moveTo(cx - k * 0.7, cy - k); ctx.lineTo(cx + k * 1.05, cy); ctx.lineTo(cx - k * 0.7, cy + k); ctx.closePath();
-  ctx.lineJoin = 'round'; ctx.lineWidth = k * 0.25; ctx.strokeStyle = WHITE; ctx.fill(); ctx.stroke();
+  const {ctx, u} = g, p = g.st.pacc;
+  const fw = Math.min(r.w * 0.9, r.h * 0.96 * 16 / 9), fh = fw * 9 / 16;
+  const x = r.x + (r.w - fw) / 2, y = r.y + (r.h - fh) / 2;
+  ctx.fillStyle = g.ink(0.07);
+  ctx.beginPath(); ctx.roundRect(x, y, fw, fh, 1.6 * u); ctx.fill();
+  ctx.strokeStyle = g.ink(0.45); ctx.lineWidth = g.lw; ctx.stroke();
+  const d = fh * 0.38 * (1 + 0.07 * g.wave), cx = x + fw / 2, cy = y + fh * 0.45;
+  g.ring(cx, cy, d / 2 * (1 + 0.35 * p), g.wave * 0.6);
+  ctx.fillStyle = g.ink(1); ctx.beginPath(); ctx.arc(cx, cy, d / 2, 0, Math.PI * 2); ctx.fill();
+  const k = d * 0.2;
+  ctx.fillStyle = g.ink(0);
+  ctx.beginPath(); ctx.moveTo(cx - k * 0.62, cy - k); ctx.lineTo(cx + k * 1.02, cy); ctx.lineTo(cx - k * 0.62, cy + k); ctx.closePath();
+  ctx.lineJoin = 'round'; ctx.lineWidth = k * 0.2; ctx.strokeStyle = g.ink(0); ctx.fill(); ctx.stroke();
+  const bx = x + 4 * u, bw = fw - 8 * u, by = Math.round(y + fh - 5 * u), th = Math.max(2, Math.round(0.4 * u));
+  const prog = 0.2 + 0.62 * p;
+  ctx.fillStyle = g.ink(0.3); ctx.fillRect(bx, by, bw, th);
+  ctx.fillStyle = g.ink(1); ctx.fillRect(bx, by, bw * prog, th);
+  ctx.beginPath(); ctx.arc(bx + bw * prog, by + th / 2, 1.3 * u, 0, Math.PI * 2); ctx.fill();
 }
+// the logo large, and a band of light across its letters like spot varnish on a matte sleeve
 function logoArt(g, r) {
-  const {ctx, u} = g;
-  const h = Math.min(r.h * 0.62, r.w / 2.9), cx = r.x + r.w / 2, cy = r.y + r.h / 2;
-  const a0 = ctx.globalAlpha;
-  ctx.globalAlpha = a0 * 0.8;
-  const lr = g.logo(cx, cy - h / 2, h, 'center');
-  ctx.globalAlpha = a0;
-  // the glint runs across the logo itself
-  const pos = g.glintPos();
-  if (pos != null && pos > -0.3 && pos < 1.3) {
-    const layer = makeCanvas(Math.ceil(lr.w), Math.ceil(lr.h)), lc = layer.getContext('2d');
-    lc.drawImage(ASSETS.logoWhite, 0, 0, layer.width, layer.height);
+  const {ctx} = g, p = g.st.pacc;
+  const h = Math.min(r.h * 0.7, r.w / 2.9);
+  const light = g.s === SURF.light;
+  const lr = g.logo(r.x + r.w / 2, r.y + (r.h - h) / 2, h, 'center', g.ink(light ? 1 : 0.9));
+  if (p > 0) {
+    const layer = makeCanvas(lr.w, lr.h), lc = layer.getContext('2d');
+    lc.drawImage(logoIn(tone(1), lr.w, lr.h), 0, 0);
     lc.globalCompositeOperation = 'source-in';
-    const gx = layer.width * pos, bw = layer.width * 0.18;
-    const gr = lc.createLinearGradient(gx - bw, 0, gx + bw, 0);
-    gr.addColorStop(0, 'rgba(255,255,255,0)'); gr.addColorStop(0.5, 'rgba(255,255,255,1)'); gr.addColorStop(1, 'rgba(255,255,255,0)');
-    lc.fillStyle = gr; lc.fillRect(0, 0, layer.width, layer.height);
+    const gx = lr.w * lerp(-0.2, 1.2, p), bw = lr.w * 0.17;
+    const gr = lc.createLinearGradient(gx - bw, -bw * 0.4, gx + bw, bw * 0.4);
+    const sheen = light ? 0.6 : 1;
+    gr.addColorStop(0, tone(sheen, 0)); gr.addColorStop(0.5, tone(sheen, 1)); gr.addColorStop(1, tone(sheen, 0));
+    lc.fillStyle = gr; lc.fillRect(0, 0, lr.w, lr.h);
     ctx.drawImage(layer, lr.x, lr.y);
   }
-  const tw = k => 0.55 + 0.45 * Math.sin(Math.PI * clamp(g.st.pacc * 1.4 - k, 0, 1));
-  g.sparkle(lr.x + lr.w * 0.96, lr.y + lr.h * 0.08, 2.6 * u * tw(0));
-  g.sparkle(lr.x + lr.w * 0.06, lr.y + lr.h * 0.96, 1.7 * u * tw(0.3));
 }
+// the free swatches lift one after another
 function swatchArt(g, r, items) {
   const {ctx, u} = g;
-  const n = Math.max(1, items.length), cols = g.tall || n < 4 ? Math.min(n, 2) : n, rows = Math.ceil(n / cols);
-  const gap = 2 * u, capH = 4.4 * u;
-  const s = Math.min((r.w - gap * (cols - 1)) / cols, (r.h - rows * capH - gap * (rows - 1)) / rows);
+  const n = Math.max(1, items.length), gap = 2.2 * u, capH = 4.6 * u;
+  const fit = (cols, rows) => Math.min((r.w - gap * (cols - 1)) / cols, (r.h - rows * capH - gap * (rows - 1)) / rows);
+  // one row, or two: whichever gives the bigger swatches
+  const cols = n > 2 && fit(Math.ceil(n / 2), 2) > fit(n, 1) ? Math.ceil(n / 2) : n, rows = Math.ceil(n / cols);
+  const s = Math.min(fit(cols, rows), 46 * u);
   const gw = cols * s + (cols - 1) * gap, gh = rows * (s + capH) + (rows - 1) * gap;
   const x0 = r.x + (r.w - gw) / 2, y0 = r.y + (r.h - gh) / 2;
   items.forEach((name, i) => {
-    const lift = Math.sin(Math.PI * seg(g.st.pacc, i * 0.14, i * 0.14 + 0.5)) * 1.6 * u;
+    const lift = Math.sin(Math.PI * seg(g.st.pacc, i * 0.14, i * 0.14 + 0.5)) * 1.8 * u;
     const x = x0 + (i % cols) * (s + gap), y = y0 + Math.floor(i / cols) * (s + capH + gap) - lift;
-    ctx.save();
-    ctx.shadowColor = 'rgba(0,0,0,0.55)'; ctx.shadowBlur = 2 * u + lift; ctx.shadowOffsetY = 0.8 * u + lift * 0.5;
-    ctx.fillStyle = '#111'; ctx.beginPath(); ctx.roundRect(x, y, s, s, s * 0.12); ctx.fill();
-    ctx.restore();
     g.tile(R(x, y, s, s), swatchFor(name, i), i + 11);
-    g.label(name, x + s / 2, y + s + 1.6 * u + lift, 2.1 * u, 0.16, '#dcdcd8', 'center');
+    g.line(name, FACE.meta, 2.1 * u, x + s / 2, y + s + 1.8 * u + lift, {caps: true, align: 'center', color: g.role('meta')});
   });
 }
+// four patterns; light passes over each in turn
 function patternArt(g, r) {
   const {ctx, u} = g;
   const kinds = ['pyramids', 'herringbone', 'dots', 'wood'];
@@ -1349,40 +1325,31 @@ function patternArt(g, r) {
   kinds.forEach((k, i) => {
     const tr = R(x0 + (i % 2) * (s + gap), y0 + Math.floor(i / 2) * (s + gap), s, s);
     g.tile(tr, k, i + 9);
-    const k2 = Math.sin(Math.PI * seg(g.st.pacc, i * 0.12, i * 0.12 + 0.55));
+    const a = seg(g.st.pacc, i * 0.12, i * 0.12 + 0.55), k2 = Math.sin(Math.PI * a);
     if (k2 > 0.01) {
       ctx.save();
-      ctx.beginPath(); ctx.roundRect(tr.x, tr.y, tr.w, tr.h, s * 0.12); ctx.clip();
-      g.glintBand(tr, lerp(-0.4, 1.4, seg(g.st.pacc, i * 0.12, i * 0.12 + 0.55)), 0.35 * k2);
+      ctx.beginPath(); ctx.roundRect(tr.x, tr.y, tr.w, tr.h, s * 0.06); ctx.clip();
+      const cx = tr.x + tr.w * lerp(-0.4, 1.4, a), cy = tr.y + tr.h / 2, bw = s * 0.22, len = s * 1.5;
+      ctx.translate(cx, cy); ctx.rotate(0.38);
+      const gr = ctx.createLinearGradient(-bw, 0, bw, 0);
+      gr.addColorStop(0, tone(1, 0)); gr.addColorStop(0.5, tone(1, 0.42 * k2)); gr.addColorStop(1, tone(1, 0));
+      ctx.fillStyle = gr; ctx.fillRect(-bw, -len, 2 * bw, 2 * len);
       ctx.restore();
     }
   });
 }
-function buttonPill(g, text, x, y) {
-  const {ctx, u} = g, size = 3 * u;
-  const m = measure(ctx, FACE.label, text, 0.12), cap = measure(ctx, FACE.label, 'H', 0.12).a * size / 100;
-  const w = m.w * size / 100 + 13 * u, h = cap + 4 * u;
-  ctx.save();
-  ctx.shadowColor = 'rgba(0,0,0,0.5)'; ctx.shadowBlur = 2.4 * u; ctx.shadowOffsetY = 0.8 * u;
-  ctx.fillStyle = WHITE; ctx.beginPath(); ctx.roundRect(x, y, w, h, h / 2); ctx.fill();
-  ctx.restore();
-  applyFont(ctx, FACE.label, size, 0.12);
-  ctx.fillStyle = '#111';
-  ctx.fillText(text.toUpperCase(), x + 4.5 * u + m.l * size / 100, y + h / 2 + cap / 2);
-  return R(x, y, w, h);
-}
 
 /* ---------- frames, timeline, sheets ---------- */
-// Frame k on the sheet. Every frame is the finished slide (pin 1: fully in); only the accent moves.
+// Frame k on the sheet. Every frame is the finished slide; only the move goes on.
 function frameState(k, kind) {
-  return {pin: 1, pacc: kind === 'toggle' ? k / 7 : k / 8, kind};
+  return {pacc: kind === 'toggle' ? k / 7 : k / 8, kind};
 }
 function copyOf(item, overrides = {}) {
   const c = {};
   item.fields.forEach(f => { c[f.key] = overrides[f.key] ?? f.value; });
   return c;
 }
-function wordsIn(c) { return Object.values(c).join(' ').split(/\s+/).filter(Boolean).length; }
+function wordsIn(c) { return Object.entries(c).filter(([k]) => k !== 'finish').map(([, v]) => v).join(' ').split(/\s+/).filter(Boolean).length; }
 function defaultHolds(slide, c) {
   const read = clamp(1.4 + 0.2 * wordsIn(c), 2.6, 5.5);
   return slide.kind === 'toggle'
@@ -1398,7 +1365,7 @@ function timelineOf(slide, holds) {
     for (let k = 6; k >= 1; k--) t.push([k, ACC_STEP, 'back']);
     t.push([0, holds.read, 'hold: first state']);
   } else {
-    for (let k = 1; k <= 7; k++) t.push([k, ACC_STEP, 'light passes']);
+    for (let k = 1; k <= 7; k++) t.push([k, ACC_STEP, 'the move']);
     t.push([0, holds.read, 'hold: message']);
   }
   return t;
@@ -1429,9 +1396,7 @@ function renderFrames(slide, shape, copy) {
   const W = shape.w, H = shape.h, out = [];
   for (let k = 0; k < FRAMES; k++) {
     const c = makeCanvas(W, H);
-    const g = new G(c, frameState(k, slide.kind));
-    g.background();
-    slide.draw(g, copy);
+    slide.draw(new G(c, frameState(k, slide.kind), copy.finish), copy);
     out.push(c);
   }
   return out;
@@ -1499,14 +1464,15 @@ class Bytes {
 }
 const luma = (d, i) => (d[i] * 77 + d[i + 1] * 150 + d[i + 2] * 29 + 128) >> 8;
 
-// Animated GIF, 256-level gray palette, per-frame delays, loops forever. Repeats of the
+// Animated GIF, per-frame delays, loops forever. The palette is 256 steps of brightness along
+// the black-to-bone line, so a slide in the two inks comes through exactly. Repeats of the
 // same frame are merged into one longer delay, and each frame stores only the rectangle
 // that changed since the one before.
 function encodeGIF(frames, holds) {
   const w = frames[0].width, h = frames[0].height, out = new Bytes(w * h);
   out.str('GIF89a'); out.u16(w); out.u16(h);
   out.u8(0xF7); out.u8(0); out.u8(0);
-  for (let i = 0; i < 256; i++) { out.u8(i); out.u8(i); out.u8(i); }
+  for (let i = 0; i < 256; i++) { const c = duoAt(i); out.u8(c[0]); out.u8(c[1]); out.u8(c[2]); }
   out.u8(0x21); out.u8(0xFF); out.u8(11); out.str('NETSCAPE2.0'); out.u8(3); out.u8(1); out.u16(0); out.u8(0);
   const cache = new Map();
   const lumaOf = cv => {
@@ -1583,7 +1549,7 @@ async function deflate(bytes) {
   return new Uint8Array(await new Response(s).arrayBuffer());
 }
 // PNG written by hand: 24-bit RGB for opaque sheets (no alpha channel, so Second
-// Life treats it as opaque), RGBA for the badge. Pixels are forced to gray.
+// Life treats it as opaque), RGBA for the badge.
 async function encodePNG(canvas, alpha = false) {
   const w = canvas.width, h = canvas.height, ch = alpha ? 4 : 3, stride = w * ch;
   const d = canvas.getContext('2d').getImageData(0, 0, w, h).data;
@@ -1592,8 +1558,8 @@ async function encodePNG(canvas, alpha = false) {
   const cand = [0, 1, 2, 3, 4].map(() => new Uint8Array(stride));
   for (let y = 0; y < h; y++) {
     for (let x = 0; x < w; x++) {
-      const i = (y * w + x) * 4, o = x * ch, v = luma(d, i);
-      cur[o] = cur[o + 1] = cur[o + 2] = v;
+      const i = (y * w + x) * 4, o = x * ch;
+      cur[o] = d[i]; cur[o + 1] = d[i + 1]; cur[o + 2] = d[i + 2];
       if (alpha) cur[o + 3] = d[i + 3];
     }
     let best = 0, bestSum = Infinity;
@@ -1754,7 +1720,7 @@ default
 const EXTRAS = [
   {
     id: 'ticker', group: 'Zero-frame motion', name: 'Ticker strip', kind: 'ticker', size: [2048, 256], seconds: 26,
-    fields: [field('items', 'Ticker lines', 'Redelivery: click the material twice / Free sample materials / Tint any material in the texture tab / Copy-Mod or Full Perm / Tutorials on YouTube', 'Separate lines with /')],
+    fields: [field('items', 'Ticker lines', 'Free samples / Redeliver any time / Tint any material', 'Separate lines with /. About 45 letters in all stay big enough to read; more makes the text smaller.')],
   },
   {
     id: 'badge', group: 'Zero-frame motion', name: 'Spinning badge', kind: 'badge', size: [512, 512], seconds: 16,
@@ -1764,61 +1730,60 @@ const EXTRAS = [
 function renderTicker(copy) {
   const W = 2048, H = 256, c = makeCanvas(W, H), ctx = c.getContext('2d');
   const g0 = ctx.createLinearGradient(0, 0, 0, H);
-  g0.addColorStop(0, '#18181a'); g0.addColorStop(1, '#0a0a0b');
+  g0.addColorStop(0, tone(0.035)); g0.addColorStop(1, tone(0));
   ctx.fillStyle = g0; ctx.fillRect(0, 0, W, H);
-  ctx.fillStyle = 'rgba(255,255,255,0.22)'; ctx.fillRect(0, 34, W, 2); ctx.fillRect(0, H - 36, W, 2);
+  // the thin rules of the sleeve, top and bottom
+  ctx.fillStyle = tone(0.3); ctx.fillRect(0, 26, W, 2); ctx.fillRect(0, H - 28, W, 2);
   const items = copy.items.split('/').map(s => s.trim().toUpperCase()).filter(Boolean);
   if (!items.length) return c;
-  const face = FACE.label, track = 0.16;
-  const cap = measure(ctx, face, 'H', track).a;
-  let S = 62 * 100 / cap;
-  const sp = S * 1.1;
-  const natural = items.reduce((a, t) => a + measure(ctx, face, t, track).w * S / 100 + 2 * sp, 0);
+  const face = FACE.cap, cap = measure(ctx, face, 'H').a;
+  let S = 54 * 100 / cap, logoH = 112;
+  const logoW = logoH * ASSETS.logoWhite.width / ASSETS.logoWhite.height;
+  // one round: the logo, then each line, with a dot between lines
+  const sp = S * 0.9;
+  const natural = logoW + items.reduce((a, t) => a + measure(ctx, face, t).w * S / 100, 0) + (items.length + 1) * 2 * sp;
   let reps = Math.max(1, Math.round(W / natural)), scale = 1, extra = 0;
-  if (natural > W) { scale = W / natural; reps = 1; } else extra = (W - reps * natural) / (reps * items.length);
-  S *= scale;
-  const capPx = cap * S / 100, base = H / 2 + capPx / 2, gap = sp * scale + extra / 2;
-  const g = new G(makeCanvas(8, 8), {pin: 1, pacc: 0});
-  g.ctx = ctx;
+  if (natural > W) { scale = W / natural; reps = 1; } else extra = (W - reps * natural) / (reps * (items.length + 1));
+  S *= scale; logoH *= scale;
+  const gap = sp * scale + extra / 2, base = H / 2 + cap * S / 200;
   const parts = [];
   let x = 0;
-  for (let r = 0; r < reps; r++) items.forEach(t => {
-    const m = measure(ctx, face, t, track), w = m.w * S / 100;
-    x += gap; parts.push({t, m, x}); x += w + gap; parts.push({spark: x});
-  });
+  for (let r = 0; r < reps; r++) {
+    x += gap; parts.push({logo: x}); x += logoW * scale + gap;
+    items.forEach((t, i) => {
+      const m = measure(ctx, face, t), w = m.w * S / 100;
+      x += gap; parts.push({t, m, x}); x += w + gap;
+      if (i < items.length - 1) parts.push({dot: x});
+    });
+  }
+  const lw = Math.round(logoW * scale), lh = Math.round(logoH), logo = logoIn(tone(1), lw, lh);
   for (const off of [-W, 0, W]) for (const p of parts) {
-    if (p.spark !== undefined) { ctx.globalAlpha = 0.7; g.sparkle(p.spark + off, H / 2, 13 * scale); ctx.globalAlpha = 1; continue; }
-    applyFont(ctx, face, S, track);
-    ctx.fillStyle = WHITE;
+    if (p.logo !== undefined) { ctx.drawImage(logo, Math.round(p.logo + off), Math.round(H / 2 - lh * 0.56)); continue; }
+    if (p.dot !== undefined) { ctx.fillStyle = tone(0.5); ctx.beginPath(); ctx.arc(p.dot + off, H / 2, 5 * scale, 0, Math.PI * 2); ctx.fill(); continue; }
+    applyFont(ctx, face, S);
+    ctx.fillStyle = tone(1);
     ctx.fillText(p.t, p.x + off + p.m.l * S / 100, base);
   }
   return c;
 }
+// a record: grooves, the ring text, and the logo on a bone label in the middle
 function renderBadge(copy) {
   const S = 512, c = makeCanvas(S, S), ctx = c.getContext('2d');
-  const g = new G(makeCanvas(8, 8), {pin: 1, pacc: 0});
-  g.ctx = ctx;
-  const cx = S / 2, cy = S / 2, R0 = 252;
-  const bg = ctx.createLinearGradient(0, 0, S, S);
-  bg.addColorStop(0, '#2a2a2d'); bg.addColorStop(0.5, '#141416'); bg.addColorStop(1, '#0b0b0c');
-  ctx.fillStyle = bg; ctx.beginPath(); ctx.arc(cx, cy, R0, 0, Math.PI * 2); ctx.fill();
-  const sheen = ctx.createLinearGradient(cx - R0, cy - R0, cx + R0 * 0.2, cy + R0);
-  sheen.addColorStop(0, 'rgba(255,255,255,0.16)'); sheen.addColorStop(1, 'rgba(255,255,255,0)');
-  ctx.fillStyle = sheen; ctx.beginPath(); ctx.arc(cx, cy, R0, 0, Math.PI * 2); ctx.fill();
-  ctx.strokeStyle = 'rgba(255,255,255,0.5)'; ctx.lineWidth = 3;
-  ctx.beginPath(); ctx.arc(cx, cy, R0 - 2, 0, Math.PI * 2); ctx.stroke();
-  ctx.strokeStyle = 'rgba(255,255,255,0.28)'; ctx.lineWidth = 2;
-  ctx.beginPath(); ctx.arc(cx, cy, 150, 0, Math.PI * 2); ctx.stroke();
+  const cx = S / 2, cy = S / 2, R0 = 252, disc = (r, col) => { ctx.fillStyle = col; ctx.beginPath(); ctx.arc(cx, cy, r, 0, Math.PI * 2); ctx.fill(); };
+  const ringAt = (r, col, lw) => { ctx.strokeStyle = col; ctx.lineWidth = lw; ctx.beginPath(); ctx.arc(cx, cy, r, 0, Math.PI * 2); ctx.stroke(); };
+  disc(R0, tone(0.03));
+  for (let r = 122; r < 176; r += 3.5) ringAt(r, tone(0.075 + 0.04 * ((r * 7) % 3) / 2), 1);
+  ringAt(R0 - 1.5, tone(0.32), 3);
+  ringAt(184, tone(0.22), 2);
   const text = copy.ring.toUpperCase(), times = clamp(parseInt(copy.times, 10) || 3, 1, 6);
-  const face = FACE.label, size = 40, rText = 196;
+  const face = FACE.cap, size = 36, rText = 207, track = 0.18 * size;
   const chars = [...text];
-  const adv = chars.map(ch => measure(ctx, face, ch, 0).adv * size / 100);
-  const spark = 52;
-  const one = adv.reduce((a, b) => a + b, 0) + spark;
+  const adv = chars.map(ch => measure(ctx, face, ch, 0).adv * size / 100 + track);
+  const dot = 46;
+  const one = adv.reduce((a, b) => a + b, 0) + dot;
   const k = (2 * Math.PI * rText) / (one * times);
   let ang = -Math.PI / 2;
   applyFont(ctx, face, size, 0);
-  ctx.fillStyle = WHITE;
   for (let r = 0; r < times; r++) {
     chars.forEach((ch, i) => {
       const a = adv[i] * k / rText;
@@ -1826,15 +1791,22 @@ function renderBadge(copy) {
       ctx.translate(cx + Math.cos(ang + a / 2) * rText, cy + Math.sin(ang + a / 2) * rText);
       ctx.rotate(ang + a / 2 + Math.PI / 2);
       ctx.textAlign = 'center';
+      ctx.fillStyle = tone(1);
       ctx.fillText(ch, 0, size * 0.36);
       ctx.restore();
       ang += a;
     });
-    const a = spark * k / rText;
-    g.sparkle(cx + Math.cos(ang + a / 2) * rText, cy + Math.sin(ang + a / 2) * rText, 12);
+    const a = dot * k / rText;
+    ctx.fillStyle = tone(0.5);
+    ctx.beginPath(); ctx.arc(cx + Math.cos(ang + a / 2) * rText, cy + Math.sin(ang + a / 2) * rText, 4.5, 0, Math.PI * 2); ctx.fill();
     ang += a;
   }
-  g.sparkle(cx, cy, 70, 0.1);
+  disc(112, tone(1));
+  ringAt(103, tone(0.62), 1.5);
+  // the logo above the spindle hole, like a record label
+  const lw = 150, lh = Math.round(lw * ASSETS.logoWhite.height / ASSETS.logoWhite.width);
+  ctx.drawImage(logoIn(tone(0), lw, lh), Math.round(cx - lw / 2), Math.round(cy - 14 - lh));
+  disc(6, tone(0));
   return c;
 }
 function lslTicker(win, seconds) {
@@ -1964,8 +1936,8 @@ window.SignStudio = {
       badge: {png: b64(await encodePNG(renderBadge(copyOf(b)), true)), lsl: lslBadge(b.seconds)},
     };
   },
-  // every slide's first and last frame for review
-  async contact(shapeId, frames = [0, 7]) {
+  // every slide's first and last frame for review, optionally all in one finish
+  async contact(shapeId, frames = [0, 7], finish) {
     await READY;
     const shape = SHAPES[shapeId], W = shape.w, H = shape.h, sc = 0.5, pad = 8;
     const fw = W * sc, fh = H * sc, cols = frames.length;
@@ -1973,15 +1945,15 @@ window.SignStudio = {
     const ctx = c.getContext('2d');
     ctx.fillStyle = '#6f6f6f'; ctx.fillRect(0, 0, c.width, c.height);
     SLIDES.forEach((s, j) => {
-      const fr = renderFrames(s, shape, copyOf(s));
+      const fr = renderFrames(s, shape, copyOf(s, finish ? {finish} : {}));
       frames.forEach((k, i) => ctx.drawImage(fr[k], pad + i * (fw + pad), pad + j * (fh + pad), fw, fh));
     });
     return c.toDataURL('image/png');
   },
-  async strip(id, shapeId, scale = 0.5) {
+  async strip(id, shapeId, scale = 0.5, finish) {
     await READY;
     const slide = SLIDES.find(s => s.id === id), shape = SHAPES[shapeId];
-    const fr = renderFrames(slide, shape, copyOf(slide));
+    const fr = renderFrames(slide, shape, copyOf(slide, finish ? {finish} : {}));
     const W = shape.w * scale, H = shape.h * scale, pad = 6;
     const c = makeCanvas(Math.round(8 * (W + pad) + pad), Math.round(H + 2 * pad));
     const ctx = c.getContext('2d');
@@ -2025,7 +1997,7 @@ function buildNav() {
       b.type = 'button'; b.dataset.id = s.id;
       const strong = document.createElement('strong'); strong.textContent = s.name;
       const small = document.createElement('small');
-      small.textContent = s.kind === 'ticker' ? 'Smooth scroll, 0 frames' : s.kind === 'badge' ? 'Smooth spin, 0 frames' : (s.kind === 'toggle' ? 'Two states' : 'One message') + ', 16 frames';
+      small.textContent = s.kind === 'ticker' ? 'Smooth scroll, 0 frames' : s.kind === 'badge' ? 'Smooth spin, 0 frames' : (s.kind === 'toggle' ? 'Two states' : 'One message') + `, ${FRAMES} frames`;
       b.append(strong, small);
       b.addEventListener('click', () => { state.sel = s.id; save(); rebuild(); });
       li.append(b); ol.append(li);
@@ -2058,6 +2030,16 @@ function buildCopyForm(item) {
     label.append(input);
     if (f.hint) { const em = document.createElement('em'); em.textContent = f.hint; label.append(em); }
     form.append(label);
+    if (f.key === 'finish') {
+      const all = document.createElement('button');
+      all.type = 'button'; all.className = 'btn'; all.textContent = 'Use this finish on every slide';
+      all.addEventListener('click', () => {
+        SLIDES.forEach(sl => { state.copy[sl.id] = {...(state.copy[sl.id] || {}), finish: input.value}; });
+        save(); rebuild(false);
+        toast(`Every slide is ${input.value} now.`);
+      });
+      form.append(all);
+    }
   });
 }
 
@@ -2085,7 +2067,7 @@ function buildTiming() {
 function buildFrames() {
   const ol = $('frames');
   ol.innerHTML = '';
-  const names = k => current.slide.kind === 'toggle' ? (k === 0 ? 'state 1' : k === 7 ? 'state 2' : 'move') : (k === 0 ? 'message' : 'light');
+  const names = k => current.slide.kind === 'toggle' ? (k === 0 ? 'state 1' : k === 7 ? 'state 2' : 'move') : (k === 0 ? 'message' : 'move');
   current.frames.forEach((f, k) => {
     const li = document.createElement('li');
     const b = document.createElement('button');
@@ -2242,7 +2224,7 @@ function draw() {
     ctx.drawImage(current.tex, 2048 - p, 0);
     $('clock').textContent = `${(clock % current.seconds).toFixed(1)} / ${fmtSec(current.seconds)} s`;
   } else {
-    ctx.fillStyle = '#1a1a1c'; ctx.fillRect(0, 0, 512, 512);
+    ctx.fillStyle = '#1b1a18'; ctx.fillRect(0, 0, 512, 512);
     ctx.save(); ctx.translate(256, 256); ctx.rotate((clock / current.seconds) * Math.PI * 2); ctx.drawImage(current.tex, -256, -256); ctx.restore();
     $('clock').textContent = `${(clock % current.seconds).toFixed(1)} / ${fmtSec(current.seconds)} s`;
   }
