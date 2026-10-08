@@ -1908,9 +1908,9 @@ window.SignStudio = {
   slides: SLIDES.map(s => s.id),
   shapes: Object.keys(SHAPES),
   fonts: () => ({...FONT_STATE}),
-  async build(id, shapeId, gifScale = 1) {
+  async build(id, shapeId, gifScale = 1, finish) {
     await READY;
-    const slide = SLIDES.find(s => s.id === id), shape = SHAPES[shapeId], copy = copyOf(slide);
+    const slide = SLIDES.find(s => s.id === id), shape = SHAPES[shapeId], copy = copyOf(slide, finish ? {finish} : {});
     const holds = defaultHolds(slide, copy);
     const {frames, tl, sheets} = buildSlide(slide, shape, copy, holds);
     const names = sheetNames(slide, shape);
